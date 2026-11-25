@@ -37,7 +37,7 @@
  "apps/web/public/v2.js": "7b6b6a2f83560537a350eb957bf0e9007c1ea1e5fe7ffd366d51eb5028103817",
  "apps/web/server/auth.js": "60561408221d22f738bc5a6ec4c32ac5aa55e490646a12038ac0be82ab04be5a",
  "apps/web/server/email.js": "c4f909a9e1b724c0ed12b01d1cbad1220d6a65bb0931f8f7e63ff4ae6cefa7e7",
- "apps/web/server/index.js": "98d4a33e5a197c9cac65de4a0bb8d396c50e077862acb6891d16d86990526a29",
+ "apps/web/server/index.js": "9be6855bf849c61cbd2352627eb042fcca61801bf9b12de95b77d235f5b8a211",
  "apps/web/server/membership-policy.js": "114d28195ce4d7efaf3caa323bc0491cfe8254462336bf8816cdab2c94fdac73",
  "apps/web/templates/homepage-v7-layout.html": "aabb10a85f9a29e469220edc6bfc8a9b9dcee6eed5a054856c5db287affd7b71",
  "apps/web/templates/homepage-v7.html": "c064fb6488db937549b73558fcf5f7b246c1ca6fe5b248081d418ab0fd966269",

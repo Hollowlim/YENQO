@@ -27,7 +27,7 @@ import {eaApi} from './ea-routes.js';
 
 const origin = new URL(process.env.APP_ORIGIN ?? "http://127.0.0.1:3000");
 const port = Number(process.env.PORT ?? origin.port ?? 3000) || 3000;
-const server = createServer(async (incoming, outgoing) => {
+export async function handler(incoming, outgoing) {
   for (const [name, value] of Object.entries(securityHeaders(['/app', '/app/mapping'].includes((incoming.url ?? '').split('?')[0]))))
     outgoing.setHeader(name, value);
   outgoing.setHeader("Content-Type", "text/html; charset=utf-8");
@@ -168,18 +168,22 @@ const server = createServer(async (incoming, outgoing) => {
     if (!outgoing.headersSent) outgoing.writeHead(503);
     outgoing.end(errorPage(503));
   }
-});
+}
+const server = createServer(handler);
 server.requestTimeout = 10 * 60 * 1000;
 server.headersTimeout = 10000;
 server.keepAliveTimeout = 5000;
 server.maxHeadersCount = 50;
-startPcSecretSweeper();
-// HOST=0.0.0.0 on a hosting platform; default stays local-only.
-server.listen(port, process.env.HOST ?? "127.0.0.1", () =>
-  console.log(
-    `YENQO (${process.env.NODE_ENV}) — http://127.0.0.1:${port}`,
-  ),
-);
+// Vercel calls `handler` per request (api/index.js); everywhere else run a long-lived server.
+if (!process.env.VERCEL) {
+  startPcSecretSweeper();
+  // HOST=0.0.0.0 on a hosting platform; default stays local-only.
+  server.listen(port, process.env.HOST ?? "127.0.0.1", () =>
+    console.log(
+      `YENQO (${process.env.NODE_ENV}) — http://127.0.0.1:${port}`,
+    ),
+  );
+}
 server.on("error", (error) => {
   console.error(
     `Server could not start: ${"code" in error ? error.code : "unknown error"}`,
