@@ -1,0 +1,381 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+enum EditorialStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum MarketBias {
+  BULLISH
+  BEARISH
+  SIDEWAY
+}
+
+enum MembershipStatus {
+  FREE
+  PENDING
+  APPROVED
+  REJECTED
+  REVOKED
+}
+
+model User {
+  id                  String             @id @default(cuid())
+  email               String             @unique
+  username            String?            @unique
+  name                String
+  passwordHash        String
+  role                Role               @default(MEMBER)
+  createdAt           DateTime           @default(now())
+  lastLoginAt         DateTime?
+  brokerName          String?
+  mt5Account          String?
+  mt5Server           String?
+  profileVersion      Int @default(0)
+  profilePhoto        ProfilePhoto?
+  sessions            Session[]
+  resets              PasswordReset[]
+  membership          Membership?
+  audits              AuditEvent[]
+  reviewedMemberships Membership[]       @relation("MembershipReviewer")
+  communityMessages   CommunityMessage[]
+  communityReports    CommunityReport[]
+  dailyPlans          DailyPlan[]
+  manualSignals       ManualSignal[]
+  videoLessons        VideoLesson[]
+  brokerConnection    BrokerConnection?
+  statementHistory    StatementHistory?
+  pcBrokerAccount     PcBrokerAccount?
+  // Admin-granted; a mentor gains room-creation rights only, never access to members' accounts.
+  mentorApprovedAt    DateTime?
+  roomsOwned          DiscussionRoom[]   @relation("RoomOwner")
+  roomMemberships     RoomMember[]
+  roomJoinRequests    RoomJoinRequest[]
+  roomMessages        RoomMessage[]
+  @@index([createdAt, id])
+}
+
+model DiscussionRoom {
+  id           String            @id @default(cuid())
+  title        String
+  description  String            @default("")
+  visibility   String            @default("PUBLIC")
+  ownerId      String
+  owner        User              @relation("RoomOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  archivedAt   DateTime?
+  createdAt    DateTime          @default(now())
+  members      RoomMember[]
+  invites      RoomInvite[]
+  joinRequests RoomJoinRequest[]
+  messages     RoomMessage[]
+
+  @@index([visibility, archivedAt, createdAt])
+}
+
+model RoomMember {
+  roomId   String
+  room     DiscussionRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     String         @default("MEMBER")
+  joinedAt DateTime       @default(now())
+
+  @@id([roomId, userId])
+  @@index([userId])
+}
+
+model RoomInvite {
+  id          String         @id @default(cuid())
+  roomId      String
+  room        DiscussionRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  tokenHash   String         @unique
+  createdById String
+  expiresAt   DateTime?
+  revokedAt   DateTime?
+  createdAt   DateTime       @default(now())
+
+  @@index([roomId])
+}
+
+model RoomJoinRequest {
+  roomId    String
+  room      DiscussionRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status    String         @default("PENDING")
+  createdAt DateTime       @default(now())
+  decidedAt DateTime?
+
+  @@id([roomId, userId])
+  @@index([roomId, status])
+}
+
+model RoomMessage {
+  id        String         @id @default(cuid())
+  roomId    String
+  room      DiscussionRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User           @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  clientKey String
+  kind      String         @default("MESSAGE")
+  text      String
+  chartUrl  String?
+  pinnedAt  DateTime?
+  hiddenAt  DateTime?
+  createdAt DateTime       @default(now())
+
+  @@unique([authorId, clientKey])
+  @@index([roomId, createdAt, id])
+}
+
+model PcConnector {
+ id String @id
+ tokenHash String @unique
+ publicKey String
+ enabled Boolean @default(true)
+ lastSeenAt DateTime?
+ accounts PcBrokerAccount[]
+ createdAt DateTime @default(now())
+}
+
+model PcBrokerAccount {
+ id String @id @default(cuid())
+ userId String @unique
+ user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+ connectorId String
+ connector PcConnector @relation(fields:[connectorId], references:[id], onDelete:Cascade)
+ login String
+ server String
+ state String @default("AWAITING_PASSWORD")
+ generation Int @default(1)
+ version Int @default(1)
+ nonce String
+ sealedPassword String?
+ secretExpiresAt DateTime?
+ leaseHash String?
+ leaseUntil DateTime?
+ nextSyncAt DateTime?
+ currency String?
+ accountType String?
+ deals Json?
+ lastSyncedAt DateTime?
+ historyFrom DateTime?
+ historyTo DateTime?
+ errorCode String?
+ updatedAt DateTime @updatedAt
+ @@index([connectorId,state,nextSyncAt])
+}
+
+model StatementHistory {
+ userId String @id
+ user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+ login String
+ server String
+ currency String
+ deals Json
+ version Int @default(1)
+ importedAt DateTime @default(now())
+ historyFrom DateTime
+ historyTo DateTime
+}
+
+model BrokerConnection {
+  userId            String   @id
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  broker            String
+  login             String
+  server            String
+  requestKey        String   @unique
+  providerAccountId String?  @unique
+  state             String   @default("CONNECTING")
+  version           Int      @default(0)
+  leaseUntil        DateTime?
+  currency          String?
+  lastSyncedAt      DateTime?
+  historyFrom       DateTime?
+  historyTo         DateTime?
+  deals             Json?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model ProfilePhoto {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  imageData Bytes
+  imageHash String
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  tokenHash String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordReset {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model Membership {
+  id                   String           @id @default(cuid())
+  userId               String           @unique
+  user                 User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                 String           @default("FREE")
+  entitlements         String[]         @default([])
+  createdAt            DateTime         @default(now())
+  status               MembershipStatus @default(FREE)
+  version              Int              @default(0)
+  brokerName           String?
+  ibCode               String?
+  accountSuffix        String?
+  depositReference     String?
+  claimedDepositCents  Int?
+  verifiedDepositCents Int?
+  verifiedBroker       String?
+  verifiedIbCode       String?
+  verifiedById         String?
+  verifiedBy           User?            @relation("MembershipReviewer", fields: [verifiedById], references: [id], onDelete: SetNull)
+  verifiedAt           DateTime?
+  requestedAt          DateTime?
+  reviewReason         String?
+
+  @@index([status, requestedAt])
+}
+
+model RateLimit {
+  key       String   @id
+  hits      Int      @default(1)
+  expiresAt DateTime
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    String
+  targetId  String?
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+}
+
+model CommunityMessage {
+  id        String             @id @default(cuid())
+  authorId  String
+  author    User               @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  clientKey String
+  text      String
+  chartUrl  String?
+  imageData Bytes?
+  imageHash String?
+  replyToId String?
+  replyTo   CommunityMessage?  @relation("CommunityReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   CommunityMessage[] @relation("CommunityReplies")
+  createdAt DateTime           @default(now())
+  hiddenAt  DateTime?
+  reports   CommunityReport[]
+
+  @@unique([authorId, clientKey])
+  @@index([createdAt, id])
+  @@index([replyToId])
+}
+
+model CommunityReport {
+  id         String           @id @default(cuid())
+  messageId  String
+  message    CommunityMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  reporterId String
+  reporter   User             @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  reason     String
+  createdAt  DateTime         @default(now())
+
+  @@unique([messageId, reporterId])
+  @@index([createdAt, id])
+}
+
+model DailyPlan {
+  id          String          @id @default(cuid())
+  planDate    String          @unique
+  title       String
+  description String
+  bias        MarketBias
+  status      EditorialStatus @default(DRAFT)
+  version     Int             @default(1)
+  createdById String?
+  createdBy   User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  publishedAt DateTime?
+
+  @@index([status, planDate])
+}
+
+model ManualSignal {
+  id          String          @id @default(cuid())
+  requestKey  String          @unique
+  title       String
+  side        String
+  category    String
+  zoneLow     Decimal         @db.Decimal(14, 3)
+  zoneHigh    Decimal         @db.Decimal(14, 3)
+  sl          Decimal         @db.Decimal(14, 3)
+  tp1         Decimal         @db.Decimal(14, 3)
+  tp2         Decimal         @db.Decimal(14, 3)
+  tp3         Decimal         @db.Decimal(14, 3)
+  notes       String          @default("")
+  status      EditorialStatus @default(DRAFT)
+  version     Int             @default(1)
+  createdById String?
+  createdBy   User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  publishedAt DateTime?
+
+  @@index([status, createdAt, id])
+}
+
+model VideoLesson {
+  id          String          @id @default(cuid())
+  title       String
+  description String
+  status      EditorialStatus @default(DRAFT)
+  version     Int             @default(1)
+  filename    String?         @unique
+  bytes       Int?
+  createdById String?
+  createdBy   User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  publishedAt DateTime?
+
+  @@index([status, createdAt, id])
+}

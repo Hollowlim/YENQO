@@ -1,0 +1,57 @@
+import { expect, test } from '@playwright/test';
+import { PrismaClient } from '@prisma/client';
+import { digestToken } from '../../apps/web/server/security.js';
+const db = new PrismaClient();
+test.afterAll(async () => { await db.$disconnect(); });
+
+test('free mapping, IB request, username admin approval and revoke work through the UI', async ({ page, browser }, testInfo) => {
+  const email = `ib-browser-${testInfo.project.name}-${Date.now()}@example.test`;
+  const password = 'Synthetic browser IB test only!';
+  const adminContext = await browser.newContext({ viewport: page.viewportSize() ?? { width: 1440, height: 1000 } });
+  try {
+    await db.rateLimit.deleteMany({ where: { key: { in: [`login-email:${digestToken('YENGFX')}`] } } });
+    await page.goto('/auth/register');
+    await page.getByLabel('Display name').fill('Browser IB Member');
+    await page.getByLabel('Email address').fill(email);
+    await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByRole('button', { name: 'Create account', exact: true }).click();
+    await expect(page.getByRole('status')).toContainText('Account created');
+    await page.goto('/auth/login');
+    await page.getByLabel('Email or admin username').fill(email);
+    await page.getByLabel('Password', { exact: true }).fill(password);
+    await page.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await expect(page).toHaveURL('/app/mapping');
+    await page.goto('/app/academy');
+    await expect(page).toHaveURL(/\/app\/membership\?notice=ib-required/);
+    await page.getByLabel('Last four account digits').fill('4321');
+    await page.getByLabel('Qualifying deposit (USD)', { exact: true }).fill('100');
+    await page.getByLabel('Redacted deposit reference').fill('Synthetic UI test reference; not a real broker deposit.');
+    await page.getByRole('button', { name: 'Submit verification request' }).click();
+    await expect(page.locator('[data-membership-status]')).toHaveText('PENDING');
+    await page.screenshot({ path: `docs/screenshots/${testInfo.project.name}-membership.png`, fullPage: true });
+    await page.goto('/app/academy');
+    await expect(page).toHaveURL(/\/app\/membership/);
+    const admin = await adminContext.newPage();
+    await admin.goto('http://127.0.0.1:3000/auth/login');
+    await admin.getByLabel('Email or admin username').fill('YENGFX');
+    await admin.getByLabel('Password', { exact: true }).fill(process.env.LOCAL_ADMIN_PASSWORD!);
+    await admin.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await expect(admin).toHaveURL('http://127.0.0.1:3000/admin');
+    await admin.goto('http://127.0.0.1:3000/admin/members');
+    const review = admin.locator('.membership-review').filter({ hasText: email });
+    await expect(review).toBeVisible();
+    await admin.screenshot({ path: `docs/screenshots/${testInfo.project.name}-ib-review.png`, fullPage: true });
+    await review.getByLabel('Verified qualifying deposit (USD)').fill('100.00');
+    await review.getByRole('checkbox').check();
+    await review.getByLabel('Review reason (visible to the member)').fill('Synthetic browser approval test. No real broker verification.');
+    await review.getByRole('button', { name: 'Approve membership' }).click();
+    await expect(review.getByRole('heading')).toContainText('APPROVED');
+    await page.goto('/app/academy');
+    await expect(page.getByRole('heading', { name: 'Educations', exact: true })).toBeVisible();
+    await review.getByLabel('Review reason (visible to the member)').fill('Synthetic revoke test. No real account affected.');
+    await review.getByRole('button', { name: 'Revoke access' }).click();
+    await expect(review.getByRole('heading')).toContainText('REVOKED');
+    await page.goto('/app/academy');
+    await expect(page).toHaveURL(/\/app\/membership\?notice=ib-required/);
+  } finally { await adminContext.close(); await db.user.deleteMany({ where: { email } }); }
+});

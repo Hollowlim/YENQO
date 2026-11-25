@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" data-offline-preview="true"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administration | YENQO</title><meta name="description" content="Your private YENQO member workspace.">
+<link rel="stylesheet" href="../../public/styles.css"><link rel="stylesheet" href="../../public/v2.css"><link rel="stylesheet" href="../../public/v4.css">
+<script defer src="../../public/v2-trade-model.js"></script><script defer src="../../public/v2.js"></script><script defer src="../../public/v2-signals.js"></script><script defer src="../../public/app.js"></script><script defer src="../../public/membership.js"></script><link rel="stylesheet" href="../../public/branding-2026.css"><link rel="stylesheet" href="../../public/v6.css"><script defer src="../../public/portal-v6.js"></script><script defer src="../../public/profile-photo.js"></script><link rel="stylesheet" href="../../public/portal-clean.css"><script defer src="../../public/admin-portal.js"></script><link rel="icon" href="../../public/yenqo-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="../../public/yenqo.css"></head>
+<body class="v2-theme v6-portal clean-portal v6-admin" data-demo-scope="b11e67feb3f3d0db5fbc8775" data-client-view="false"><div class="app-shell"><a href="#main-content" class="skip-link">Skip to content</a>
+<header class="topbar"><div class="compact-brand"><a class="brand clean-brand" aria-label="YENQO home" href="../demo-preview.html" data-app-href="/"><img class="brand-logo-small" src="../../public/yenqo-mark.svg" alt="" width="36" height="36"><span class="clean-brand-title">YENQO<small>YOUR TRADING. YOUR CONTROL.</small></span></a></div><div class="v6-workspace-search"><label><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input type="search" data-portal-search aria-label="Find a workspace" aria-controls="portal-search-results" aria-expanded="false" placeholder="Find an admin workspace…" autocomplete="off"><kbd>Ctrl K</kbd></label><div id="portal-search-results" class="v6-search-results" data-portal-search-results hidden></div></div><div class="topbar-actions"><a class="v6-header-profile" aria-label="My profile" href="settings.html" data-app-href="/admin/settings"><span class="v6-profile-avatar" data-profile-avatar data-profile-initial="A"><span data-profile-initial>A</span></span><span><strong>Admin preview</strong><small>Administrator</small></span></a><a class="v2-collapse-button notification-bell" aria-label="Open notifications" href="../member/notifications.html" data-app-href="/app/notifications"><span class="bell-glyph" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 16.5V10a6 6 0 0 1 12 0v6.5l1.6 2.3H4.4L6 16.5Z"/><path d="M10 21h4"/></svg></span><span>Notifications</span></a><button type="button" class="v2-collapse-button" data-v2-collapse aria-label="Hide sidebar" aria-controls="desktop-sidebar" aria-expanded="true"><svg class="portal-sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path class="sidebar-close-chevron" d="m15 9-3 3 3 3"/><path class="sidebar-open-chevron" d="m13 9 3 3-3 3"/></svg></button><span class="demo-badge"><span></span>DEMO · NOT LIVE</span><button type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="compact-navigation" class="menu-toggle" data-menu-toggle><svg class="portal-sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path class="sidebar-close-chevron" d="m15 9-3 3 3 3"/><path class="sidebar-open-chevron" d="m13 9 3 3-3 3"/></svg></button></div></header>
+<aside class="sidebar" id="desktop-sidebar"><div class="clean-workspace-label">ADMINISTRATION</div><nav class="nav-links" aria-label="Main navigation"><span class="clean-nav-group">Operations</span>
+<a aria-current="page" class="nav-link selected" href="overview.html" data-app-href="/admin"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-layout-dashboard"
+      aria-hidden="true"
+    >
+      <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+      <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+      <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+      <rect width="7" height="5" x="3" y="16" rx="1"></rect></svg
+    ><span>Overview</span></a>
+<a class="nav-link" href="members.html" data-app-href="/admin/members"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-crown"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"
+      ></path>
+      <path d="M5 21h14"></path></svg
+    ><span>Members</span></a>
+<a class="nav-link" href="content.html" data-app-href="/admin/content"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-graduation-cap"
+      aria-hidden="true"
+    >
+      <path
+        d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+      ></path>
+      <path d="M22 10v6"></path>
+      <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg
+    ><span>Content / Academy</span></a>
+
+
+<a class="nav-link" href="platform.html" data-app-href="/admin/platform"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>Platform &amp; rooms</span></a>
+<a class="nav-link" href="overview.html#system-status" data-app-href="/admin#system-status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>System Status</span></a>
+<a class="nav-link" href="audit.html" data-app-href="/admin/audit"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-shield-check"
+      aria-hidden="true"
+    >
+      <path
+        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+      ></path>
+      <path d="m9 12 2 2 4-4"></path></svg
+    ><span>Audit Log</span></a>
+</nav><nav class="nav-links" aria-label="Account navigation"><span class="clean-nav-group">Account</span>
+<a class="nav-link" href="settings.html" data-app-href="/admin/settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>My profile</span></a>
+<a class="nav-link" href="../member/overview.html" data-app-href="/app"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-shield-check"
+      aria-hidden="true"
+    >
+      <path
+        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+      ></path>
+      <path d="m9 12 2 2 4-4"></path></svg
+    ><span>Member workspace</span></a>
+</nav>
+<div class="sidebar-bottom"><div class="connection-mini"><span class="status-dot"></span><span>MT5 disconnected</span></div><small>Cloud connector pending / execution disabled</small><div class="profile"><span class="avatar" data-profile-avatar data-profile-initial="A"><span data-profile-initial>A</span></span><span><strong>Admin preview</strong><small>Administrator</small></span></div><button class="logout" data-logout>Sign out</button><p data-logout-error role="alert" hidden></p></div></aside>
+<div class="workspace"><section class="offline-banner" aria-label="Offline preview information"><strong>OFFLINE UI PREVIEW / ADMIN VIEW</strong><p>Preview the website design. No account is signed in; real client data and saving require the <a href="http://127.0.0.1:3000">local server</a>. MT5 trading is disabled.</p><nav class="preview-view-switch" aria-label="Preview view"><a href="../demo-preview.html">Homepage</a><a href="../member/overview.html">Client View</a><a href="overview.html" aria-current="page">Admin View</a></nav><div class="preview-actions"><details><summary>Explore all categories</summary><nav class="offline-catalog" aria-label="All demo screens"><a href="../demo-preview.html">YENQO — Your Trading. Your Control.</a>
+<a href="../auth/login.html">Sign in</a>
+<a href="../auth/register.html">Create account</a>
+<a href="../auth/forgot-password.html">Forgot password</a>
+<a href="../auth/reset-password.html">Reset password</a>
+<a href="../member/overview.html">Dashboard</a>
+<a href="../member/mt5.html">Tools</a>
+<a href="../member/rooms.html">Discussion Rooms</a>
+<a href="../member/news.html">News</a>
+<a href="../member/devices.html">Device Setup</a>
+<a href="../member/receipt.html">Command Receipt</a>
+<a href="../member/chat.html">Live Chat / Demo</a>
+<a href="../member/academy.html">Educations</a>
+<a href="../member/journal.html">Journal</a>
+<a href="../member/calendar.html">P/L Calendar</a>
+<a href="../member/membership.html">Membership</a>
+<a href="../member/notifications.html">Notifications</a>
+<a href="../member/settings.html">Settings</a>
+<a href="../member/lesson-market-structure.html">Lesson / market structure</a>
+<a href="../member/lesson-risk-and-discipline.html">Lesson / risk and discipline</a>
+<a href="../member/lesson-mentorship.html">Lesson / mentorship</a>
+<a href="overview.html">Administration</a>
+<a href="content.html">Admin / content</a>
+<a href="members.html">Admin / members</a>
+<a href="audit.html">Admin / audit</a>
+<a href="settings.html">Admin / settings</a>
+<a href="platform.html">Admin / platform</a></nav></details></div></section><div class="compact-navigation" id="compact-navigation" hidden><nav class="nav-links" aria-label="Main navigation"><span class="clean-nav-group">Operations</span>
+<a aria-current="page" class="nav-link selected" href="overview.html" data-app-href="/admin"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-layout-dashboard"
+      aria-hidden="true"
+    >
+      <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+      <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+      <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+      <rect width="7" height="5" x="3" y="16" rx="1"></rect></svg
+    ><span>Overview</span></a>
+<a class="nav-link" href="members.html" data-app-href="/admin/members"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-crown"
+      aria-hidden="true"
+    >
+      <path
+        d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"
+      ></path>
+      <path d="M5 21h14"></path></svg
+    ><span>Members</span></a>
+<a class="nav-link" href="content.html" data-app-href="/admin/content"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-graduation-cap"
+      aria-hidden="true"
+    >
+      <path
+        d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"
+      ></path>
+      <path d="M22 10v6"></path>
+      <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path></svg
+    ><span>Content / Academy</span></a>
+
+
+<a class="nav-link" href="platform.html" data-app-href="/admin/platform"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>Platform &amp; rooms</span></a>
+<a class="nav-link" href="overview.html#system-status" data-app-href="/admin#system-status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>System Status</span></a>
+<a class="nav-link" href="audit.html" data-app-href="/admin/audit"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-shield-check"
+      aria-hidden="true"
+    >
+      <path
+        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+      ></path>
+      <path d="m9 12 2 2 4-4"></path></svg
+    ><span>Audit Log</span></a>
+</nav><nav class="nav-links" aria-label="Account navigation"><span class="clean-nav-group">Account</span>
+<a class="nav-link" href="settings.html" data-app-href="/admin/settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>My profile</span></a>
+<a class="nav-link" href="../member/overview.html" data-app-href="/app"><svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="17"
+      height="17"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="lucide lucide-shield-check"
+      aria-hidden="true"
+    >
+      <path
+        d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+      ></path>
+      <path d="m9 12 2 2 4-4"></path></svg
+    ><span>Member workspace</span></a>
+</nav>
+<button class="logout" data-logout>Sign out</button><p data-logout-error role="alert" hidden></p></div><main id="main-content" class="main-content"><!-- PAGE CONTENT START --><section data-admin-dashboard class="v6-admin-dashboard" aria-busy="false">
+<header class="v6-admin-hero"><div><span class="eyebrow">YENQO / OPERATIONS</span><h1>Platform overview</h1><p>Members, verification and Academy publishing. One clear view of your platform.</p></div><button type="button" class="button button-secondary" data-admin-refresh>Refresh data</button></header>
+<p class="v6-source-status" data-admin-source role="status" aria-live="polite">Waiting for authenticated operations data.</p>
+<div class="v6-kpi-grid clean-core-metrics"><article class="v6-kpi"><span class="v6-kpi-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 21v-2a6 6 0 0 1 12 0v2M16 5a3 3 0 0 1 0 6M18 15a5 5 0 0 1 3 4v2"/></svg></span><div><span class="v6-kpi-label">Total members</span><strong data-admin-metric="totalMembers">&mdash;</strong><small>Registered member accounts</small></div></article><article class="v6-kpi"><span class="v6-kpi-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7Z"/><path d="m8 12 3 3 5-6"/></svg></span><div><span class="v6-kpi-label">Verified access</span><strong data-admin-metric="verifiedMembers">&mdash;</strong><small>Qualifying IB + USD 100 review</small></div></article><article class="v6-kpi"><span class="v6-kpi-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><span class="v6-kpi-label">Awaiting review</span><strong data-admin-metric="pendingMemberships">&mdash;</strong><small>Submitted membership requests</small></div></article></div><details class="clean-additional-metrics"><summary>Academy &amp; activity metrics</summary><div class="v6-kpi-grid"><article class="v6-kpi"><span class="v6-kpi-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m3 12 4 0 3-7 4 14 3-7h4"/></svg></span><div><span class="v6-kpi-label">Active members</span><strong data-admin-metric="activeMembers30d">&mdash;</strong><small>Signed in during the last 30 days</small></div></article><article class="v6-kpi"><span class="v6-kpi-icon" aria-hidden="true"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5c4-2 6-1 9 1 3-2 5-3 9-1v15c-4-2-6-1-9 1-3-2-5-3-9-1ZM12 6v15"/></svg></span><div><span class="v6-kpi-label">Published lessons</span><strong data-admin-metric="publishedLessons">&mdash;</strong><small>Published Academy video records</small></div></article></div></details><div class="v6-admin-grid"><section class="v6-admin-panel"><header class="v6-panel-heading"><div><span class="eyebrow">MEMBER REGISTRATIONS</span><h2>Platform growth</h2></div><div class="v6-period-tabs" role="group" aria-label="Registration chart period"><button type="button" data-admin-period="7" aria-pressed="false">7 days</button><button type="button" data-admin-period="30" aria-pressed="true">30 days</button><button type="button" data-admin-period="90" aria-pressed="false">90 days</button><button type="button" data-admin-period="365" aria-pressed="false">Year</button></div></header><div class="v6-growth-chart" data-admin-growth><div class="v6-chart-placeholder"><span>Registration history</span><p>Actual member growth will appear when records are loaded.</p></div></div><p class="v6-data-note">Cumulative registered members &middot; Malaysia calendar dates</p></section>
+<section class="v6-admin-panel"><header class="v6-panel-heading"><div><span class="eyebrow">MEMBER ACCESS</span><h2>Membership distribution</h2></div></header><div class="v6-distribution" data-admin-distribution><div class="v6-distribution-empty"><strong>&mdash;</strong><span>Records not loaded</span></div></div><p class="v6-data-note">Access states come from the current IB and deposit verification policy.</p></section></div>
+<section class="v6-admin-panel v6-members-preview"><header class="v6-panel-heading"><div><span class="eyebrow">LATEST REGISTRATIONS</span><h2>Member management</h2></div><a class="button button-gold" href="members.html" data-app-href="/admin/members">Open member directory &rarr;</a></header><div class="v6-table-scroll" tabindex="0" aria-label="Recent registered members"><table class="v6-data-table"><thead><tr><th scope="col">Member</th><th scope="col">Review status</th><th scope="col">Registered</th><th scope="col">Last sign-in</th></tr></thead><tbody data-admin-recent-members><tr><td colspan="4" class="v6-empty">No records loaded. Private member details require an authenticated administrator session.</td></tr></tbody></table></div></section>
+<div class="v6-admin-lower"><section class="v6-admin-panel"><header class="v6-panel-heading"><div><span class="eyebrow">AUDIT RECORDS</span><h2>Recent activity</h2></div><a class="inline-link" href="audit.html" data-app-href="/admin/audit">Administrative logs &rarr;</a></header><ul class="v6-activity-list" data-admin-activity><li class="v6-empty">Recorded registrations, reviews and publishing actions will appear here.</li></ul></section>
+<section class="v6-admin-panel"><header class="v6-panel-heading"><div><span class="eyebrow">SERVICE AVAILABILITY</span><h2 id="system-status" tabindex="-1">System status</h2></div></header><ul class="v6-service-list" data-admin-services><li><div><strong>Application and database</strong><small>A successful authenticated refresh confirms this request only.</small></div><span class="v6-status-tag v6-status-muted">Not checked</span></li><li><div><strong>MT5 connection</strong><small>Tools is coming soon. Broker execution remains disabled.</small></div><span class="v6-status-tag v6-status-muted">Disconnected</span></li><li><div><strong>Live support and billing</strong><small>No live support or payment integration is configured.</small></div><span class="v6-status-tag v6-status-muted">Unavailable</span></li></ul></section></div>
+<nav class="v6-admin-shortcuts" aria-label="Publishing workspaces"><a href="content.html" data-app-href="/admin/content"><span>03 / ACADEMY</span><strong>Academy CMS</strong><small>Upload private lessons and publish videos &rarr;</small></a></nav>
+<p class="v6-data-note">Administrative access covers platform operations. It never authorizes trading on a member&rsquo;s broker account.</p></section>
+<!-- PAGE CONTENT END --></main><footer class="workspace-footer"><span>© 2026 YENQO. All rights reserved.</span><span>Educational use. Trading involves risk.</span></footer></div>
+<nav class="bottom-nav" aria-label="Mobile admin navigation"><a href="overview.html" data-app-href="/admin">Overview</a><a href="members.html" data-app-href="/admin/members">Members</a><a href="content.html" data-app-href="/admin/content">Academy CMS</a><a href="platform.html" data-app-href="/admin/platform">Platform</a></nav></div></body></html>

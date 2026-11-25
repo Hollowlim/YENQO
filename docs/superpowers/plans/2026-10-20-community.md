@@ -1,0 +1,9 @@
+# Shared Community implementation plan
+
+Approved scope: registered members read; verified JUSTMARKET IB jai4w0w6 plus qualifying USD100 members and admins post. Shared room only, plain text and optional HTTPS chart links; no binary uploads or DMs. Execute inline in the current workspace, following the user's continuous implementation instruction.
+
+1. Add CommunityMessage/CommunityReport tables, FK constraints, unique author/client key and stable cursor indexes. Generate Prisma and apply additive migration while the web process is stopped.
+2. Add authenticated /api/community/messages GET/POST and message remove/report POST operations. Recheck principal/membership on every request; bound bodies, same-origin mutations, rate limits, public-field projections, no raw HTML. Use transactional audits and idempotency. Admin-only reports GET. Hide content globally after deletion; never leak bodies via reply metadata or retries.
+3. Add Community page and navigation for all signed-in users. Plain browser script renders escaped text, chronological paginated messages, reply controls, visible eligibility, composer retries, own removal, reports/admin hides, and admin report review. Poll only visible connected pages with backoff. Offline preview clearly disables posting and shows no real messages.
+4. Integration tests: auth, free read/post denial, verified posting, forged author ignored, cross-user removal denied, CSRF, idempotency/conflicting replay, reply validation, hidden-content suppression, reports/admin access and immediate membership revocation. Browser tests exercise actual read-only/verified composer and admin moderation at desktop/tablet/mobile widths.
+5. Run Prisma validation, build/lint/typecheck/unit/integration/browser checks; record exact results and remaining production/upload limitations. No live MT5 commands.

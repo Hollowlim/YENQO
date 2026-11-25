@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": [
+      "ES2023",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "apps/web/server/**/*.js",
+    "apps/web/public/**/*.js",
+    "prisma/seed.js",
+    "scripts/check-web.mjs",
+    "scripts/export-preview.mjs",
+    "apps/web/components/cinematic-scene.js",
+    "apps/web/components/earth-renderer.js",
+    "apps/web/components/hero-art-renderer.js",
+    "apps/web/components/trading-tools.js",
+    "packages/shared/trading-math.js"
+  ],
+  "exclude": [
+    "apps/web/public/cinematic-scene.js",
+    "apps/web/public/earth-renderer.js",
+    "apps/web/public/hero-art-renderer.js",
+    "apps/web/public/trading-tools.js"
+  ]
+}

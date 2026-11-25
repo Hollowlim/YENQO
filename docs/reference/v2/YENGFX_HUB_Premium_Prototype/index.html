@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover"/><meta name="theme-color" content="#090a0d"/><meta name="description" content="YENGFX HUB premium member trading control and learning prototype"/><title>YENGFX HUB — Premium Prototype</title><link rel="stylesheet" href="styles.css"/></head>
+<body>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<div id="appShell" class="app-shell">
+ <aside class="sidebar" aria-label="Primary navigation">
+  <div class="brand"><img src="assets/yengfx-logo.png" alt="YENGFX" class="brand-logo"/><div class="brand-sub">PRIVATE TRADING ECOSYSTEM</div></div>
+  <div class="nav-caption">WORKSPACE</div><nav id="sideNav" class="side-nav"></nav>
+  <div class="sidebar-bottom"><div class="status-dot-row"><i class="dot amber"></i><span>MT5 DEMO ENVIRONMENT</span></div><div class="member-mini"><div class="avatar">Y</div><div><strong>Legacy Member</strong><small>YENGFX Community</small></div><span class="chevron">⌄</span></div></div>
+ </aside>
+ <div class="main-area">
+  <header class="topbar"><div class="top-left"><button class="icon-button mobile-menu-btn" id="menuToggle" aria-label="Open navigation">☰</button><span class="top-eyebrow">YENGFX / <b id="breadcrumb">OVERVIEW</b></span></div><div class="top-actions"><span class="environment"><span class="tiny-gold-dot"></span> DEMO PROTOTYPE</span><button class="icon-button" id="notifBtn" aria-label="Notifications"><span class="bell">♧</span><span class="notif-dot"></span></button><button class="user-avatar" id="profileBtn" aria-label="Account settings">Y</button></div></header>
+  <main id="mainContent" tabindex="-1"></main>
+ </div>
+ <nav id="bottomNav" class="bottom-nav" aria-label="Mobile navigation"></nav>
+ <div id="mobileDrawer" class="drawer-backdrop" hidden><div class="mobile-drawer"><div class="drawer-head"><strong>YENGFX HUB</strong><button id="drawerClose" class="icon-button" aria-label="Close menu">✕</button></div><div id="drawerNav"></div></div></div>
+ <div id="modalRoot" class="modal-backdrop" hidden></div>
+ <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+<script src="app.js"></script>
+</body></html>

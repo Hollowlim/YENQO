@@ -1,0 +1,4 @@
+/* Authentication shell only; public homepage and authenticated portal styles are unchanged. */
+.auth-page .branch-list::before,.auth-page .branch-list .nav-link::before{content:none;display:none;border:0}
+.auth-page .branch-list{padding-left:0}
+.auth-page .branch-list .nav-link{padding-left:14px}

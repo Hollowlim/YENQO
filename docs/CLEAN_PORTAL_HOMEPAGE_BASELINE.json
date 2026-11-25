@@ -1,0 +1,21 @@
+{
+  "apps/web/pages/index.html": "84937acbab9b36a178a8b044e91903cab7a6c2e58d09baa6025c327e630fd054",
+  "apps/web/pages/demo-preview.html": "04edaa292ba102281a63181ad89c8cba7cc4cc7c17360370307cdf91e6d79072",
+  "apps/web/templates/product-home.html": "1f9fe31c95d7393142fb3fecae277809cb9b0c622316ea7a68d31eb679fd8acc",
+  "apps/web/templates/layout.html": "67c2fc9af258d7219efc296355ef9cddf1fbcb0093148c96c419caa551bf00b6",
+  "apps/web/templates/member-navigation.html": "af2991a883753e258706325a174edf93128387a6a73ecb86b0461f90ea7d9a9f",
+  "apps/web/templates/admin-navigation.html": "e7df75793b6384c5fdba3421391b74c3cd56fbc93b48beed7b2b1228dd09da92",
+  "apps/web/public/styles.css": "b919b84e1a1921b8850efb82d0f3d6d9731d8c2147bc6d32afc6be0dba4d5e7e",
+  "apps/web/public/v2.css": "81ca96e4ff6584f387ca60c5ef6dd8d32053dc3ffd6c213ee444c0c438b99541",
+  "apps/web/public/v4.css": "c2cdb71606a3f1096929c26df638eec60f483316012967770e6fcec06f238053",
+  "apps/web/public/branding-2026.css": "807d5228be2b7e467a5a68591b51e392ba8949da6c74fe210c78d85b4ce41f8d",
+  "apps/web/public/product-home.css": "d775b16203999cda7fc9f669cfec69c2f59cd1cae077f2705c338f80812d76d7",
+  "apps/web/public/product-home.js": "a55b9d11b5fd535b17be5baaada218feed07f1b337ce433e2969a2e83aece351",
+  "apps/web/public/hero-motion.js": "2f96237283151a378fefff508981e808b0a4c1843e7b5dc69ac9059d17074bf6",
+  "apps/web/public/hero-art-renderer.js": "4fe40d7fd9e945520940c6bcee3a9c0693b2bb246fa6caec8e0fcc03160a5cdc",
+  "apps/web/public/cinematic-loader.js": "11722fd3673730a21e326fd758df2ec97f1658d78b4aff41283b270185764d3f",
+  "apps/web/public/cinematic-scene.js": "7196149fead8b5f56ff233ada3a4907a31abd276bfd49b8abc1789c260b3b549",
+  "apps/web/public/v4-hero-emblem.webp": "1310f644b2e883bc098a0ba3c9e014add14a57db5e899ebb9ccbfb8f53549df9",
+  "apps/web/public/yengfx-mark-2026.webp": "bfbdfa932476782a8f0bf60a7e9ee7186d602dbde5025f17ebc647f15a5488e0",
+  "rendered-public-homepage": "7d54cedcfb83865dc60433364f8a0f40c2929163d0d225f22fee191058d11fac"
+}

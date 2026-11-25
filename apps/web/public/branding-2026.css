@@ -1,0 +1,13 @@
+/* Approved YF emblem refresh. Layout and trading controls retain their existing rules. */
+.brand .brand-logo-small{width:144px;height:96px;object-fit:contain}
+.v6-portal .brand .brand-logo-small{width:144px;height:96px}
+.v6-portal .compact-brand .brand .brand-logo-small{width:68px;height:46px}
+.v4-home .cinema-identity img{width:120px;height:80px;object-fit:contain}
+.v4-home[data-hero-layers='artwork'] .v4-hero-art>img{opacity:1;animation:none;transform:none}
+.v4-art-motion-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+.v4-home[data-hero-motion='reduced'] .v4-art-motion-canvas{visibility:hidden}
+.v4-home[data-art-renderer='fallback'][data-hero-motion='running'] .v4-hero-art>img{animation:v4-art-fallback 12s ease-in-out infinite alternate}
+@keyframes v4-art-fallback{from{transform:scale(1)}to{transform:scale(1.014)}}
+@media(prefers-reduced-motion:reduce){.v4-art-motion-canvas{visibility:hidden}.v4-home[data-art-renderer='fallback'] .v4-hero-art>img{animation:none}}
+.v4-home .v4-scene-logo{inset:14% auto auto 46%;width:48%;height:58%;object-fit:contain;transform-origin:50% 50%}
+@media(max-width:600px){.v4-home .cinema-identity img{width:90px;height:60px}.v4-home .v4-scene-logo{inset:9% auto auto 27%;width:70%;height:64%}}

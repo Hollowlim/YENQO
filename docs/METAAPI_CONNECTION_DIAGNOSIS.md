@@ -1,0 +1,43 @@
+# MetaApi connection diagnosis — 2 November 2026
+
+The token saved in `.env` passed the provider server-directory lookup (HTTP 200). The attempted member connection had a provider ID but no history snapshot. A read-only metadata check showed that provider account as **UNDEPLOYED / DISCONNECTED in London**, while the application's default creation region was New York. Later in the same diagnostic, the local connection table no longer contained a connection. The assistant did not delete or deploy it. Reconnection now requires the member's investor password in the website form; it is not retained by the app and cannot be replayed from the database.
+
+The password input clearing on submission is intentional. It does not confirm either successful broker authorization or a completed history sync.
+
+Changes:
+
+- `broker-provider.js` resolves account-information and history requests from the provider account's validated region. New-account creation retains the configured default. Every client host remains constructed from an explicit region allowlist; caller-supplied URLs/regions cannot redirect the API token. History is allowed only after the same adapter instance verifies account identity, MT5 platform/version, investor mode, trading-disabled status, allowed account type and currency. A failed new check clears its prior region authorization.
+- Stopped, failed-deployment, broker-disconnected, unsupported-region, identity and API-permission failures have sanitized actionable messages. No automatic deploy/redeploy, credential retry or order method was added.
+- `broker-routes.js` audits safe error enums and claimed versions only. The owner-scoped connection GET can restore the latest matching failure message after refresh. Old failures from before this change may require one Sync attempt to produce a new detailed error. Provider responses, passwords, API tokens and account balances are never placed in those audit details or diagnostic output.
+
+Validation passed: `scripts\pnpm.cmd lint`, `scripts\pnpm.cmd typecheck`, `scripts\pnpm.cmd build` (58 HTML files / 26 exports), `scripts\pnpm.cmd test` (90 tests), `scripts\pnpm.cmd test:integration` (95 tests on disposable local PostgreSQL), and `scripts\pnpm.cmd exec playwright test --config playwright.settings.config.ts --grep "stopped MetaApi"` (3 checks at 1440/834/390). The new tests cover London/default-region differences, blocked untrusted hosts, no history before investor verification, no automatic deployment, sanitized failure persistence and cross-member error isolation. Public and private preservation checks pass; no UI templates or schema changed.
+
+Read-only provider diagnostics did not fetch trades/history, deploy, create, update or delete a provider account. A diagnostic rerun returned no local connection; it was not reported as a successful broker test. Genuine broker history acceptance remains pending, real-account history remains disabled, and Tools trading remains disabled.
+
+Next steps: reload Settings, connect the approved test member's demo MT5 account with its investor password, then Sync history once the cloud account is connected. If MetaApi shows the existing account as stopped, its owner must review and start/deploy it in the MetaApi account dashboard. Review any billing/quota/login error displayed there; do not repeatedly create accounts or regenerate tokens to work around a deployment error.
+
+Primary references: [account model and region/state fields](https://metaapi.cloud/docs/provisioning/models/tradingAccount/), [deploy behavior](https://metaapi.cloud/docs/provisioning/api/account/deployAccount/).
+
+## Subsequent connection attempt ? London availability
+
+A later screenshot identified a new failed attempt with no assigned provider ID. Its saved failure was `PROVIDER_AUTH_FAILED`, meaning the provider denied an operation before attachment. Read-only validation showed that the running token can query the server directory and quotas, and its decoded permission claims include reader/writer roles for the two required API groups. The quota endpoint returned only London (100 account / 100 deployed-G2 capacity, 0% usage); new-account creation was still configured for New York. The private `METAAPI_REGION` setting was changed to `london` and the local website restarted. No token change, account creation/deployment, password replay or failed-row deletion was performed by the assistant. Successful creation/history still requires the member to resubmit the investor password in the form. No successful broker result is inferred from the regional configuration fix.
+
+## Continued denial: diagnostic correction
+
+The next attempt also failed before provider-account assignment. The earlier message grouped HTTP 401 and 403 together and cannot prove a missing permission, invalid token or broker-password problem. Changing the region did not establish a successful connection.
+
+Additional provider checks accepted the saved token for the access-rule manifest and account list (HTTP 200, zero cloud accounts). The manifest lists reader/writer as the management API's read/write roles. One validation-only POST containing `{}` returned HTTP 400 ValidationError; it contained no broker credentials or required account fields and could not create an account. This check does **not** establish that a complete creation request will succeed, nor does it reveal the original rejection reason. No token replacement or billing change is justified by these results alone.
+
+`broker-provider.js` now distinguishes 401, 403, 429 and the documented `E_AUTH` / `E_SERVER_TIMEZONE` responses. On failure it reads at most 16 KiB and retains only HTTP status, a fixed operation name, allowlisted provider error/code values and fixed topic flags. It discards all provider text, IDs, response headers, passwords and tokens. `broker-routes.js` sanitizes these values again before placing them in the existing owner/version-scoped failure audit. Public responses and member connection GETs do not include that diagnostic object. Existing stored failures retain their old message; they are not rewritten as a new result.
+
+One fresh website submission is needed to observe the actual rejected request with these diagnostics. Use the member's Settings form; do not send a password in chat. No background credential replay or retry was added. The saved investor password remains unavailable to the application after submission.
+
+Validation: `scripts\pnpm.cmd lint`, `scripts\pnpm.cmd typecheck`, `scripts\pnpm.cmd test` (92 passing), `scripts\pnpm.cmd build` (58 HTML / 26 exports), `scripts\pnpm.cmd exec vitest run --config vitest.integration.config.ts tests/integration/broker.test.ts` (11 passing against disposable native PostgreSQL), and `scripts\pnpm.cmd exec playwright test --config playwright.settings.config.ts --grep "stopped MetaApi"` (3 passing, 1440/834/390). Integration/browser commands used an isolated loopback database and app, with MetaApi disabled and external broker calls mocked. An initial PGlite test harness produced one compatibility failure; rerunning against the existing native PostgreSQL test service passed. No public/private templates, authentication, schema, trading controls or frontend assets were edited for this correction.
+
+## Fresh instrumented attempt: 00:48 MYT
+
+The member's fresh website attempt at 2026-11-01T16:48:19.788Z recorded `PROVIDER_PERMISSION_DENIED`, HTTP 403, operation `createAccount`, provider error `ForbiddenError`, and no recognized topic flags or documented broker error code. The local connection still has no provider account ID and no history snapshot. The diagnostic confirms the failed operation, but does not establish the provider's underlying access decision or prove that investor credentials are correct or incorrect.
+
+The current private configuration still uses London and the token claims still include management reader/writer with the unrestricted current-owner resource pattern, plus MetaApi REST reader access. The official SDK's token-management test uses the same `*:$USER_ID$:*` resource pattern as an unrestricted example; the placeholder alone is not evidence of a malformed token. MetaApi documents creation HTTP 403 as missing method/resource permission, but the visible token settings do not identify the missing permission. No further speculative token, region, billing or password change was made.
+
+Prepared [support request](METAAPI_SUPPORT_REQUEST.md) for provider-side investigation. No external message was sent. No new account creation, credential replay, deployment, deletion or trade was attempted by the assistant during this turn. This turn changed documentation only; the prior passing implementation checks remain applicable.

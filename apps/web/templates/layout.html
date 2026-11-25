@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{TITLE}} | YENQO</title>
+    <meta
+      name="description"
+      content="YENQO — Phase 1 read-only educational workspace."
+    />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="/assets/v2.css" />
+    <link rel="stylesheet" href="/assets/v4.css" />
+    <script defer src="/assets/v2-trade-model.js"></script>
+    <script defer src="/assets/v2.js"></script>
+    <script defer src="/assets/v2-signals.js"></script>
+    <script type="module" src="/assets/app.js"></script>
+    <script type="module" src="/assets/membership.js"></script>
+    <script type="module" src="/assets/shape-grid.js"></script>
+  </head>
+  <body class="v2-theme" data-demo-scope="{{DEMO_SCOPE}}" data-client-view="{{CLIENT_VIEW}}">
+    <div class="shape-grid site-effects" data-shape-grid aria-hidden="true"><canvas class="shape-grid-canvas"></canvas></div>
+    <div class="app-shell">
+      <a href="#main-content" class="skip-link">Skip to content</a>
+      <aside class="sidebar">
+        <a class="brand" aria-label="YENQO home" href="/"
+          ><strong>YENQO</strong><span><b class="yq-wordmark">YENQO</b> YOUR TRADING. YOUR CONTROL.</span></a
+        >{{NAVIGATION}}
+        <div class="sidebar-bottom">{{PROFILE}}</div>
+      </aside>
+      <div class="workspace">
+        <header class="topbar">
+          <div class="compact-brand">
+            <a class="brand" aria-label="YENQO home" href="/"
+              ><strong>YENQO</strong><span><b class="yq-wordmark">YENQO</b> YOUR TRADING. YOUR CONTROL.</span></a
+            >
+          </div>
+          <span class="breadcrumb">{{BREADCRUMB}}</span>
+          <div class="topbar-actions"><a class="v2-collapse-button notification-bell" aria-label="Open notifications" href="/app/notifications"><span class="bell-glyph" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16.5V10a6 6 0 0 1 12 0v6.5l1.6 2.3H4.4L6 16.5Z"/><path d="M10 21h4"/></svg></span><span>Notifications</span></a>
+            <button type="button" class="v2-collapse-button" data-v2-collapse aria-label="Toggle desktop sidebar" aria-expanded="true">Sidebar</button>
+            <span class="demo-badge"><span></span>DEMO · NOT LIVE</span
+            ><button
+              aria-label="Open navigation"
+              aria-expanded="false"
+              aria-controls="compact-navigation"
+              class="menu-toggle"
+              data-menu-toggle=""
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-menu"
+                aria-hidden="true"
+              >
+                <path d="M4 5h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 19h16"></path>
+              </svg>
+            </button>
+          </div>
+        </header>
+        <div class="compact-navigation" id="compact-navigation" hidden="">
+          {{NAVIGATION}}{{COMPACT_PROFILE}}
+        </div>
+        <main id="main-content" class="main-content"><!-- PAGE CONTENT START -->{{CONTENT}}<!-- PAGE CONTENT END --></main>
+        <footer class="workspace-footer">
+          <span>© {{COPYRIGHT_YEAR}} YENQO. All rights reserved.</span
+          ><span>Educational use. Trading involves risk.</span>
+        </footer>
+      </div>
+      <nav class="bottom-nav" aria-label="Mobile quick navigation"><a href="/app/mt5">Tools</a><a href="/app/mapping">Daily Analysis / Mapping</a><a href="/app/academy">Educations</a><a href="/app/signals">Signals</a><a href="/app/community">Community</a></nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+<div class="account-settings">
+ <header class="settings-heading"><div><span class="eyebrow">YOUR ACCOUNT</span><h1>Account settings</h1><p>A clear home for your profile, account details and access.</p></div><span class="settings-access-tag">{{SETTINGS_ROLE}}</span></header>
+ {{PROFILE_CARD}}
+ <div class="settings-layout">
+  <section class="card settings-details"><div class="settings-section-heading"><span>01</span><div><h2>Personal details</h2><p>Your display name and account information.</p></div></div>
+   <form class="form-stack" data-client-profile {{PROFILE_FORM_ATTR}}>
+    <label class="field">Display name<input name="name" minlength="2" maxlength="80" required value="{{DISPLAY_NAME}}" autocomplete="name"></label>
+    {{BROKER_PROFILE_FIELDS}}
+    <div class="actions"><button class="button button-gold" type="submit">Save account details</button><button class="button button-secondary" type="button" data-profile-reload>Reload details</button></div>
+   </form><p class="form-status" data-profile-status role="status" aria-live="polite"></p>
+  </section>
+  <aside class="settings-aside"><section class="card settings-signin"><div class="settings-section-heading"><span>02</span><div><h2>Sign-in &amp; access</h2><p>Your login email and password.</p></div></div><label class="field">Email address<input type="email" readonly value="{{EMAIL}}" autocomplete="email"></label><p class="settings-note">Your sign-in email is fixed. Use your display name to update how your account appears.</p><a class="settings-inline-link" href="/auth/forgot-password">Reset your password <span aria-hidden="true">↗</span></a>{{SETTINGS_ACCESS_LINK}}</section><section class="settings-privacy"><svg width="20" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m12 3 8 4v5c0 5-8 9-8 9s-8-4-8-9V7Z"/><path d="m8 12 3 3 5-6"/></svg><p>Account details belong to your signed-in profile. Broker details alone do not grant access or confirm broker ownership.</p></section></aside>
+ </div>
+ {{BROKER_SYNC_PANEL}}
+</div>

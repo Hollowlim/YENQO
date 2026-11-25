@@ -1,0 +1,204 @@
+//@version=6
+indicator("YENGFX XAUUSD • Research Prototype v0.2", overlay = true, max_labels_count = 200, dynamic_requests = true)
+
+// PROVISIONAL body-pivot interpretation, not a validated Malaysian SNR system.
+// No orders, webhooks or client publishing. Test on ordinary OANDA:XAUUSD candles.
+requestedZoneTf = input.timeframe("60", "Preferred higher timeframe for zones (auto-raised if needed)")
+chartSeconds = timeframe.in_seconds()
+// Keep the preferred HTF when valid; otherwise choose a strictly higher TF.
+fallbackZoneTf = chartSeconds < 14400 ? "240" : chartSeconds < 86400 ? "1D" : chartSeconds < 604800 ? "1W" : chartSeconds < timeframe.in_seconds("1M") ? "1M" : chartSeconds < timeframe.in_seconds("3M") ? "3M" : "12M"
+zoneTf = timeframe.in_seconds(requestedZoneTf) > chartSeconds ? requestedZoneTf : fallbackZoneTf
+zonePips = input.int(70, "Entry-zone width (1 pip = $0.10)", options = [70, 80])
+pivotBars = input.int(3, "Body pivot confirmation bars", minval = 2, maxval = 10)
+expiryBars = input.int(30, "Setup expiry (chart bars)", minval = 3, maxval = 100)
+minimumRR = input.float(1.0, "Research minimum TP1 reward/risk", minval = 0.1, step = 0.1)
+mode = input.string("Scalping", "Signal label only", options = ["Scalping", "Interday"])
+zoneWidth = zonePips * 0.10
+
+if barstate.isfirst
+    if syminfo.tickerid != "OANDA:XAUUSD"
+        runtime.error("This prototype requires OANDA:XAUUSD.")
+    if not chart.is_standard
+        runtime.error("Use standard candles, not synthetic chart prices.")
+    if na(chartSeconds) or chartSeconds < 60
+        runtime.error("Use a standard time-based chart of at least one minute.")
+    if timeframe.in_seconds(zoneTf) <= timeframe.in_seconds()
+        runtime.error("Zone timeframe must be higher than the chart timeframe.")
+
+bodyLow = math.min(open, close)
+bodyHigh = math.max(open, close)
+
+// These values appear only AFTER right-side pivot confirmation. HTF requests
+// below delay them one more HTF bar and never backdate a signal to pivot time.
+f_levels() =>
+    ph = ta.pivothigh(math.max(open, close), pivotBars, pivotBars)
+    pl = ta.pivotlow(math.min(open, close), pivotBars, pivotBars)
+    h0 = ta.valuewhen(not na(ph), ph, 0)
+    h1 = ta.valuewhen(not na(ph), ph, 1)
+    l0 = ta.valuewhen(not na(pl), pl, 0)
+    l1 = ta.valuewhen(not na(pl), pl, 1)
+    ht = ta.valuewhen(not na(ph), time, 0)
+    lt = ta.valuewhen(not na(pl), time, 0)
+    [h0[1], h1[1], l0[1], l1[1], ht[1], lt[1]]
+
+[zh, zh1, zl, zl1, zhTime, zlTime] = request.security(syminfo.tickerid, zoneTf, f_levels(), lookahead = barmerge.lookahead_on)
+// Never sample incomplete lower-timeframe intrabars through request.security.
+// Lower roadblock slots fall back to chart TF; repeated levels are deduplicated.
+f_roadblock_tf(string preferred) =>
+    timeframe.in_seconds(preferred) < chartSeconds ? timeframe.period : preferred
+
+[h5, h5b, l5, l5b, th5, tl5] = request.security(syminfo.tickerid, f_roadblock_tf("5"), f_levels(), lookahead = barmerge.lookahead_on)
+[h15, h15b, l15, l15b, th15, tl15] = request.security(syminfo.tickerid, f_roadblock_tf("15"), f_levels(), lookahead = barmerge.lookahead_on)
+[h30, h30b, l30, l30b, th30, tl30] = request.security(syminfo.tickerid, f_roadblock_tf("30"), f_levels(), lookahead = barmerge.lookahead_on)
+[h60, h60b, l60, l60b, th60, tl60] = request.security(syminfo.tickerid, f_roadblock_tf("60"), f_levels(), lookahead = barmerge.lookahead_on)
+
+supportBottom = plot(zl, "HTF body support", color = color.new(color.teal, 30), style = plot.style_stepline)
+supportTop = plot(zl + zoneWidth, "HTF support zone top", color = color.new(color.teal, 65), style = plot.style_stepline)
+fill(supportBottom, supportTop, color.new(color.teal, 92))
+resistanceTop = plot(zh, "HTF body resistance", color = color.new(color.red, 30), style = plot.style_stepline)
+resistanceBottom = plot(zh - zoneWidth, "HTF resistance zone bottom", color = color.new(color.red, 65), style = plot.style_stepline)
+fill(resistanceTop, resistanceBottom, color.new(color.red, 92))
+
+ph = ta.pivothigh(bodyHigh, pivotBars, pivotBars)
+pl = ta.pivotlow(bodyLow, pivotBars, pivotBars)
+lastHigh = ta.valuewhen(not na(ph), ph, 0)
+previousHigh = ta.valuewhen(not na(ph), ph, 1)
+lastLow = ta.valuewhen(not na(pl), pl, 0)
+previousLow = ta.valuewhen(not na(pl), pl, 1)
+
+// Provisional structure: lower highs + lower lows before a bullish break,
+// higher highs + higher lows before a bearish break. Break level is frozen.
+bearishStructure = lastHigh < previousHigh and lastLow < previousLow
+bullishStructure = lastHigh > previousHigh and lastLow > previousLow
+
+f_add(array<float> levels, float price, float entryPrice, int direction) =>
+    if not na(price) and (price - entryPrice) * direction > syminfo.mintick
+        rounded = math.round_to_mintick(price)
+        if not array.includes(levels, rounded)
+            array.push(levels, rounded)
+
+f_targets(float entryPrice, int direction) =>
+    levels = array.new<float>()
+    f_add(levels, direction == 1 ? zh : zl, entryPrice, direction)
+    f_add(levels, direction == 1 ? zh1 : zl1, entryPrice, direction)
+    if timeframe.in_seconds(zoneTf) >= 300
+        f_add(levels, direction == 1 ? h5 : l5, entryPrice, direction)
+        f_add(levels, direction == 1 ? h5b : l5b, entryPrice, direction)
+    if timeframe.in_seconds(zoneTf) >= 900
+        f_add(levels, direction == 1 ? h15 : l15, entryPrice, direction)
+        f_add(levels, direction == 1 ? h15b : l15b, entryPrice, direction)
+    if timeframe.in_seconds(zoneTf) >= 1800
+        f_add(levels, direction == 1 ? h30 : l30, entryPrice, direction)
+        f_add(levels, direction == 1 ? h30b : l30b, entryPrice, direction)
+    if timeframe.in_seconds(zoneTf) >= 3600
+        f_add(levels, direction == 1 ? h60 : l60, entryPrice, direction)
+        f_add(levels, direction == 1 ? h60b : l60b, entryPrice, direction)
+    array.sort(levels, direction == 1 ? order.ascending : order.descending)
+    t1 = array.size(levels) >= 3 ? array.get(levels, 0) : na
+    t2 = array.size(levels) >= 3 ? array.get(levels, 1) : na
+    t3 = array.size(levels) >= 3 ? array.get(levels, 2) : na
+    [t1, t2, t3]
+
+var int stage = 0
+var int direction = 0
+var int armedBar = na
+var int breakBar = na
+var int zoneId = na
+var int usedBuyZone = na
+var int usedSellZone = na
+var float frozenLow = na
+var float frozenHigh = na
+var float breakLevel = na
+var float stopLevel = na
+var string status = "Waiting for HTF zone and structure"
+var float planEntry = na
+var float planSL = na
+var float planTP1 = na
+var float planTP2 = na
+var float planTP3 = na
+bool buyCandidate = false
+bool sellCandidate = false
+
+if barstate.isconfirmed
+    if stage != 0
+        zoneChanged = direction == 1 ? zlTime != zoneId : zhTime != zoneId
+        zoneInvalid = direction == 1 ? close < frozenLow : close > frozenHigh
+        stopInvalid = stage >= 2 and (direction == 1 ? low <= stopLevel : high >= stopLevel)
+        if bar_index - armedBar > expiryBars or zoneChanged or zoneInvalid or stopInvalid
+            stage := 0
+            status := "Setup expired / invalidated"
+
+    if stage == 0
+        buyTouch = not na(zl) and (na(usedBuyZone) or zlTime != usedBuyZone) and low <= zl + zoneWidth and high >= zl and close >= zl and close <= zl + zoneWidth and bearishStructure
+        sellTouch = not na(zh) and (na(usedSellZone) or zhTime != usedSellZone) and low <= zh and high >= zh - zoneWidth and close >= zh - zoneWidth and close <= zh and bullishStructure
+        if buyTouch != sellTouch
+            direction := buyTouch ? 1 : -1
+            frozenLow := buyTouch ? zl : zh - zoneWidth
+            frozenHigh := buyTouch ? zl + zoneWidth : zh
+            breakLevel := buyTouch ? lastHigh : lastLow
+            stopLevel := buyTouch ? lastLow : lastHigh
+            zoneId := buyTouch ? zlTime : zhTime
+            armedBar := bar_index
+            stage := 1
+            status := "Zone touched: waiting for structure break"
+            if buyTouch
+                usedBuyZone := zoneId
+            else
+                usedSellZone := zoneId
+
+    if stage == 1 and bar_index > armedBar
+        crossesLevel = direction == 1 ? open <= breakLevel and close > breakLevel : open >= breakLevel and close < breakLevel
+        if crossesLevel
+            breakoutStopTouched = direction == 1 ? low <= stopLevel : high >= stopLevel
+            if breakoutStopTouched
+                stage := 0
+                status := "Rejected: SL boundary touched during breakout"
+            else
+                breakBar := bar_index
+                stage := 2
+                status := "Breakout closed: waiting for retest + rejection"
+
+    if stage >= 2 and bar_index > breakBar
+        if low <= breakLevel and high >= breakLevel
+            stage := 3
+            status := "Retest touched: waiting for rejection close"
+        rejectionClosed = direction == 1 ? close > open and close > breakLevel : close < open and close < breakLevel
+        if stage == 3 and rejectionClosed
+            [t1, t2, t3] = f_targets(close, direction)
+            risk = (close - stopLevel) * direction
+            insideZone = close >= frozenLow and close <= frozenHigh
+            // Reject a candidate if the eventual SL price was already touched
+            // on the breakout/retest/rejection candle. No intrabar inference.
+            stopTouched = direction == 1 ? low <= stopLevel : high >= stopLevel
+            enoughRoom = not na(t3) and risk > 0 and (t1 - close) * direction / risk >= minimumRR
+            if insideZone and enoughRoom and not stopTouched
+                planEntry := close
+                planSL := stopLevel
+                planTP1 := t1
+                planTP2 := t2
+                planTP3 := t3
+                buyCandidate := direction == 1
+                sellCandidate := direction == -1
+                label.new(bar_index, close, "RESEARCH " + (direction == 1 ? "BUY" : "SELL") + " / " + mode + "\nEntry " + str.tostring(close, format.mintick) + "\nSL " + str.tostring(stopLevel, format.mintick) + "\nTP1 " + str.tostring(t1, format.mintick) + "\nTP2 " + str.tostring(t2, format.mintick) + "\nTP3 " + str.tostring(t3, format.mintick), style = direction == 1 ? label.style_label_up : label.style_label_down, color = color.new(color.orange, 10), textcolor = color.black)
+                status := "Research candidate only: no validated performance"
+            else
+                status := "Rejected: outside zone / SL / targets / reward-risk"
+            stage := 0
+
+plot(planEntry, "Latest research entry (not a fill)", color.gray, style = plot.style_circles)
+plot(planSL, "Latest research SL", color.red, style = plot.style_circles)
+plot(planTP1, "Latest research TP1", color.teal, style = plot.style_circles)
+plot(planTP2, "Latest research TP2", color.teal, style = plot.style_circles)
+plot(planTP3, "Latest research TP3", color.teal, style = plot.style_circles)
+plotshape(buyCandidate, "Research BUY", shape.triangleup, location.belowbar, color.orange, size = size.small)
+plotshape(sellCandidate, "Research SELL", shape.triangledown, location.abovebar, color.orange, size = size.small)
+
+var table panel = table.new(position.top_right, 1, 4, bgcolor = color.new(color.black, 15))
+if barstate.islast
+    table.cell(panel, 0, 0, "YENGFX • RESEARCH v0.2", text_color = color.orange)
+    table.cell(panel, 0, 1, status, text_color = color.white)
+    table.cell(panel, 0, 2, "Body pivots only • QM / trendline / VP not implemented", text_color = color.silver)
+    table.cell(panel, 0, 3, "Confirmation: " + timeframe.period + " / Zone: " + zoneTf + " / Lower roadblocks omitted", text_color = color.silver)
+
+alertcondition(buyCandidate, "Research BUY candidate", "YENGFX RESEARCH BUY on {{ticker}}. Unvalidated prototype; review chart. No client publishing.")
+alertcondition(sellCandidate, "Research SELL candidate", "YENGFX RESEARCH SELL on {{ticker}}. Unvalidated prototype; review chart. No client publishing.")

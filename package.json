@@ -1,0 +1,53 @@
+{
+  "name": "yengfx-hub",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @yengfx/web dev",
+    "build": "node scripts/build-cinematic.mjs && node scripts/build-trading-tools.mjs && node scripts/export-preview.mjs && node scripts/check-web.mjs",
+    "preview:export": "node scripts/build-cinematic.mjs && node scripts/build-trading-tools.mjs && node scripts/export-preview.mjs",
+    "start": "pnpm --filter @yengfx/web start",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -p tsconfig.web.json --noEmit && tsc -p tsconfig.tests.json --noEmit",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:reset": "vitest run --config vitest.delivery.config.ts",
+    "test:e2e": "playwright test",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:seed": "node prisma/seed.js",
+    "db:local": "node scripts/local-db.mjs",
+    "admin:setup": "node scripts/bootstrap-admin.mjs",
+    "supabase:prepare": "node scripts/build-supabase-bootstrap.mjs",
+    "supabase:check": "node scripts/check-supabase.mjs",
+    "supabase:validate": "node scripts/validate-supabase-bootstrap.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.0",
+    "parse5": "8.0.0",
+    "sharp": "^0.35.5",
+    "three": "0.180.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.10",
+    "@electric-sql/pglite-socket": "^0.2.13",
+    "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^24.10.0",
+    "@types/pg": "^8.16.0",
+    "@types/three": "0.180.0",
+    "esbuild": "0.27.0",
+    "eslint": "^9.39.2",
+    "pg": "^8.18.0",
+    "prettier": "^3.9.10",
+    "prisma": "6.19.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

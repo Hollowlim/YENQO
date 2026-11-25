@@ -1,0 +1,12 @@
+<section class="profile-photo-settings profile-photo-inline section-gap" data-photo-settings aria-label="Your profile">
+ <form data-photo-form class="profile-photo-form">
+  <article class="profile-card" data-profile-card aria-label="Your profile card">
+    <div class="profile-card-surface">
+      <button class="profile-photo-picker" type="button" data-photo-picker aria-label="Change profile photo" aria-describedby="profile-photo-help">{{PROFILE_AVATAR}}<span class="profile-photo-camera" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 5 6 8H3v12h18V8h-3l-2-3Z"/><circle cx="12" cy="13" r="4"/></svg></span></button>
+      <div class="profile-card-caption"><span class="eyebrow">YENQO</span><h2 data-profile-card-name>{{PROFILE_NAME}}</h2><p data-profile-card-role>{{PROFILE_ROLE}}</p></div>
+    </div>
+  </article>
+  <div class="profile-photo-options"><input type="file" accept="image/jpeg,image/png,image/webp" data-photo-file hidden aria-label="Upload profile photo" aria-describedby="profile-photo-help"><p id="profile-photo-help">Tap your photo to change it.<br>JPG, PNG or WebP · Up to 5 MB</p><div class="actions" data-photo-actions hidden><button type="submit" class="button button-gold" data-photo-save disabled>Save photo</button><button type="button" class="button button-secondary" data-photo-cancel hidden>Cancel preview</button></div><button type="button" class="profile-photo-remove" data-photo-remove hidden disabled>Remove photo</button></div>
+  <p data-photo-status class="form-status profile-photo-status" role="status" aria-live="polite"></p>
+ </form>
+</section>

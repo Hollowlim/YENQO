@@ -1,0 +1,4 @@
+{
+  "compilerOptions": { "target": "ES2022", "lib": ["esnext", "dom"], "module": "esnext", "moduleResolution": "bundler", "strict": true, "allowJs": true, "skipLibCheck": true, "esModuleInterop": true, "noEmit": true },
+  "include": ["tests/**/*.ts", "playwright.config.ts", "vitest*.ts"]
+}

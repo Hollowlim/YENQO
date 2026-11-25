@@ -1,0 +1,55 @@
+<section class="yh-tools" data-trading-tools aria-labelledby="yh-tools-heading">
+  <header class="yh-top"><div><p class="yh-kicker">YENQO / TRADING TOOLS</p><h2 id="yh-tools-heading" class="yh-title">Plan the trade.<br><em>Protect the capital.</em></h2><p>Free XAUUSD calculators. Your inputs, your broker specifications.</p></div><span class="yh-state">FREE · NO BROKER REQUIRED</span></header>
+  <div class="yh-tabs" role="tablist" aria-label="Trading tools">
+    <button id="yh-tab-profit" type="button" role="tab" aria-selected="true" aria-controls="yh-calculator-panel" data-tool-tab="profit">Profit &amp; Loss</button>
+    <button id="yh-tab-risk" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-calculator-panel" data-tool-tab="risk">Risk &amp; Lot Size</button>
+    <button id="yh-tab-reward" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-calculator-panel" data-tool-tab="reward">Risk / Reward</button>
+    <button id="yh-tab-mt5" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-mt5-panel" data-tool-tab="mt5">MT5 <span>READ-ONLY</span></button>
+  </div>
+  <div id="yh-calculator-panel" role="tabpanel" aria-labelledby="yh-tab-profit" class="yh-layout" tabindex="0">
+    <section class="yh-panel" aria-labelledby="yh-calculator-title">
+      <div class="yh-panelhead"><h2 id="yh-calculator-title" data-tools-title>Profit &amp; Loss Calculator</h2><button type="button" class="yh-text-button" data-tools-example>Load example</button></div>
+      <p class="yh-example-note">Starts with illustrative values, not market prices. Replace them with your own inputs.</p>
+      <form data-tools-form novalidate>
+        <fieldset class="yh-side"><legend>Position direction</legend><label><input type="radio" name="side" value="BUY" checked><span>BUY</span></label><label><input type="radio" name="side" value="SELL"><span>SELL</span></label></fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="profit"><legend class="yh-sr-only">Profit and loss inputs</legend>
+          <label class="yh-field">Entry price<input name="profitEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Exit price<input name="profitExit" type="number" inputmode="decimal" step="any" min="0.00000001" value="4005" required></label>
+          <label class="yh-field">Position volume (lots)<input name="profitLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.10" required></label>
+          <label class="yh-field">Total extra costs (account currency)<input name="profitCosts" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="risk" hidden disabled><legend class="yh-sr-only">Risk and lot-size inputs</legend>
+          <label class="yh-field">Account balance<input name="riskBalance" type="number" inputmode="decimal" step="any" min="0.01" value="1000" required></label>
+          <label class="yh-field">Risk per trade (%)<input name="riskPercent" type="number" inputmode="decimal" step="any" min="0.00000001" max="100" value="1" required></label>
+          <label class="yh-field">Entry price<input name="riskEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Stop-loss price<input name="riskStop" type="number" inputmode="decimal" step="any" min="0.00000001" value="3992" required></label>
+          <label class="yh-field">Take-profit price<input name="riskTarget" type="number" inputmode="decimal" step="any" min="0.00000001" value="4016" required></label>
+          <label class="yh-field">Round-trip cost per lot<input name="riskCost" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="reward" hidden disabled><legend class="yh-sr-only">Risk and reward inputs</legend>
+          <label class="yh-field">Entry price<input name="rewardEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Stop-loss price<input name="rewardStop" type="number" inputmode="decimal" step="any" min="0.00000001" value="3992" required></label>
+          <label class="yh-field">Take-profit price<input name="rewardTarget" type="number" inputmode="decimal" step="any" min="0.00000001" value="4016" required></label>
+          <label class="yh-field">Position volume (lots)<input name="rewardLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.10" required></label>
+          <label class="yh-field">Round-trip cost per lot<input name="rewardCost" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <details class="yh-spec"><summary>Broker symbol settings <span>ADJUSTABLE</span></summary><p>Example: 100 troy oz per lot. Confirm your broker’s exact symbol contract, volume limits and calculation mode.</p><div class="yh-formgrid">
+          <label class="yh-field">Contract size (units / lot)<input name="contractSize" type="number" inputmode="decimal" step="any" min="0.00000001" value="100" required></label>
+          <label class="yh-field">Minimum lots<input name="minLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.01" required></label>
+          <label class="yh-field">Maximum lots<input name="maxLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="100" required></label>
+          <label class="yh-field">Lot step<input name="lotStep" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.01" required></label>
+          <label class="yh-field">Quote currency<input name="quoteCurrency" value="USD" pattern="[A-Z]{3}" maxlength="3" autocapitalize="characters" spellcheck="false" required></label>
+          <label class="yh-field">Account currency<input name="accountCurrency" value="USD" pattern="[A-Z]{3}" maxlength="3" autocapitalize="characters" spellcheck="false" required></label>
+          <label class="yh-field yh-field-wide">Conversion rate: account currency per 1 quote unit<input name="quoteToAccountRate" type="number" inputmode="decimal" step="any" min="0.00000001" value="1" aria-describedby="yh-fx-help" required></label>
+        </div><p id="yh-fx-help">Manual conversion, no live FX feed. Use 1 for matching currencies. Example: 4.5 MYR per USD.</p></details>
+      </form>
+      <p class="yh-help">BUY: entry at ask, exit at bid. SELL: entry at bid, exit at ask. Use effective prices and do not count the spread twice. Extra costs are non-negative charges in account currency.</p>
+    </section>
+    <aside class="yh-panel yh-result" aria-label="Calculated estimate"><p class="yh-kicker">TRADE ESTIMATE / NOT LIVE DATA</p><div aria-live="polite" aria-atomic="true"><p class="yh-caption" data-tools-caption>Estimated net profit / loss</p><output class="yh-amount" data-tools-primary>—</output><p class="yh-error" data-tools-error hidden></p></div><dl class="yh-list" data-tools-results></dl><p class="yh-notice" data-tools-notice></p><p class="yh-disclaimer">Linear estimate only. Slippage, gaps, fees and broker calculation rules can change actual results. A stop-loss does not guarantee the estimated loss limit.</p></aside>
+  </div>
+  <section id="yh-mt5-panel" class="yh-mt5" role="tabpanel" aria-labelledby="yh-tab-mt5" tabindex="0" hidden>
+    <div class="yh-panel"><div class="yh-panelhead"><div><p class="yh-kicker">YOUR ACCOUNT / READ-ONLY</p><h2>MT5 account snapshot</h2></div><span class="yh-state">DISCONNECTED</span></div><p data-tools-mt5-status role="status">No paired MT5 device. Secure read-only pairing is not available in this release.</p><div class="yh-account-grid"><div><span>Balance</span><strong>—</strong></div><div><span>Equity</span><strong>—</strong></div><div><span>Floating P&amp;L</span><strong>—</strong></div><div><span>Last snapshot</span><strong>—</strong></div></div><p>No broker credentials are requested here. No account data or live connection is being shown.</p><div class="yh-mt5-actions"><button class="yh-check-button" type="button" data-tools-check>Check connection status</button><span>Pairing coming soon</span></div></div>
+    <aside class="yh-panel"><p class="yh-kicker">BUILT AROUND YOUR ACCOUNT</p><h2>Read-only, by design.</h2><p>A future connection needs your own paired device, explicit investor access and verified account ownership.</p><ul><li>Member-specific device access</li><li>Private encrypted transport</li><li>Freshness and revocation checks</li><li>No trade execution</li></ul><p class="yh-disclaimer">MT5 connectivity is not enabled. Calculators work independently, with no paid API.</p></aside>
+  </section>
+  <noscript><p class="yh-notice">Enable JavaScript to use the calculators. No broker connection is needed.</p></noscript>
+</section>

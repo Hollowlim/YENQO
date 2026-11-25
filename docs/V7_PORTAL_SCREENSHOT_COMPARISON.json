@@ -1,0 +1,44 @@
+[
+  {
+    "size": "desktop",
+    "role": "member",
+    "width": 1440,
+    "height": 1016,
+    "differingPixels": 0
+  },
+  {
+    "size": "desktop",
+    "role": "admin",
+    "width": 1440,
+    "height": 1844,
+    "differingPixels": 0
+  },
+  {
+    "size": "tablet",
+    "role": "member",
+    "width": 834,
+    "height": 1112,
+    "differingPixels": 0
+  },
+  {
+    "size": "tablet",
+    "role": "admin",
+    "width": 834,
+    "height": 1961,
+    "differingPixels": 0
+  },
+  {
+    "size": "mobile",
+    "role": "member",
+    "width": 390,
+    "height": 1897,
+    "differingPixels": 0
+  },
+  {
+    "size": "mobile",
+    "role": "admin",
+    "width": 390,
+    "height": 2970,
+    "differingPixels": 0
+  }
+]

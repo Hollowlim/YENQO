@@ -1,0 +1,79 @@
+<section class="yq-terminal" data-yq-terminal aria-labelledby="yq-terminal-title">
+  <header class="yq-term-head">
+    <div><p class="yq-kicker">TOOLS / TRADING TERMINAL</p><h1 id="yq-terminal-title">XAUUSD terminal</h1></div>
+    <div class="yq-term-badges"><span class="yq-pill yq-pill-demo">Chart: demo data, not market prices</span><span class="yq-pill yq-pill-off">Execution disabled</span></div>
+  </header>
+  <div class="yq-term-grid">
+    <section class="yq-card yq-chart-card" aria-labelledby="yq-chart-title">
+      <div class="yq-card-head">
+        <h2 id="yq-chart-title">XAUUSD · <span data-yq-tf-label>M15</span></h2>
+        <div class="yq-segment" role="group" aria-label="Chart timeframe"><button type="button" data-yq-tf="M5" aria-pressed="false">M5</button><button type="button" data-yq-tf="M15" aria-pressed="true">M15</button><button type="button" data-yq-tf="H1" aria-pressed="false">H1</button><button type="button" data-yq-tf="H4" aria-pressed="false">H4</button></div>
+      </div>
+      <p class="yq-note" data-yq-feed role="status">No market-data feed is connected. Candles and levels below are a generated demonstration, not XAUUSD prices.</p>
+      <div class="yq-chart-wrap"><canvas data-yq-chart role="img" aria-label="Demonstration XAUUSD candlestick chart with BUY and SELL zones, EA entry layers, stop loss and take profit. Not market data. Exact levels are listed in the table below."></canvas></div>
+      <ul class="yq-legend" aria-label="Chart legend"><li><i class="yq-sw yq-sw-buy"></i>BUY zone</li><li><i class="yq-sw yq-sw-sell"></i>SELL zone</li><li><i class="yq-sw yq-sw-layer"></i>EA layers L1–L3</li><li><i class="yq-sw yq-sw-sl"></i>Stop loss</li><li><i class="yq-sw yq-sw-tp"></i>Take profit</li></ul>
+      <details class="yq-levels"><summary>Chart levels as a table</summary><table class="yq-table"><caption>Demonstration levels, not a trade plan</caption><thead><tr><th scope="col">Level</th><th scope="col">Price</th></tr></thead><tbody data-yq-levels></tbody></table></details>
+    </section>
+    <aside class="yq-side" aria-label="Account and EA">
+      <section class="yq-card" aria-labelledby="yq-account-title">
+        <div class="yq-card-head"><h2 id="yq-account-title">Account</h2><span class="yq-pill yq-pill-pending" data-yq-connection>Checking…</span></div>
+        <dl class="yq-stats">
+          <div><dt>Balance</dt><dd data-yq-stat="balance">—</dd></div>
+          <div><dt>Equity</dt><dd data-yq-stat="equity">—</dd></div>
+          <div><dt>Floating P&amp;L</dt><dd data-yq-stat="floating">—</dd></div>
+          <div><dt>Open positions</dt><dd data-yq-stat="positions">—</dd></div>
+          <div><dt>Used margin</dt><dd data-yq-stat="margin">—</dd></div>
+          <div><dt>Currency</dt><dd data-yq-stat="currency">—</dd></div>
+          <div><dt>EA status</dt><dd data-yq-stat="ea">—</dd></div>
+          <div><dt>Read-only history</dt><dd data-yq-stat="history">—</dd></div>
+        </dl>
+        <p class="yq-note" data-yq-account-note>Values appear only when confirmed by your broker connection. “—” means no confirmed data.</p>
+        <a class="yq-link" href="/app/settings#broker-connection-heading">Manage MT5 connection →</a>
+      </section>
+      <section class="yq-card" aria-labelledby="yq-ea-title">
+        <div class="yq-card-head"><h2 id="yq-ea-title">EA controls</h2><span class="yq-pill yq-pill-off">Not deployed</span></div>
+        <p class="yq-note">Buttons send a <strong>request</strong>. A request is not an execution: only a broker-confirmed result changes your account. Cloud execution is not enabled, so every request is recorded and rejected.</p>
+        <div class="yq-ea-actions">
+          <button type="button" class="yq-btn" data-yq-ea="START">Start EA</button>
+          <button type="button" class="yq-btn" data-yq-ea="PAUSE_NEW_ENTRIES">Pause new entries</button>
+          <button type="button" class="yq-btn" data-yq-ea="RESUME">Resume EA</button>
+          <button type="button" class="yq-btn" data-yq-ea="BREAKEVEN">Breakeven</button>
+          <button type="button" class="yq-btn" data-yq-ea="PARTIAL_CLOSE">Partial close</button>
+          <button type="button" class="yq-btn yq-btn-danger" data-yq-ea="EMERGENCY_STOP">Emergency stop</button>
+        </div>
+        <details class="yq-advanced"><summary>EA settings</summary>
+          <form class="yq-form" data-yq-settings novalidate>
+            <label>Lot size<input name="lotSize" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.01" required></label>
+            <label>Risk per trade (%)<input name="riskPercent" type="number" inputmode="decimal" step="0.01" min="0.01" max="10" value="1" required></label>
+            <label>Maximum exposure (lots)<input name="maxExposureLots" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.10" required></label>
+            <label>Maximum active layers<input name="maxLayers" type="number" inputmode="numeric" step="1" min="1" max="20" value="3" required></label>
+            <label>Stop loss (points)<input name="stopLossPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Take profit (points)<input name="takeProfitPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Breakeven trigger (points)<input name="breakevenTriggerPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Partial close (% of eligible volume)<input name="partialClosePercent" type="number" inputmode="numeric" step="1" min="1" max="100" value="50" required></label>
+            <button type="submit" class="yq-btn">Request settings update</button>
+          </form>
+        </details>
+        <p class="yq-result" data-yq-ea-result role="status" aria-live="polite"></p>
+      </section>
+      <section class="yq-card" aria-labelledby="yq-guard-title">
+        <div class="yq-card-head"><h2 id="yq-guard-title">News protection</h2><span class="yq-pill yq-pill-pending" data-yq-guard-state>Checking…</span></div>
+        <p class="yq-note" data-yq-guard-note>Checking the USD calendar status…</p>
+        <a class="yq-link" href="/app/news">Open USD calendar →</a>
+      </section>
+    </aside>
+  </div>
+  <section class="yq-card yq-bottom" aria-label="Positions and history">
+    <div class="yq-tabs" role="tablist" aria-label="Positions and history">
+      <button type="button" role="tab" id="yq-tab-positions" aria-controls="yq-panel-positions" aria-selected="true" data-yq-tab>Open positions</button>
+      <button type="button" role="tab" id="yq-tab-orders" aria-controls="yq-panel-orders" aria-selected="false" tabindex="-1" data-yq-tab>Orders</button>
+      <button type="button" role="tab" id="yq-tab-layers" aria-controls="yq-panel-layers" aria-selected="false" tabindex="-1" data-yq-tab>EA layers</button>
+      <button type="button" role="tab" id="yq-tab-history" aria-controls="yq-panel-history" aria-selected="false" tabindex="-1" data-yq-tab>History</button>
+    </div>
+    <div role="tabpanel" id="yq-panel-positions" aria-labelledby="yq-tab-positions" tabindex="0"><p class="yq-empty">No broker-confirmed positions. The cloud MT5 connector is not deployed.</p></div>
+    <div role="tabpanel" id="yq-panel-orders" aria-labelledby="yq-tab-orders" tabindex="0" hidden><p class="yq-empty">No broker-confirmed pending orders.</p></div>
+    <div role="tabpanel" id="yq-panel-layers" aria-labelledby="yq-tab-layers" tabindex="0" hidden><p class="yq-note">Demonstration layer plan matching the chart. These are not open positions.</p><table class="yq-table"><thead><tr><th scope="col">Layer</th><th scope="col">Side</th><th scope="col">Entry</th><th scope="col">Stop loss</th><th scope="col">Take profit</th></tr></thead><tbody data-yq-layer-rows></tbody></table></div>
+    <div role="tabpanel" id="yq-panel-history" aria-labelledby="yq-tab-history" tabindex="0" hidden><p class="yq-empty">Closed-trade history comes from your read-only MT5 connection. <a class="yq-link" href="/app/calendar">Open P/L Calendar →</a></p></div>
+  </section>
+</section>
+<h2 class="yq-section-title" id="yq-calculators">Calculators</h2>

@@ -1,0 +1,16 @@
+import { X509Certificate } from 'node:crypto';
+import { loadEnvFile } from 'node:process';
+import { readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const certificateFile = fileURLToPath(new URL('../supabase/prod-ca-2021.crt', import.meta.url));
+const certificate = new X509Certificate(await readFile(certificateFile));
+if (!certificate.ca || Date.parse(certificate.validFrom) > Date.now() || Date.parse(certificate.validTo) <= Date.now()) throw new Error('The supplied certificate is not a currently valid CA certificate.');
+loadEnvFile('.env.supabase');
+const connection = new URL(process.env.SUPABASE_DATABASE_URL ?? '');
+if (connection.hostname !== 'aws-0-ap-northeast-1.pooler.supabase.com' || decodeURIComponent(connection.username) !== 'postgres.xammdrkwxonffxvmsjpi') throw new Error('Connection does not match the requested Supabase project.');
+connection.searchParams.set('sslmode', 'require');
+connection.searchParams.set('sslaccept', 'strict');
+connection.searchParams.set('sslcert', certificateFile.replaceAll('\\', '/'));
+const environment = await readFile('.env.supabase', 'utf8');
+await writeFile('.env.supabase', environment.replace(/^SUPABASE_DATABASE_URL=.*$/m, () => `SUPABASE_DATABASE_URL=${connection.toString()}`));
+console.log('Valid CA certificate configured with strict verification. Credentials were not displayed.');

@@ -1,0 +1,94 @@
+import { expect, test, type BrowserContext } from '@playwright/test';
+import { PrismaClient } from '@prisma/client';
+import { digestToken, newToken } from '../../apps/web/server/security.js';
+import sharp from 'sharp';
+const db = new PrismaClient();
+test.afterAll(async () => { await db.$disconnect(); });
+
+test('shared room permits free posting, reporting and admin hiding', async ({ page, browser }, testInfo) => {
+  const prefix = `community-ui-${testInfo.project.name}-${Date.now()}`;
+  const context = await browser.newContext({ viewport: page.viewportSize()! });
+  const adminContext = await browser.newContext({ viewport: page.viewportSize()! });
+  const user = async (name: string, role: 'ADMIN' | 'MEMBER' = 'MEMBER') => db.user.create({ data: { email: `${prefix}-${name}@example.test`, name: `Synthetic ${name}`, role, passwordHash: 'test-only-no-password-login' } });
+  const signIn = async (target: BrowserContext, userId: string) => {
+    const token = newToken();
+    await db.session.create({ data: { userId, tokenHash: digestToken(token), expiresAt: new Date(Date.now() + 600000) } });
+    await target.addCookies([{ name: '__Host-yengfx_session', value: token, domain: '127.0.0.1', path: '/', secure: true, httpOnly: true, sameSite: 'Lax' }]);
+  };
+  try {
+    const a = await user('admin', 'ADMIN'), f = await user('reader'), m = await user('writer');
+    await db.membership.create({ data: { userId: m.id, status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: a.id, verifiedAt: new Date(), reviewReason: 'Synthetic UI fixture. No actual broker verification.' } });
+    await signIn(page.context(), f.id); await signIn(context, m.id); await signIn(adminContext, a.id);
+    await page.goto('/app/community');
+    await expect(page.locator('[data-community-access]')).toContainText('you can post and reply');
+    await expect(page.locator('.chat-room-title h2')).toHaveText('YENGFX Community');
+    await expect(page.locator('[data-shape-grid]')).toHaveAttribute('data-ready', 'true');
+    await expect(page.getByRole('button', { name: 'Send message', exact: true })).toBeEnabled();
+    const writer = await context.newPage(); await writer.goto('http://127.0.0.1:3001/app/community');
+    if (testInfo.project.name === 'mobile') {
+      const send = await writer.getByRole('button', { name: 'Send message', exact: true }).boundingBox();
+      const navigation = await writer.locator('.bottom-nav').boundingBox();
+      expect(send!.y + send!.height).toBeLessThanOrEqual(navigation!.y);
+    }
+    const text = `${prefix} — <img src=x onerror=alert(1)> synthetic mapping discussion`;
+    await expect(writer.getByLabel('Your message')).toBeEnabled();
+    await writer.getByLabel('Your message').fill(text);
+    await writer.getByRole('button', { name: 'Send message', exact: true }).click();
+    await expect(writer.locator('[data-community-send-status]')).toHaveText('Message sent.');
+    await expect(writer.locator('[data-community-feed] article.is-own').filter({ hasText: text })).toBeVisible();
+    const imageBuffer = await sharp({ create: { width: 320, height: 180, channels: 3, background: '#e8be68' } }).png().toBuffer();
+    const chooserPromise = writer.waitForEvent('filechooser');
+    await writer.getByRole('button', { name: 'Add image', exact: true }).click();
+    await (await chooserPromise).setFiles({ name: 'synthetic-mapping.png', mimeType: 'image/png', buffer: imageBuffer });
+    await expect(writer.locator('[data-community-attachment-preview]')).toBeVisible();
+    await writer.getByRole('button', { name: 'Remove attached image' }).click();
+    await expect(writer.locator('[data-community-attachment-preview]')).toBeHidden();
+    await writer.getByLabel('Attach image', { exact: true }).setInputFiles({ name: 'synthetic-mapping.png', mimeType: 'image/png', buffer: imageBuffer });
+    await expect(writer.locator('[data-community-send-status]')).toContainText('Image attached');
+    await writer.getByLabel('Your message').fill(`${prefix} synthetic photo caption`);
+    await writer.getByRole('button', { name: 'Send message', exact: true }).click();
+    await expect(writer.locator('[data-community-send-status]')).toHaveText('Message sent.');
+    const photoCard = writer.locator('[data-community-feed] article').filter({ hasText: `${prefix} synthetic photo caption` });
+    await expect(photoCard.locator('img')).toBeVisible();
+    await expect.poll(() => photoCard.locator('img').evaluate(node => (node as HTMLImageElement).naturalWidth)).toBe(320);
+    await expect(writer.locator('.workspace-footer')).toContainText('All rights reserved');
+    await writer.screenshot({ path: `docs/screenshots/${testInfo.project.name}-community-photos.png`, fullPage: true });
+    await page.getByRole('button', { name: 'Refresh latest', exact: true }).click();
+    const card = page.locator('[data-community-feed] article').filter({ hasText: text });
+    await expect(card).toBeVisible(); await expect(card.locator('img')).toHaveCount(0);
+    await expect(writer.locator('input[name="chartUrl"]')).toHaveCount(0);
+    page.once('dialog', dialog => dialog.accept('Synthetic report: test admin moderation.'));
+    await card.getByRole('button', { name: 'Report', exact: true }).click();
+    await expect(page.locator('[data-community-send-status]')).toContainText('Report sent');
+    const admin = await adminContext.newPage(); await admin.goto('http://127.0.0.1:3001/app/community');
+    const readerPhoto = page.locator('[data-community-feed] article').filter({ hasText: `${prefix} synthetic photo caption` });
+    page.once('dialog', dialog => dialog.accept('Synthetic photo report for moderation preview.'));
+    await readerPhoto.getByRole('button', { name: 'Report', exact: true }).click();
+    await expect(page.locator('[data-community-send-status]')).toContainText('Report sent');
+    await admin.getByRole('button', { name: 'Refresh reports', exact: true }).click();
+    const photoReport = admin.locator('[data-community-report-list] article').filter({ hasText: `${prefix} synthetic photo caption` });
+    await expect(photoReport.getByRole('link', { name: 'Open reported image' })).toHaveAttribute('href', /\/api\/community\/messages\/[^/]+\/image$/);
+    const adminCard = admin.locator('[data-community-feed] article').filter({ hasText: text });
+    await adminCard.getByRole('button', { name: 'Reply', exact: true }).click();
+    await admin.getByLabel('Your message').fill(`${prefix} — synthetic admin reply`);
+    await admin.getByRole('button', { name: 'Send message', exact: true }).click();
+    await expect(admin.locator('[data-community-send-status]')).toHaveText('Message sent.');
+    await admin.getByRole('button', { name: 'Refresh reports', exact: true }).click();
+    const report = admin.locator('[data-community-report-list] article').filter({ hasText: text });
+    await expect(report).toBeVisible();
+    await admin.screenshot({ path: `docs/screenshots/${testInfo.project.name}-community-moderation.png`, fullPage: true });
+    admin.once('dialog', dialog => dialog.accept('Synthetic moderation: removing test content.'));
+    await report.getByRole('button', { name: 'Hide reported message', exact: true }).click();
+    await expect(admin.locator('[data-community-send-status]')).toHaveText('Message removed.');
+    await page.getByRole('button', { name: 'Refresh latest', exact: true }).click();
+    await expect(page.locator('[data-community-feed]')).not.toContainText(text);
+    await expect(page.locator('[data-community-feed]')).toContainText('Message removed.');
+    await page.screenshot({ path: `docs/screenshots/${testInfo.project.name}-community-reader.png`, fullPage: true });
+    await db.membership.update({ where: { userId: m.id }, data: { status: 'REVOKED' } });
+    await writer.getByRole('button', { name: 'Refresh latest', exact: true }).click();
+    await expect(writer.getByRole('button', { name: 'Send message', exact: true })).toBeEnabled();
+  } finally {
+    await context.close(); await adminContext.close();
+    await db.user.deleteMany({ where: { email: { startsWith: prefix } } });
+  }
+});

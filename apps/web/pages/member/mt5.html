@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en" data-offline-preview="true"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tools | YENQO</title><meta name="description" content="Your private YENQO member workspace.">
+<link rel="stylesheet" href="../../public/styles.css"><link rel="stylesheet" href="../../public/v2.css"><link rel="stylesheet" href="../../public/v4.css">
+<script defer src="../../public/v2-trade-model.js"></script><script defer src="../../public/v2.js"></script><script defer src="../../public/v2-signals.js"></script><script defer src="../../public/app.js"></script><script defer src="../../public/membership.js"></script><link rel="stylesheet" href="../../public/branding-2026.css"><link rel="stylesheet" href="../../public/v6.css"><script defer src="../../public/portal-v6.js"></script><script defer src="../../public/profile-photo.js"></script><link rel="stylesheet" href="../../public/portal-clean.css"><link rel="stylesheet" href="../../public/trading-tools.css"><script defer src="../../public/trading-tools.js"></script><script defer src="../../public/terminal.js"></script><link rel="icon" href="../../public/yenqo-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="../../public/yenqo.css"></head>
+<body class="v2-theme v6-portal clean-portal v6-client" data-demo-scope="b11e67feb3f3d0db5fbc8775" data-client-view="false"><div class="app-shell"><a href="#main-content" class="skip-link">Skip to content</a>
+<header class="topbar"><div class="compact-brand"><a class="brand clean-brand" aria-label="YENQO home" href="../demo-preview.html" data-app-href="/"><img class="brand-logo-small" src="../../public/yenqo-mark.svg" alt="" width="36" height="36"><span class="clean-brand-title">YENQO<small>YOUR TRADING. YOUR CONTROL.</small></span></a></div><div class="v6-workspace-search"><label><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input type="search" data-portal-search aria-label="Find a workspace" aria-controls="portal-search-results" aria-expanded="false" placeholder="Find a workspace…" autocomplete="off"><kbd>Ctrl K</kbd></label><div id="portal-search-results" class="v6-search-results" data-portal-search-results hidden></div></div><div class="topbar-actions"><a class="v6-header-profile" aria-label="My profile" href="settings.html" data-app-href="/app/settings"><span class="v6-profile-avatar" data-profile-avatar data-profile-initial="C"><span data-profile-initial>C</span></span><span><strong>Client preview</strong><small>Verified IB member</small></span></a><a class="v2-collapse-button notification-bell" aria-label="Open notifications" href="notifications.html" data-app-href="/app/notifications"><span class="bell-glyph" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 16.5V10a6 6 0 0 1 12 0v6.5l1.6 2.3H4.4L6 16.5Z"/><path d="M10 21h4"/></svg></span><span>Notifications</span></a><button type="button" class="v2-collapse-button" data-v2-collapse aria-label="Hide sidebar" aria-controls="desktop-sidebar" aria-expanded="true"><svg class="portal-sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path class="sidebar-close-chevron" d="m15 9-3 3 3 3"/><path class="sidebar-open-chevron" d="m13 9 3 3-3 3"/></svg></button><span class="demo-badge"><span></span>DEMO · NOT LIVE</span><button type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="compact-navigation" class="menu-toggle" data-menu-toggle><svg class="portal-sidebar-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 4v16"/><path class="sidebar-close-chevron" d="m15 9-3 3 3 3"/><path class="sidebar-open-chevron" d="m13 9 3 3-3 3"/></svg></button></div></header>
+<aside class="sidebar" id="desktop-sidebar"><div class="clean-workspace-label">MEMBER WORKSPACE</div><nav class="nav-links" aria-label="Main navigation"><span class="clean-nav-group">Workspace</span>
+<a aria-current="page" class="nav-link selected" href="mt5.html" data-app-href="/app/mt5" aria-label="Tools / Trading terminal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v-4M11 15V8M15 15v-6M19 15v-9"/></svg><span>Tools</span></a>
+<a class="nav-link" href="rooms.html" data-app-href="/app/rooms"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg><span>Discussion Rooms</span></a>
+<a class="nav-link" href="news.html" data-app-href="/app/news" aria-label="News / USD economic calendar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>News</span></a>
+</nav><details class="yq-account-menu"><summary class="clean-nav-group">Account</summary><nav class="nav-links" aria-label="Account navigation">
+<a class="nav-link" href="settings.html" data-app-href="/app/settings"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile &amp; security</span></a>
+<a class="nav-link" href="settings.html#broker-connection-heading" data-app-href="/app/settings#broker-connection-heading"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7H7a5 5 0 0 0 0 10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg><span>MT5 connection</span></a>
+<a class="nav-link" href="membership.html" data-app-href="/app/membership"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg><span>Membership</span></a>
+<a class="nav-link" href="academy.html" data-app-href="/app/academy"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Academy</span></a>
+<a class="nav-link" href="calendar.html" data-app-href="/app/calendar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>P/L Calendar</span></a>
+<a class="nav-link" href="overview.html" data-app-href="/app"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Overview</span></a>
+</nav></details>
+<div class="sidebar-bottom"><div class="connection-mini"><span class="status-dot"></span><span>MT5 disconnected</span></div><small>Cloud connector pending / execution disabled</small><div class="profile"><span class="avatar" data-profile-avatar data-profile-initial="C"><span data-profile-initial>C</span></span><span><strong>Client preview</strong><small>Verified IB member</small></span></div><button class="logout" data-logout>Sign out</button><p data-logout-error role="alert" hidden></p></div></aside>
+<div class="workspace"><section class="offline-banner" aria-label="Offline preview information"><strong>OFFLINE UI PREVIEW / CLIENT VIEW</strong><p>Preview the website design. No account is signed in; real client data and saving require the <a href="http://127.0.0.1:3000">local server</a>. MT5 trading is disabled.</p><nav class="preview-view-switch" aria-label="Preview view"><a href="../demo-preview.html">Homepage</a><a href="overview.html" aria-current="page">Client View</a><a href="../admin/overview.html">Admin View</a></nav><div class="preview-actions"><details><summary>Explore all categories</summary><nav class="offline-catalog" aria-label="All demo screens"><a href="../demo-preview.html">YENQO — Your Trading. Your Control.</a>
+<a href="../auth/login.html">Sign in</a>
+<a href="../auth/register.html">Create account</a>
+<a href="../auth/forgot-password.html">Forgot password</a>
+<a href="../auth/reset-password.html">Reset password</a>
+<a href="overview.html">Dashboard</a>
+<a href="mt5.html">Tools</a>
+<a href="rooms.html">Discussion Rooms</a>
+<a href="news.html">News</a>
+<a href="devices.html">Device Setup</a>
+<a href="receipt.html">Command Receipt</a>
+<a href="chat.html">Live Chat / Demo</a>
+<a href="academy.html">Educations</a>
+<a href="journal.html">Journal</a>
+<a href="calendar.html">P/L Calendar</a>
+<a href="membership.html">Membership</a>
+<a href="notifications.html">Notifications</a>
+<a href="settings.html">Settings</a>
+<a href="lesson-market-structure.html">Lesson / market structure</a>
+<a href="lesson-risk-and-discipline.html">Lesson / risk and discipline</a>
+<a href="lesson-mentorship.html">Lesson / mentorship</a>
+<a href="../admin/overview.html">Administration</a>
+<a href="../admin/content.html">Admin / content</a>
+<a href="../admin/members.html">Admin / members</a>
+<a href="../admin/audit.html">Admin / audit</a>
+<a href="../admin/settings.html">Admin / settings</a>
+<a href="../admin/platform.html">Admin / platform</a></nav></details></div></section><div class="compact-navigation" id="compact-navigation" hidden><nav class="nav-links" aria-label="Main navigation"><span class="clean-nav-group">Workspace</span>
+<a aria-current="page" class="nav-link selected" href="mt5.html" data-app-href="/app/mt5" aria-label="Tools / Trading terminal"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15v-4M11 15V8M15 15v-6M19 15v-9"/></svg><span>Tools</span></a>
+<a class="nav-link" href="rooms.html" data-app-href="/app/rooms"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></svg><span>Discussion Rooms</span></a>
+<a class="nav-link" href="news.html" data-app-href="/app/news" aria-label="News / USD economic calendar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>News</span></a>
+</nav><details class="yq-account-menu"><summary class="clean-nav-group">Account</summary><nav class="nav-links" aria-label="Account navigation">
+<a class="nav-link" href="settings.html" data-app-href="/app/settings"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profile &amp; security</span></a>
+<a class="nav-link" href="settings.html#broker-connection-heading" data-app-href="/app/settings#broker-connection-heading"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 7H7a5 5 0 0 0 0 10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg><span>MT5 connection</span></a>
+<a class="nav-link" href="membership.html" data-app-href="/app/membership"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg><span>Membership</span></a>
+<a class="nav-link" href="academy.html" data-app-href="/app/academy"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span>Academy</span></a>
+<a class="nav-link" href="calendar.html" data-app-href="/app/calendar"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h6M8 17h4"/></svg><span>P/L Calendar</span></a>
+<a class="nav-link" href="overview.html" data-app-href="/app"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Overview</span></a>
+</nav></details>
+<button class="logout" data-logout>Sign out</button><p data-logout-error role="alert" hidden></p></div><main id="main-content" class="main-content"><!-- PAGE CONTENT START --><section class="yq-terminal" data-yq-terminal aria-labelledby="yq-terminal-title">
+  <header class="yq-term-head">
+    <div><p class="yq-kicker">TOOLS / TRADING TERMINAL</p><h1 id="yq-terminal-title">XAUUSD terminal</h1></div>
+    <div class="yq-term-badges"><span class="yq-pill yq-pill-demo">Chart: demo data, not market prices</span><span class="yq-pill yq-pill-off">Execution disabled</span></div>
+  </header>
+  <div class="yq-term-grid">
+    <section class="yq-card yq-chart-card" aria-labelledby="yq-chart-title">
+      <div class="yq-card-head">
+        <h2 id="yq-chart-title">XAUUSD · <span data-yq-tf-label>M15</span></h2>
+        <div class="yq-segment" role="group" aria-label="Chart timeframe"><button type="button" data-yq-tf="M5" aria-pressed="false">M5</button><button type="button" data-yq-tf="M15" aria-pressed="true">M15</button><button type="button" data-yq-tf="H1" aria-pressed="false">H1</button><button type="button" data-yq-tf="H4" aria-pressed="false">H4</button></div>
+      </div>
+      <p class="yq-note" data-yq-feed role="status">No market-data feed is connected. Candles and levels below are a generated demonstration, not XAUUSD prices.</p>
+      <div class="yq-chart-wrap"><canvas data-yq-chart role="img" aria-label="Demonstration XAUUSD candlestick chart with BUY and SELL zones, EA entry layers, stop loss and take profit. Not market data. Exact levels are listed in the table below."></canvas></div>
+      <ul class="yq-legend" aria-label="Chart legend"><li><i class="yq-sw yq-sw-buy"></i>BUY zone</li><li><i class="yq-sw yq-sw-sell"></i>SELL zone</li><li><i class="yq-sw yq-sw-layer"></i>EA layers L1–L3</li><li><i class="yq-sw yq-sw-sl"></i>Stop loss</li><li><i class="yq-sw yq-sw-tp"></i>Take profit</li></ul>
+      <details class="yq-levels"><summary>Chart levels as a table</summary><table class="yq-table"><caption>Demonstration levels, not a trade plan</caption><thead><tr><th scope="col">Level</th><th scope="col">Price</th></tr></thead><tbody data-yq-levels></tbody></table></details>
+    </section>
+    <aside class="yq-side" aria-label="Account and EA">
+      <section class="yq-card" aria-labelledby="yq-account-title">
+        <div class="yq-card-head"><h2 id="yq-account-title">Account</h2><span class="yq-pill yq-pill-pending" data-yq-connection>Checking…</span></div>
+        <dl class="yq-stats">
+          <div><dt>Balance</dt><dd data-yq-stat="balance">—</dd></div>
+          <div><dt>Equity</dt><dd data-yq-stat="equity">—</dd></div>
+          <div><dt>Floating P&amp;L</dt><dd data-yq-stat="floating">—</dd></div>
+          <div><dt>Open positions</dt><dd data-yq-stat="positions">—</dd></div>
+          <div><dt>Used margin</dt><dd data-yq-stat="margin">—</dd></div>
+          <div><dt>Currency</dt><dd data-yq-stat="currency">—</dd></div>
+          <div><dt>EA status</dt><dd data-yq-stat="ea">—</dd></div>
+          <div><dt>Read-only history</dt><dd data-yq-stat="history">—</dd></div>
+        </dl>
+        <p class="yq-note" data-yq-account-note>Values appear only when confirmed by your broker connection. “—” means no confirmed data.</p>
+        <a class="yq-link" href="settings.html#broker-connection-heading" data-app-href="/app/settings#broker-connection-heading">Manage MT5 connection →</a>
+      </section>
+      <section class="yq-card" aria-labelledby="yq-ea-title">
+        <div class="yq-card-head"><h2 id="yq-ea-title">EA controls</h2><span class="yq-pill yq-pill-off">Not deployed</span></div>
+        <p class="yq-note">Buttons send a <strong>request</strong>. A request is not an execution: only a broker-confirmed result changes your account. Cloud execution is not enabled, so every request is recorded and rejected.</p>
+        <div class="yq-ea-actions">
+          <button type="button" class="yq-btn" data-yq-ea="START">Start EA</button>
+          <button type="button" class="yq-btn" data-yq-ea="PAUSE_NEW_ENTRIES">Pause new entries</button>
+          <button type="button" class="yq-btn" data-yq-ea="RESUME">Resume EA</button>
+          <button type="button" class="yq-btn" data-yq-ea="BREAKEVEN">Breakeven</button>
+          <button type="button" class="yq-btn" data-yq-ea="PARTIAL_CLOSE">Partial close</button>
+          <button type="button" class="yq-btn yq-btn-danger" data-yq-ea="EMERGENCY_STOP">Emergency stop</button>
+        </div>
+        <details class="yq-advanced"><summary>EA settings</summary>
+          <form class="yq-form" data-yq-settings novalidate>
+            <label>Lot size<input name="lotSize" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.01" required></label>
+            <label>Risk per trade (%)<input name="riskPercent" type="number" inputmode="decimal" step="0.01" min="0.01" max="10" value="1" required></label>
+            <label>Maximum exposure (lots)<input name="maxExposureLots" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.10" required></label>
+            <label>Maximum active layers<input name="maxLayers" type="number" inputmode="numeric" step="1" min="1" max="20" value="3" required></label>
+            <label>Stop loss (points)<input name="stopLossPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Take profit (points)<input name="takeProfitPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Breakeven trigger (points)<input name="breakevenTriggerPoints" type="number" inputmode="numeric" step="1" min="1" max="100000" placeholder="None"></label>
+            <label>Partial close (% of eligible volume)<input name="partialClosePercent" type="number" inputmode="numeric" step="1" min="1" max="100" value="50" required></label>
+            <button type="submit" class="yq-btn">Request settings update</button>
+          </form>
+        </details>
+        <p class="yq-result" data-yq-ea-result role="status" aria-live="polite"></p>
+      </section>
+      <section class="yq-card" aria-labelledby="yq-guard-title">
+        <div class="yq-card-head"><h2 id="yq-guard-title">News protection</h2><span class="yq-pill yq-pill-pending" data-yq-guard-state>Checking…</span></div>
+        <p class="yq-note" data-yq-guard-note>Checking the USD calendar status…</p>
+        <a class="yq-link" href="news.html" data-app-href="/app/news">Open USD calendar →</a>
+      </section>
+    </aside>
+  </div>
+  <section class="yq-card yq-bottom" aria-label="Positions and history">
+    <div class="yq-tabs" role="tablist" aria-label="Positions and history">
+      <button type="button" role="tab" id="yq-tab-positions" aria-controls="yq-panel-positions" aria-selected="true" data-yq-tab>Open positions</button>
+      <button type="button" role="tab" id="yq-tab-orders" aria-controls="yq-panel-orders" aria-selected="false" tabindex="-1" data-yq-tab>Orders</button>
+      <button type="button" role="tab" id="yq-tab-layers" aria-controls="yq-panel-layers" aria-selected="false" tabindex="-1" data-yq-tab>EA layers</button>
+      <button type="button" role="tab" id="yq-tab-history" aria-controls="yq-panel-history" aria-selected="false" tabindex="-1" data-yq-tab>History</button>
+    </div>
+    <div role="tabpanel" id="yq-panel-positions" aria-labelledby="yq-tab-positions" tabindex="0"><p class="yq-empty">No broker-confirmed positions. The cloud MT5 connector is not deployed.</p></div>
+    <div role="tabpanel" id="yq-panel-orders" aria-labelledby="yq-tab-orders" tabindex="0" hidden><p class="yq-empty">No broker-confirmed pending orders.</p></div>
+    <div role="tabpanel" id="yq-panel-layers" aria-labelledby="yq-tab-layers" tabindex="0" hidden><p class="yq-note">Demonstration layer plan matching the chart. These are not open positions.</p><table class="yq-table"><thead><tr><th scope="col">Layer</th><th scope="col">Side</th><th scope="col">Entry</th><th scope="col">Stop loss</th><th scope="col">Take profit</th></tr></thead><tbody data-yq-layer-rows></tbody></table></div>
+    <div role="tabpanel" id="yq-panel-history" aria-labelledby="yq-tab-history" tabindex="0" hidden><p class="yq-empty">Closed-trade history comes from your read-only MT5 connection. <a class="yq-link" href="calendar.html" data-app-href="/app/calendar">Open P/L Calendar →</a></p></div>
+  </section>
+</section>
+<h2 class="yq-section-title" id="yq-calculators">Calculators</h2>
+<section class="yh-tools" data-trading-tools aria-labelledby="yh-tools-heading">
+  <header class="yh-top"><div><p class="yh-kicker">YENQO / TRADING TOOLS</p><h2 id="yh-tools-heading" class="yh-title">Plan the trade.<br><em>Protect the capital.</em></h2><p>Free XAUUSD calculators. Your inputs, your broker specifications.</p></div><span class="yh-state">FREE · NO BROKER REQUIRED</span></header>
+  <div class="yh-tabs" role="tablist" aria-label="Trading tools">
+    <button id="yh-tab-profit" type="button" role="tab" aria-selected="true" aria-controls="yh-calculator-panel" data-tool-tab="profit">Profit &amp; Loss</button>
+    <button id="yh-tab-risk" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-calculator-panel" data-tool-tab="risk">Risk &amp; Lot Size</button>
+    <button id="yh-tab-reward" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-calculator-panel" data-tool-tab="reward">Risk / Reward</button>
+    <button id="yh-tab-mt5" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="yh-mt5-panel" data-tool-tab="mt5">MT5 <span>READ-ONLY</span></button>
+  </div>
+  <div id="yh-calculator-panel" role="tabpanel" aria-labelledby="yh-tab-profit" class="yh-layout" tabindex="0">
+    <section class="yh-panel" aria-labelledby="yh-calculator-title">
+      <div class="yh-panelhead"><h2 id="yh-calculator-title" data-tools-title>Profit &amp; Loss Calculator</h2><button type="button" class="yh-text-button" data-tools-example>Load example</button></div>
+      <p class="yh-example-note">Starts with illustrative values, not market prices. Replace them with your own inputs.</p>
+      <form data-tools-form novalidate>
+        <fieldset class="yh-side"><legend>Position direction</legend><label><input type="radio" name="side" value="BUY" checked><span>BUY</span></label><label><input type="radio" name="side" value="SELL"><span>SELL</span></label></fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="profit"><legend class="yh-sr-only">Profit and loss inputs</legend>
+          <label class="yh-field">Entry price<input name="profitEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Exit price<input name="profitExit" type="number" inputmode="decimal" step="any" min="0.00000001" value="4005" required></label>
+          <label class="yh-field">Position volume (lots)<input name="profitLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.10" required></label>
+          <label class="yh-field">Total extra costs (account currency)<input name="profitCosts" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="risk" hidden disabled><legend class="yh-sr-only">Risk and lot-size inputs</legend>
+          <label class="yh-field">Account balance<input name="riskBalance" type="number" inputmode="decimal" step="any" min="0.01" value="1000" required></label>
+          <label class="yh-field">Risk per trade (%)<input name="riskPercent" type="number" inputmode="decimal" step="any" min="0.00000001" max="100" value="1" required></label>
+          <label class="yh-field">Entry price<input name="riskEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Stop-loss price<input name="riskStop" type="number" inputmode="decimal" step="any" min="0.00000001" value="3992" required></label>
+          <label class="yh-field">Take-profit price<input name="riskTarget" type="number" inputmode="decimal" step="any" min="0.00000001" value="4016" required></label>
+          <label class="yh-field">Round-trip cost per lot<input name="riskCost" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <fieldset class="yh-formgrid" data-tools-fields="reward" hidden disabled><legend class="yh-sr-only">Risk and reward inputs</legend>
+          <label class="yh-field">Entry price<input name="rewardEntry" type="number" inputmode="decimal" step="any" min="0.00000001" value="4000" required></label>
+          <label class="yh-field">Stop-loss price<input name="rewardStop" type="number" inputmode="decimal" step="any" min="0.00000001" value="3992" required></label>
+          <label class="yh-field">Take-profit price<input name="rewardTarget" type="number" inputmode="decimal" step="any" min="0.00000001" value="4016" required></label>
+          <label class="yh-field">Position volume (lots)<input name="rewardLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.10" required></label>
+          <label class="yh-field">Round-trip cost per lot<input name="rewardCost" type="number" inputmode="decimal" step="any" min="0" value="0" required></label>
+        </fieldset>
+        <details class="yh-spec"><summary>Broker symbol settings <span>ADJUSTABLE</span></summary><p>Example: 100 troy oz per lot. Confirm your broker’s exact symbol contract, volume limits and calculation mode.</p><div class="yh-formgrid">
+          <label class="yh-field">Contract size (units / lot)<input name="contractSize" type="number" inputmode="decimal" step="any" min="0.00000001" value="100" required></label>
+          <label class="yh-field">Minimum lots<input name="minLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.01" required></label>
+          <label class="yh-field">Maximum lots<input name="maxLots" type="number" inputmode="decimal" step="any" min="0.00000001" value="100" required></label>
+          <label class="yh-field">Lot step<input name="lotStep" type="number" inputmode="decimal" step="any" min="0.00000001" value="0.01" required></label>
+          <label class="yh-field">Quote currency<input name="quoteCurrency" value="USD" pattern="[A-Z]{3}" maxlength="3" autocapitalize="characters" spellcheck="false" required></label>
+          <label class="yh-field">Account currency<input name="accountCurrency" value="USD" pattern="[A-Z]{3}" maxlength="3" autocapitalize="characters" spellcheck="false" required></label>
+          <label class="yh-field yh-field-wide">Conversion rate: account currency per 1 quote unit<input name="quoteToAccountRate" type="number" inputmode="decimal" step="any" min="0.00000001" value="1" aria-describedby="yh-fx-help" required></label>
+        </div><p id="yh-fx-help">Manual conversion, no live FX feed. Use 1 for matching currencies. Example: 4.5 MYR per USD.</p></details>
+      </form>
+      <p class="yh-help">BUY: entry at ask, exit at bid. SELL: entry at bid, exit at ask. Use effective prices and do not count the spread twice. Extra costs are non-negative charges in account currency.</p>
+    </section>
+    <aside class="yh-panel yh-result" aria-label="Calculated estimate"><p class="yh-kicker">TRADE ESTIMATE / NOT LIVE DATA</p><div aria-live="polite" aria-atomic="true"><p class="yh-caption" data-tools-caption>Estimated net profit / loss</p><output class="yh-amount" data-tools-primary>—</output><p class="yh-error" data-tools-error hidden></p></div><dl class="yh-list" data-tools-results></dl><p class="yh-notice" data-tools-notice></p><p class="yh-disclaimer">Linear estimate only. Slippage, gaps, fees and broker calculation rules can change actual results. A stop-loss does not guarantee the estimated loss limit.</p></aside>
+  </div>
+  <section id="yh-mt5-panel" class="yh-mt5" role="tabpanel" aria-labelledby="yh-tab-mt5" tabindex="0" hidden>
+    <div class="yh-panel"><div class="yh-panelhead"><div><p class="yh-kicker">YOUR ACCOUNT / READ-ONLY</p><h2>MT5 account snapshot</h2></div><span class="yh-state">DISCONNECTED</span></div><p data-tools-mt5-status role="status">No paired MT5 device. Secure read-only pairing is not available in this release.</p><div class="yh-account-grid"><div><span>Balance</span><strong>—</strong></div><div><span>Equity</span><strong>—</strong></div><div><span>Floating P&amp;L</span><strong>—</strong></div><div><span>Last snapshot</span><strong>—</strong></div></div><p>No broker credentials are requested here. No account data or live connection is being shown.</p><div class="yh-mt5-actions"><button class="yh-check-button" type="button" data-tools-check>Check connection status</button><span>Pairing coming soon</span></div></div>
+    <aside class="yh-panel"><p class="yh-kicker">BUILT AROUND YOUR ACCOUNT</p><h2>Read-only, by design.</h2><p>A future connection needs your own paired device, explicit investor access and verified account ownership.</p><ul><li>Member-specific device access</li><li>Private encrypted transport</li><li>Freshness and revocation checks</li><li>No trade execution</li></ul><p class="yh-disclaimer">MT5 connectivity is not enabled. Calculators work independently, with no paid API.</p></aside>
+  </section>
+  <noscript><p class="yh-notice">Enable JavaScript to use the calculators. No broker connection is needed.</p></noscript>
+</section>
+<!-- PAGE CONTENT END --></main><footer class="workspace-footer"><span>© 2026 YENQO. All rights reserved.</span><span>Educational use. Trading involves risk.</span></footer></div>
+<nav class="bottom-nav" aria-label="Mobile quick navigation"><a aria-current="page" href="mt5.html" data-app-href="/app/mt5">Tools</a><a href="rooms.html" data-app-href="/app/rooms">Rooms</a><a href="news.html" data-app-href="/app/news">News</a><a href="settings.html" data-app-href="/app/settings">Account</a></nav></div></body></html>

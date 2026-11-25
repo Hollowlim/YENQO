@@ -1,0 +1,32 @@
+[
+  {
+    "viewport": "desktop",
+    "width": 1440,
+    "height": 1000,
+    "beforeWidth": 1440,
+    "beforeHeight": 6241,
+    "afterWidth": 1440,
+    "afterHeight": 6241,
+    "changedPixels": 0
+  },
+  {
+    "viewport": "tablet",
+    "width": 834,
+    "height": 1112,
+    "beforeWidth": 834,
+    "beforeHeight": 5599,
+    "afterWidth": 834,
+    "afterHeight": 5599,
+    "changedPixels": 0
+  },
+  {
+    "viewport": "mobile",
+    "width": 390,
+    "height": 844,
+    "beforeWidth": 390,
+    "beforeHeight": 7435,
+    "afterWidth": 390,
+    "afterHeight": 7435,
+    "changedPixels": 0
+  }
+]
