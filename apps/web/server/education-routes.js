@@ -21,7 +21,7 @@ export async function educationApi(request) {
   try {
     const user = await currentUser(request);
     if (!user) return message('Sign in required.', 401);
-    if (admin ? user.role !== 'ADMIN' : !hasFullMemberAccess(user)) return message(admin ? 'Administrator access required.' : 'Verified IB membership and qualifying USD 100 deposit required.', 403);
+    if (admin ? user.role !== 'ADMIN' : !hasFullMemberAccess(user)) return message(admin ? 'Administrator access required.' : 'Your 3-month free trial has ended. Paid plans are coming soon.', 403);
     if (!await takeRateLimit(`education:${request.method}`, user.id, request.method === 'PUT' ? 20 : 180, 60)) return message('Too many requests. Try again shortly.', 429);
     if (id && ['GET', 'HEAD'].includes(request.method)) {
       const lesson = await db.videoLesson.findFirst({ where: { id, ...(!admin ? { status: 'PUBLISHED' } : {}) } });

@@ -7,7 +7,10 @@ import {isLaunchPathEnabled} from './launch-policy.js';
 import {
   canViewMemberRoute,
   hasFullMemberAccess,
+  isVerifiedIbMember,
   memberDestination,
+  memberLabel,
+  trialDaysLeft,
 } from "./membership-policy.js";
 const root = new URL("../", import.meta.url);
 
@@ -229,13 +232,13 @@ export async function renderPage(
   const connection =
     '<div class="connection-mini"><span class="status-dot"></span><span>MT5 disconnected</span></div><small>Cloud connector pending / execution disabled</small>';
   const profile = user
-    ? `${connection}<div class="profile"><span class="avatar">${escapeHtml(user.name.slice(0, 1))}</span><span><strong>${escapeHtml(user.name)}</strong><small>${admin ? "Administrator" : pathname.startsWith('/app') ? hasFullMemberAccess(user) ? "Verified IB member" : "Free member" : "Foundation member"}</small></span></div>${logout}`
+    ? `${connection}<div class="profile"><span class="avatar">${escapeHtml(user.name.slice(0, 1))}</span><span><strong>${escapeHtml(user.name)}</strong><small>${admin ? "Administrator" : pathname.startsWith('/app') ? memberLabel(user) : "Foundation member"}</small></span></div>${logout}`
     : `${connection}<a class="button button-gold" href="/auth/login">Member login →</a>`;
   let contentTemplate = extractContent(pageDocument);
   if (pathname === '/app/mt5') contentTemplate = (await readFile(new URL('templates/terminal.html', root), 'utf8')) + contentTemplate;
   if (pathname === '/admin/platform') contentTemplate = contentTemplate.replace('{{PLATFORM_STATUS}}', platformStatus());
   if(['/app/settings','/admin/settings'].includes(pathname)){
-    contentTemplate=contentTemplate.replace('{{SETTINGS_ROLE}}',admin?'Administrator':hasFullMemberAccess(user)?'Verified IB member':'Free member')
+    contentTemplate=contentTemplate.replace('{{SETTINGS_ROLE}}',admin?'Administrator':memberLabel(user))
       .replace('{{PROFILE_FORM_ATTR}}',admin?'data-admin-profile':'')
       .replace('{{BROKER_PROFILE_FIELDS}}',admin?'':'<div class="settings-subheading"><h3>Broker &amp; MT5 details</h3><p>These are your membership review details. They do not connect a broker by themselves.</p></div><label class="field">Broker<input name="brokerName" maxlength="60" placeholder="For example, JUSTMARKET" autocomplete="off"></label><label class="field">MT5 account number<input name="mt5Account" inputmode="numeric" pattern="[0-9]{4,20}" maxlength="20" placeholder="Your account number" autocomplete="off"></label><label class="field">MT5 server (optional)<input id="profile-mt5-server" name="mt5Server" maxlength="100" placeholder="Select or enter your exact server" autocomplete="off" list="mt5-server-suggestions" aria-describedby="mt5-server-help"></label><datalist id="mt5-server-suggestions"></datalist><p id="mt5-server-help" class="settings-note">JustMarkets suggestions appear automatically. Use the exact server shown on your MT5 account.</p>')
       .replace('{{SETTINGS_ACCESS_LINK}}',admin?'<p class="settings-note">Administrator access is controlled on the server. Profile changes do not change your role.</p>':'<a class="settings-inline-link" href="/app/membership">Manage membership <span aria-hidden="true">↗</span></a>')
@@ -251,9 +254,10 @@ export async function renderPage(
     contentTemplate=contentTemplate.replace(/<div class="membership-plans"[^>]*>/,tag=>tag.replace(/ hidden(?=[\s>])/g,'').replace(/>$/,hideOffers?' hidden>':'>'));
     contentTemplate=contentTemplate.replace(/<section id="membership-request"[^>]*>/,tag=>tag.replace(/ hidden(?=[\s>])/g,'').replace(/>$/,hideOffers?' hidden>':'>'));
     if(!preserveBindings&&user){
-      const status=user.role==='ADMIN'?'ADMINISTRATOR':hasFullMemberAccess(user)?'APPROVED':user.membership?.status==='APPROVED'?'REVIEW REQUIRED':user.membership?.status??'FREE';
+      const onTrial=user.role!=='ADMIN'&&!isVerifiedIbMember(user)&&trialDaysLeft(user)>0;
+      const status=user.role==='ADMIN'?'ADMINISTRATOR':onTrial?'FREE TRIAL':hasFullMemberAccess(user)?'APPROVED':user.membership?.status==='APPROVED'?'REVIEW REQUIRED':user.membership?.status??'FREE';
       contentTemplate=contentTemplate.replace(/(data-membership-status[^>]*>)[^<]*(<\/span>)/,`$1${escapeHtml(status)}$2`);
-      contentTemplate=contentTemplate.replace(/(<p data-membership-summary>)[\s\S]*?(<\/p>)/,`$1${hideOffers?(user.role==='ADMIN'?'Administrator access is separate from IB membership.':'Full member access is approved. MT5 trading controls remain disabled.'):'Your membership details are being refreshed.'}$2`);
+      contentTemplate=contentTemplate.replace(/(<p data-membership-summary>)[\s\S]*?(<\/p>)/,`$1${onTrial?`Free trial: ${trialDaysLeft(user)} days left. Everything is unlocked. Paid plans are coming soon.`:hideOffers?(user.role==='ADMIN'?'Administrator access is separate from IB membership.':'Full member access is approved. MT5 trading controls remain disabled.'):'Your membership details are being refreshed.'}$2`);
     }
   }
   const initial = user?.name?.slice(0,1) ?? 'M';
@@ -261,7 +265,7 @@ export async function renderPage(
   const avatar = className => `<span class="${className}" data-profile-avatar data-profile-initial="${escapeHtml(initial)}"><span data-profile-initial>${escapeHtml(initial)}</span>${photoUrl ? `<img class="profile-avatar-image" src="${photoUrl}" alt="" data-own-profile-photo hidden>` : ''}</span>`;
   if (['/app/settings', '/admin/settings'].includes(pathname)) {
     const profileCard = await readFile(new URL('templates/profile-card.html', root), 'utf8');
-    const personalizedCard = profileCard.replaceAll('{{PROFILE_NAME}}', escapeHtml(user?.name ?? 'Your profile')).replaceAll('{{PROFILE_ROLE}}', admin ? 'Administrator' : hasFullMemberAccess(user) ? 'Verified IB member' : 'Free member').replace('{{PROFILE_AVATAR}}', avatar('profile-card-portrait'));
+    const personalizedCard = profileCard.replaceAll('{{PROFILE_NAME}}', escapeHtml(user?.name ?? 'Your profile')).replaceAll('{{PROFILE_ROLE}}', admin ? 'Administrator' : memberLabel(user)).replace('{{PROFILE_AVATAR}}', avatar('profile-card-portrait'));
     contentTemplate = contentTemplate.includes('{{PROFILE_CARD}}') ? contentTemplate.replace('{{PROFILE_CARD}}', personalizedCard) : contentTemplate.replace(/<section class="profile-photo-settings\b[\s\S]*?<\/section>/, personalizedCard);
   }
   let content = preserveBindings
@@ -299,7 +303,7 @@ export async function renderPage(
     const search = `<div class="v6-workspace-search"><label><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input type="search" data-portal-search aria-label="Find a workspace" aria-controls="portal-search-results" aria-expanded="false" placeholder="${admin ? 'Find an admin workspace…' : 'Find a workspace…'}" autocomplete="off"><kbd>Ctrl K</kbd></label><div id="portal-search-results" class="v6-search-results" data-portal-search-results hidden></div></div>`;
     shell = shell.replace('<span class="breadcrumb">{{BREADCRUMB}}</span>', search);
     const administrator = user?.role === 'ADMIN';
-    const person = `<a class="v6-header-profile" aria-label="My profile" href="${administrator ? '/admin/settings' : '/app/settings'}">${avatar('v6-profile-avatar')}<span><strong>${escapeHtml(user?.name ?? 'Member')}</strong><small>${administrator ? 'Administrator' : hasFullMemberAccess(user) ? 'Verified IB member' : 'Free member'}</small></span></a>`;
+    const person = `<a class="v6-header-profile" aria-label="My profile" href="${administrator ? '/admin/settings' : '/app/settings'}">${avatar('v6-profile-avatar')}<span><strong>${escapeHtml(user?.name ?? 'Member')}</strong><small>${administrator ? 'Administrator' : memberLabel(user)}</small></span></a>`;
     shell = shell.replace('<div class="topbar-actions">', '<div class="topbar-actions">' + person);
     if (pathname === '/admin') shell = shell.replace('</head>', '<script defer src="/assets/admin-portal.js"></script></head>');
     if (pathname === '/admin/audit') shell = shell.replace('</head>', '<script defer src="/assets/admin-audit.js"></script></head>');

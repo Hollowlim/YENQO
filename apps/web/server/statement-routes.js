@@ -36,7 +36,7 @@ export function createStatementApi({database=db,principal=currentUser,rateLimit=
   if(!/^\d{13}$/.test(expires??'')||! /^[a-f0-9]{64}$/.test(signature??'')||Number(expires)<Date.now()||Number(expires)>Date.now()+10*60000||!timingSafeEqual(Buffer.from(signature,'hex'),Buffer.from(sign(user.id,hash,fields.version,fields.utcOffset,Number(expires)),'hex')))return jsonResponse({message:'Preview expired or changed. Review the statement again.'},409);
   if(!merged.added)return jsonResponse({message:'All these executions are already imported. Nothing was added.'});
   await database.$transaction(async tx=>{
-   const current=await tx.user.findUnique({where:{id:user.id},select:{mt5Account:true,mt5Server:true,membership:true,role:true}});
+   const current=await tx.user.findUnique({where:{id:user.id},select:{mt5Account:true,mt5Server:true,membership:true,role:true,createdAt:true}});
    if(!current||!hasFullMemberAccess(current)||current.mt5Account!==report.login||current.mt5Server!==profile.mt5Server)throw new StatementError('Account or membership changed. Reload before importing.');
    const data={login:report.login,server:profile.mt5Server??'',currency:report.currency,deals:merged.deals,historyFrom:from,historyTo:to,importedAt:new Date()};
    if(row){const saved=await tx.statementHistory.updateMany({where:{userId:user.id,version:fields.version},data:{...data,version:{increment:1}}});if(!saved.count)throw new StatementError('History changed. Preview again.');}

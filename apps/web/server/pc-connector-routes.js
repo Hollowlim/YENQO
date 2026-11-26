@@ -25,7 +25,7 @@ export function createPcConnectorApi({database=db,principal=currentUser,rateLimi
    if(!await rateLimit('pc-worker',connector.id,90,60))return jsonResponse({message:'Too many requests.'},429);
    if(path==='/api/pc-worker/check'){
     const parsed=receiptSchema.pick({id:true,generation:true,lease:true}).strict().safeParse(await readBoundedJson(request.body,1024));if(!parsed.success)return jsonResponse({message:'Invalid history grant.'},400);
-    const grant=await database.pcBrokerAccount.findFirst({where:{id:parsed.data.id,connectorId:connector.id,generation:parsed.data.generation,leaseHash:digestToken(parsed.data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,membership:true,mt5Account:true,mt5Server:true}}}});
+    const grant=await database.pcBrokerAccount.findFirst({where:{id:parsed.data.id,connectorId:connector.id,generation:parsed.data.generation,leaseHash:digestToken(parsed.data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,createdAt:true,membership:true,mt5Account:true,mt5Server:true}}}});
     if(!grant||!validProfile(grant,grant.user))return jsonResponse({message:'History grant expired or revoked.'},409);
     await database.pcConnector.update({where:{id:connector.id},data:{lastSeenAt:new Date()}});return jsonResponse({authorized:true});
    }
@@ -33,7 +33,7 @@ export function createPcConnectorApi({database=db,principal=currentUser,rateLimi
     const body=await readBoundedJson(request.body,1024);if(!z.object({}).strict().safeParse(body).success)return jsonResponse({message:'Invalid poll.'},400);
     await database.pcConnector.update({where:{id:connector.id},data:{lastSeenAt:new Date()}});
     await expireSecrets(database);
-    const rows=await database.pcBrokerAccount.findMany({where:{connectorId:connector.id,state:{not:'REVOKED'}},select:{id:true,userId:true,login:true,server:true,state:true,generation:true,version:true,nonce:true,sealedPassword:true,secretExpiresAt:true,leaseUntil:true,nextSyncAt:true,user:{select:{role:true,membership:true,mt5Account:true,mt5Server:true}}},orderBy:{updatedAt:'asc'},take:20});
+    const rows=await database.pcBrokerAccount.findMany({where:{connectorId:connector.id,state:{not:'REVOKED'}},select:{id:true,userId:true,login:true,server:true,state:true,generation:true,version:true,nonce:true,sealedPassword:true,secretExpiresAt:true,leaseUntil:true,nextSyncAt:true,user:{select:{role:true,createdAt:true,membership:true,mt5Account:true,mt5Server:true}}},orderBy:{updatedAt:'asc'},take:20});
     const grants=[],jobs=[];
     for(const row of rows){
      if(!validProfile(row,row.user)){
@@ -48,14 +48,14 @@ export function createPcConnectorApi({database=db,principal=currentUser,rateLimi
    }
    if(path!=='/api/pc-worker/receipt')return jsonResponse({message:'Not found.'},404);
    const parsed=receiptSchema.safeParse(await readBoundedJson(request.body,4*1024*1024));if(!parsed.success)return jsonResponse({message:'Invalid history receipt.'},400);const data=parsed.data;
-   const row=await database.pcBrokerAccount.findFirst({where:{id:data.id,connectorId:connector.id,generation:data.generation,leaseHash:digestToken(data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,membership:true,mt5Account:true,mt5Server:true}}}});
+   const row=await database.pcBrokerAccount.findFirst({where:{id:data.id,connectorId:connector.id,generation:data.generation,leaseHash:digestToken(data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,createdAt:true,membership:true,mt5Account:true,mt5Server:true}}}});
    if(!row||!validProfile(row,row.user))return jsonResponse({message:'History grant expired or revoked.'},409);
    if(data.error){await database.pcBrokerAccount.updateMany({where:{id:row.id,generation:data.generation,leaseHash:digestToken(data.lease)},data:{state:['INVESTOR_REQUIRED','LOGIN_FAILED','NEEDS_PASSWORD','DEMO_REQUIRED','INVALID_TERMINAL'].includes(data.error)?'NEEDS_PASSWORD':'ERROR',errorCode:data.error,leaseHash:null,leaseUntil:null,secretExpiresAt:null,nextSyncAt:new Date(Date.now()+60000),version:{increment:1}}});return jsonResponse({accepted:true});}
    if(data.login!==row.login||data.server!==row.server||data.tradeAllowed!==false||!data.currency||!data.from||!data.to||!data.deals||!data.accountType||data.accountType!=='DEMO'&&process.env.PC_CONNECTOR_ALLOW_REAL_READONLY!=='true')return jsonResponse({message:'Read-only account identity was not confirmed.'},400);
    const from=new Date(data.from),to=new Date(data.to);if(from>=to||to>new Date(Date.now()+60000)||+to-+from>367*86400000)return jsonResponse({message:'Invalid history window.'},400);
    const deals=normalizeDeals(data.deals,from,to);
    await database.$transaction(async tx=>{
-    const current=await tx.pcBrokerAccount.findFirst({where:{id:row.id,connectorId:connector.id,generation:data.generation,leaseHash:digestToken(data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,membership:true,mt5Account:true,mt5Server:true}}}});
+    const current=await tx.pcBrokerAccount.findFirst({where:{id:row.id,connectorId:connector.id,generation:data.generation,leaseHash:digestToken(data.lease),leaseUntil:{gt:new Date()}},include:{user:{select:{role:true,createdAt:true,membership:true,mt5Account:true,mt5Server:true}}}});
     if(!current||!validProfile(current,current.user))throw new Error('STALE_GRANT');
     const canonical=values=>JSON.stringify(values.map(item=>[item.id,item.time,item.positionId,item.entryType,item.symbol,item.volume,item.net]));
     const changedHistory=!Array.isArray(current.deals)||canonical(current.deals)!==canonical(deals)||current.currency!==data.currency;

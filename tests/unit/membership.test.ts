@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { hasFullMemberAccess, canViewMemberRoute, memberDestination, parseUsdToCents, IB_POLICY } from '../../apps/web/server/membership-policy.js';
+import { hasFullMemberAccess, canViewMemberRoute, memberDestination, parseUsdToCents, IB_POLICY, trialDaysLeft, memberLabel } from '../../apps/web/server/membership-policy.js';
 import {renderPage} from '../../apps/web/server/render.js';
 
 const membership = { status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: 'reviewer', verifiedAt: new Date() };
@@ -42,4 +42,20 @@ it('parses USD without floating point rounding or accepting invalid/negative amo
   expect(parseUsdToCents('100')).toBe(10000);
   expect(parseUsdToCents('100.01')).toBe(10001);
   for (const value of ['-100','1e2','100.001','NaN','Infinity','',100,null]) expect(parseUsdToCents(value)).toBeNull();
+});
+it('gives every new member 90 days of full access without IB verification', async () => {
+  const day = 86400000, now = Date.now();
+  const fresh = { role: 'MEMBER', name: 'Trial member', email: 'trial@example.test', createdAt: new Date(now - day), membership: { status: 'FREE' } };
+  expect(trialDaysLeft(fresh, now)).toBe(89);
+  expect(hasFullMemberAccess(fresh)).toBe(true);
+  expect(memberLabel(fresh)).toMatch(/^Free trial · 8[89] days left$/);
+  const expired = { ...fresh, createdAt: new Date(now - 91 * day) };
+  expect(trialDaysLeft(expired, now)).toBe(0);
+  expect(hasFullMemberAccess(expired)).toBe(false);
+  expect(memberLabel(expired)).toBe('Free member');
+  expect(trialDaysLeft({ ...fresh, role: 'ADMIN' }, now)).toBe(0);
+  expect(trialDaysLeft({ ...fresh, createdAt: undefined }, now)).toBe(0);
+  const page = (await renderPage('/app/membership', fresh))!;
+  expect(page).toContain('data-membership-status>FREE TRIAL');
+  expect(page).toMatch(/Free trial: 8[89] days left/);
 });

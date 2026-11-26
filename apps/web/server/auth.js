@@ -28,6 +28,7 @@ export async function currentUser(request) {
           email: true,
           role: true,
           membership: true,
+          createdAt: true,
           mentorApprovedAt: true,
           profilePhoto: { select: { imageHash: true } },
         },
