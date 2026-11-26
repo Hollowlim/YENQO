@@ -17,3 +17,4 @@ coverage/
 .private-pc-connector/
 __pycache__/
 .pnpm-store/
+.vercel/
