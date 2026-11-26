@@ -1,8 +1,8 @@
 {
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm db:generate",
-  "outputDirectory": "apps/web/public",
+  "buildCommand": "pnpm db:generate && mkdir -p public",
+  "outputDirectory": "public",
   "functions": {
     "api/index.js": {
       "includeFiles": "{apps/web/templates,apps/web/pages,apps/web/public,prisma}/**",
