@@ -12,12 +12,13 @@ it('distinguishes actual client pages from labelled admin and offline simulation
   expect(offline).toContain('data-client-view="false"');
 });
 
-it('keeps the client portal to three main sections with account pages in a secondary menu', async () => {
+it('shows one flat client menu with Home first and account pages in their own group', async () => {
   const html = await renderPage('/app/mt5', { role: 'ADMIN', name: 'Test', email: 'test@example.test' });
   const main = html!.match(/<nav[^>]*aria-label="Main navigation"[\s\S]*?<\/nav>/)?.[0] ?? '';
-  expect([...main.matchAll(/<span>([^<]+)<\/span><\/a>/g)].map(m => m[1])).toEqual(['Tools', 'Discussion Rooms', 'News']);
-  const account = html!.match(/<details class="yq-account-menu">[\s\S]*?<\/details>/)?.[0] ?? '';
-  for (const href of ['/app/settings', '/app/settings#broker-connection-heading', '/app/membership', '/app/academy', '/app/calendar']) expect(account).toContain(`href="${href}"`);
+  expect([...main.matchAll(/<span>([^<]+)<\/span><\/a>/g)].map(m => m[1])).toEqual(['Home', 'Trading tools', 'Academy', 'P/L calendar', 'News', 'Discussion rooms']);
+  const account = html!.match(/<nav[^>]*aria-label="Account navigation"[\s\S]*?<\/nav>/)?.[0] ?? '';
+  for (const href of ['/app/settings', '/app/settings#broker-connection-heading', '/app/membership']) expect(account).toContain(`href="${href}"`);
+  expect(html).not.toContain('yq-account-menu');
   for (const title of ['Strategy Lab', 'Backtesting', 'Market Analysis', 'Signals', 'Community', 'Journal']) expect(main + account).not.toContain(title);
 });
 
@@ -78,4 +79,13 @@ it('only permits published assets, never source, templates or traversal', () => 
   expect(safeAssetPath('/assets/shape-grid.js')).toBe('shape-grid.js');
   expect(safeAssetPath('/assets/yengfx-logo.png')).toBe('yengfx-logo.png');
   for (const path of ['/assets/../server/index.js', '/assets/%2e%2e/.env', '/server/index.js', '/pages/member/settings.html', '/assets/.env', '/assets/unknown.js']) expect(safeAssetPath(path)).toBeNull();
+});
+it('hides phone bar links a free member cannot open and labels admins honestly on Home', async () => {
+  const free = { id:'synthetic-free', role:'MEMBER', name:'Test', email:'test@example.test', membership:null };
+  const bar = (await renderPage('/app/mt5', free))!.match(/<nav class="bottom-nav"[\s\S]*?<\/nav>/)?.[0] ?? '';
+  expect(bar).not.toContain('href="/app"');
+  for (const href of ['/app/mt5', '/app/news', '/app/rooms', '/app/settings']) expect(bar).toContain(`href="${href}"`);
+  const adminHome = (await renderPage('/app', { ...free, role:'ADMIN' }))!;
+  expect(adminHome).toContain('<strong>Administrator</strong>');
+  expect(adminHome).not.toContain('class="yq-ok">Verified');
 });

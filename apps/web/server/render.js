@@ -329,6 +329,8 @@ export async function renderPage(
     /<nav class="bottom-nav"[\s\S]*?<\/nav>/,
     '<nav class="bottom-nav" aria-label="Mobile admin navigation"><a href="/admin">Overview</a><a href="/admin/members">Members</a><a href="/admin/mapping">Mapping CMS</a><a href="/admin/signals">Signals CMS</a><a href="/admin/content">Academy CMS</a><a href="/admin/platform">Platform</a></nav>',
   );
+  else if (user && !hasFullMemberAccess(user)) shell = shell.replace(/<nav class="bottom-nav"[\s\S]*?<\/nav>/, (bar) => bar.replace(/<a\b[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>/g, (link, href) => canViewMemberRoute(user, href) ? link : ''));
+  if (pathname === '/app' && user?.role === 'ADMIN') content = content.replace('<strong class="yq-ok">Verified</strong><small>Your Academy and P/L calendar are unlocked.</small>', '<strong>Administrator</strong><small>Admin access is separate from IB membership.</small>');
   shell=shell.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
   content=content.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
   if(pathname==='/app/chat'&&clientView)content='<div class="page-heading"><span class="eyebrow">YENQO / SUPPORT</span><h1>Live Chat</h1><p>Live support is not connected for this release.</p></div><section class="card"><h2>Account support</h2><p>Review your account details and membership status in your portal.</p><a class="button button-secondary" href="/app/membership">Open Membership</a></section>';

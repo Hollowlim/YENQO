@@ -19,15 +19,15 @@
     const max=Math.max(4,Math.ceil(Math.max(0,...rows.map(row=>row.total))/4)*4);
     for(let i=0;i<=4;i++){
       const y=35+i*39;
-      chart.append(svgNode('line',{x1:55,y1:y,x2:755,y2:y,stroke:'#cba45a20'}));
+      chart.append(svgNode('line',{x1:55,y1:y,x2:755,y2:y,stroke:'#a66bff20'}));
       const label=svgNode('text',{x:44,y:y+4,'text-anchor':'end',fill:'#97a2a9'});label.textContent=number.format(Math.round(max*(1-i/4)));chart.append(label);
     }
     const coords=rows.map((row,i)=>[55+i/Math.max(1,rows.length-1)*700,191-row.total/max*156]);
     if(coords.length){
       const path=coords.map(([x,y],i)=>`${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)}`).join(' ');
-      chart.append(svgNode('path',{d:`${path} L755 191 L55 191 Z`,fill:'#d5ac6618'}));
-      chart.append(svgNode('path',{d:path,fill:'none',stroke:'#edc778','stroke-width':2.5,'stroke-linejoin':'round'}));
-      const [x,y]=coords[coords.length-1];chart.append(svgNode('circle',{cx:x,cy:y,r:4,fill:'#f3d69b'}));
+      chart.append(svgNode('path',{d:`${path} L755 191 L55 191 Z`,fill:'#a66bff18'}));
+      chart.append(svgNode('path',{d:path,fill:'none',stroke:'#ab6bff','stroke-width':2.5,'stroke-linejoin':'round'}));
+      const [x,y]=coords[coords.length-1];chart.append(svgNode('circle',{cx:x,cy:y,r:4,fill:'#b983ff'}));
       for(const index of [...new Set([0,Math.floor((rows.length-1)/2),rows.length-1])]){
         const label=svgNode('text',{x:coords[index][0],y:220,'text-anchor':index===0?'start':index===rows.length-1?'end':'middle',fill:'#97a2a9'});
         label.textContent=new Intl.DateTimeFormat('en-MY',{day:'numeric',month:'short',timeZone:'Asia/Kuala_Lumpur'}).format(new Date(`${rows[index].date}T12:00:00Z`));chart.append(label);
@@ -40,14 +40,14 @@
   function renderDistribution(items) {
     const host=root?.querySelector('[data-admin-distribution]');if(!host)return;
     host.replaceChildren();
-    const total=items.reduce((sum,item)=>sum+item.count,0), colors=['#e9c879','#5e98c9','#5cbca0','#bf7780','#77818d'];
+    const total=items.reduce((sum,item)=>sum+item.count,0), colors=['#ab6bff','#5e98c9','#5cbca0','#bf7780','#77818d'];
     const svg=svgNode('svg',{viewBox:'0 0 200 200',role:'img','aria-label':total?'Membership access distribution from current records':'No registered members'});
-    svg.append(svgNode('circle',{cx:100,cy:100,r:73,fill:'none',stroke:'#20272c','stroke-width':24}));
+    svg.append(svgNode('circle',{cx:100,cy:100,r:73,fill:'none',stroke:'#231537','stroke-width':24}));
     let offset=0;const circumference=2*Math.PI*73;
     items.forEach((item,i)=>{
       if(item.count&&total){const length=item.count/total*circumference;svg.append(svgNode('circle',{cx:100,cy:100,r:73,fill:'none',stroke:colors[i%colors.length],'stroke-width':24,'stroke-dasharray':`${length} ${circumference-length}`,'stroke-dashoffset':-offset,transform:'rotate(-90 100 100)'}));offset+=length;}
     });
-    const count=svgNode('text',{x:100,y:99,'text-anchor':'middle',fill:'#f7ecdb','font-size':25});count.textContent=number.format(total);
+    const count=svgNode('text',{x:100,y:99,'text-anchor':'middle',fill:'#dec5ff','font-size':25});count.textContent=number.format(total);
     const label=svgNode('text',{x:100,y:121,'text-anchor':'middle',fill:'#97a2a9','font-size':11});label.textContent='members';svg.append(count,label);
     const legend=make('ul','','v6-distribution-legend');items.forEach((item,i)=>{const row=make('li');const marker=make('i','',`v6-chart-key v6-chart-key-${i}`);marker.setAttribute('aria-hidden','true');row.append(marker,make('span',item.label),make('strong',number.format(item.count)));legend.append(row);});host.append(svg,legend);
   }
