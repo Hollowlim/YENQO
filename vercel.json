@@ -1,7 +1,7 @@
 {
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm db:generate && mkdir -p public",
+  "buildCommand": "pnpm db:generate",
   "outputDirectory": "public",
   "functions": {
     "api/index.js": {
