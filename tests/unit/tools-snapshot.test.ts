@@ -1,7 +1,7 @@
 import {expect,it,vi} from 'vitest';
 import {createToolsSnapshotApi} from '../../apps/web/server/tools-snapshot-routes.js';
 const request=(suffix='',method='GET')=>new Request('http://127.0.0.1:3000/api/tools/mt5-snapshot'+suffix,{method});
-const member={id:'member-a',role:'MEMBER' as const,email:'synthetic@example.test',name:'Synthetic member',profilePhoto:null,membership:null,mentorApprovedAt:null};
+const member={id:'member-a',role:'MEMBER' as const,email:'synthetic@example.test',name:'Synthetic member',profilePhoto:null,membership:null,mentorApprovedAt:null,createdAt:new Date(0)};
 it('uses the authenticated principal and exposes no account data while pairing is unavailable',async()=>{
  const rateLimit=vi.fn(async()=>true),principal=vi.fn(async()=>member),api=createToolsSnapshotApi({principal,rateLimit});
  const r=await api(request());expect(r.status).toBe(200);expect(r.headers.get('Cache-Control')).toBe('no-store');

@@ -7,7 +7,7 @@ import { canViewMemberRoute, memberDestination } from '../../apps/web/server/mem
 
 const now = new Date('2026-12-04T13:00:00Z');
 const event = (minutes: number, extra = {}) => ({ id: String(minutes), title: 'Non-Farm Employment Change', currency: 'USD', impact: 'HIGH', time: new Date(now.getTime() + minutes * 60000).toISOString(), forecast: '150K', previous: '120K', actual: null, ...extra });
-const member = { id: 'member-a', role: 'MEMBER' as const, email: 'a@example.test', name: 'Member A', profilePhoto: null, membership: null, mentorApprovedAt: null };
+const member = { id: 'member-a', role: 'MEMBER' as const, email: 'a@example.test', name: 'Member A', profilePhoto: null, membership: null, mentorApprovedAt: null, createdAt: new Date(0) };
 const get = (path: string) => new Request('http://127.0.0.1:3000' + path);
 
 it('never reports a clear news state when calendar data is missing or stale', () => {

@@ -4,7 +4,7 @@ import {renderPage,safeAssetPath} from '../../apps/web/server/render.js';
 
 it('explains the actual product, access and next steps without performance or connection claims',async()=>{
   const html=await renderPage('/',null);
-  for(const value of ['data-homepage-v7','Your trading.','id="platform"','id="academy"','id="legacy"','href="/auth/register"','href="/auth/login"','labelled demonstration','Broker execution remains disabled','qualifying USD 100 deposit','INTERFACE PREVIEW']) expect(html).toContain(value);
+  for(const value of ['data-homepage-v7','Your trading.','id="platform"','id="academy"','id="legacy"','href="/auth/register"','href="/auth/login"','labelled demonstration','Broker execution remains disabled','3 months of full access','Interface preview']) expect(html).toContain(value);
   expect(html?.match(/<h1\b/g)).toHaveLength(1);
   expect(html?.match(/<article class="v7-feature-card"/g)).toHaveLength(4);
   expect(html).not.toMatch(/guaranteed profit|MT5 Live|24,580|98% win/i);

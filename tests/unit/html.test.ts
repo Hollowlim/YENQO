@@ -29,12 +29,12 @@ it('extracts editable page content without trusting an offline shell as authenti
 });
 it('restores the connected logo asset after standalone HTML has been exported', async () => {
   const html = await renderPage('/', null);
-  expect(html).toContain('class="v7-emblem-plane"');
+  expect(html).toContain('class="v7-brand"');
   expect(html).toContain('src="/assets/yenqo-mark.svg"');
   expect(html).toContain('rel="icon" href="/assets/yenqo-mark.svg"');
   expect(html).not.toMatch(/YENGFX|YENGHUB/);
   expect(html).not.toContain('src="../public/yengfx-mark-2026.webp"');
-  expect(html).toContain('class="v7-emblem"');
+  expect(html).toContain('class="v7-window"');
   expect(html).not.toContain('src="../public/gallery-');
 });
 it('loads the V7 motion enhancement only on the public homepage without a WebGL bundle', async () => {
