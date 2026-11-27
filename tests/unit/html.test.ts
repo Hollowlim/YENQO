@@ -59,7 +59,7 @@ it('loads the V7 motion enhancement only on the public homepage without a WebGL 
 it('shows free calculators and disconnected MT5 without simulated trading controls',async()=>{
   for(const role of ['MEMBER','ADMIN']){
     const html=await renderPage('/app/mt5',{role,name:'Beta tester',email:'beta@example.test'});
-    expect(html).toContain('Free XAUUSD calculators');
+    expect(html).toContain('Profit, risk and lot size for XAUUSD');
     expect(html).toContain('Pairing coming soon');
     expect(html).not.toContain('data-v2-trade');
     expect(html).not.toContain('data-trade-action');

@@ -100,12 +100,15 @@
   const getJson = (/** @type {string} */ url) => fetch(url, { credentials: 'same-origin' }).then(r => r.ok ? r.json() : null).catch(() => null);
   const setPill = (/** @type {HTMLElement} */ el, /** @type {string} */ text, /** @type {string} */ tone) => { el.textContent = text; el.className = `yq-pill yq-pill-${tone}`; };
   const money = (/** @type {number|null} */ n, /** @type {string} */ cur) => n == null ? '—' : `${cur} ${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  let feedMessage = '';
+  let feedMessage = '', retry = false;
   async function loadLive() {
     const response = await fetch(`/api/broker/live?symbol=${encodeURIComponent(symbol)}&tf=${timeframe}`, { credentials: 'same-origin' }).catch(() => null);
     const body = response ? await response.json().catch(() => null) : null;
     live = body?.live && body.symbol === symbol ? body : null;
-    feedMessage = typeof body?.message === 'string' ? body.message : '';
+    // Broker error codes carry a customer-readable reason; anything else gets plain words.
+    const status = response?.status ?? 0, client = status >= 400 && status < 500;
+    feedMessage = body?.available === false ? 'Live charts are being switched on. Check back soon.' : body?.live === false ? '' : (client || body?.errorCode) && typeof body?.message === 'string' ? body.message : live ? '' : 'Could not reach your broker just now. Trying again shortly.';
+    retry = !live && !client && Boolean(feedMessage) && body?.available !== false;
     render();
   }
   function render() {
@@ -129,7 +132,7 @@
       list.textContent = live.positions.length ? live.positions.map((/** @type {any} */ p, /** @type {number} */ i) => `L${i + 1} ${p.side} ${p.volume} lots @ ${fmt(p.openPrice)} · P/L ${money(p.profit, a.currency)}`).join('\n') : `No open ${symbol} positions.`;
     } else {
       setPill($('[data-yq-source]'), 'Chart: demo data, not market prices', 'demo');
-      $('[data-yq-feed]').textContent = feedMessage && !feedMessage.startsWith('Connect your MT5') ? `Demo chart. Live chart unavailable: ${feedMessage}` : 'Demo chart. Connect your MT5 account to see live prices and your open trades on the chart.';
+      $('[data-yq-feed]').textContent = feedMessage ? `Demo chart. ${feedMessage}` : 'Demo chart. Connect your MT5 account to see live prices and your open trades on the chart.';
       $('[data-yq-connect]').hidden = false;
     }
     draw();
@@ -150,8 +153,8 @@
   });
   new window.ResizeObserver(() => draw()).observe(canvas);
   loadLive();
-  // Poll only after a live connection answered, and only while the tab is visible.
-  window.setInterval(() => { if (live && !document.hidden) loadLive(); }, 10000);
+  // Poll while live (or after a temporary error), only while the tab is visible.
+  window.setInterval(() => { if ((live || retry) && !document.hidden) loadLive(); }, 10000);
 
   getJson('/api/ea/status').then(status => {
     $('[data-yq-stat="ea"]').textContent = status ? 'Not deployed' : 'Unavailable';
