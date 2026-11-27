@@ -9,7 +9,7 @@
   const make = (tag,text='',className='') => { const node = document.createElement(tag);node.textContent=text;node.className=className;return node; };
   const svgNode = (tag,attributes={}) => { const node = document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,value] of Object.entries(attributes))node.setAttribute(key,String(value));return node; };
   let days = 30, loading = false, hasData = false;
-  const metricLabels = {totalMembers:'Total members',activeMembers30d:'Signed in / 30 days',verifiedMembers:'Verified access',pendingMemberships:'Awaiting review',publishedAnalysis:'Published analysis',publishedSignals:'Published signals',publishedLessons:'Published lessons',pendingModeration:'Open community reports'};
+  const metricLabels = {totalMembers:'Total members',activeMembers30d:'Signed in / 30 days',trialMembers:'On free trial',paidMembers:'Paid plans',freeMembers:'No access',publishedAnalysis:'Published analysis',publishedSignals:'Published signals',publishedLessons:'Published lessons',pendingModeration:'Open community reports'};
   const say = text => { if(status)status.textContent=text; };
 
   function renderGrowth(rows) {

@@ -59,7 +59,7 @@ it('retains honest trading availability and membership review hooks after restyl
   const mobileAdmin = members?.match(/<nav class="bottom-nav"[\s\S]*?<\/nav>/)?.[0];
   expect(mobileAdmin).toContain('href="/admin/members"');
   expect(mobileAdmin).not.toContain('href="/app/mt5"');
-  for (const hook of ['data-client-directory', 'data-client-list', 'data-membership-dialog', 'data-membership-reviews']) {
+  for (const hook of ['data-client-directory', 'data-client-list', 'data-client-status-filter']) {
     expect(members).toContain(hook);
   }
   const dashboard = await renderPage('/app', reviewer);

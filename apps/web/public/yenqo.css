@@ -238,3 +238,13 @@ body.clean-portal .bottom-nav a{text-align:center;line-height:1.2}
 .v2-theme :is(.card,.v2-panel,.yq-card,.clean-summary,.v6-panel,.v6-admin-panel,.yq-hero){background-image:none!important;box-shadow:none!important}
 .v2-theme .nav-link.selected{background:#1c1c26!important;color:var(--yq-ink)!important;box-shadow:inset 2px 0 var(--yq-gold)!important}
 .v2-theme .nav-link.selected svg{color:var(--yq-gold)!important}
+/* Membership plans */
+.yq-plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.yq-plan{display:flex;flex-direction:column;gap:12px}
+.yq-plan h3{margin:0;font-size:16px;font-weight:500}
+.yq-plan-price{margin:0;font-size:28px;line-height:1;font-weight:500;font-variant-numeric:tabular-nums;color:var(--yq-ink)}
+.yq-plan-price span{font-size:14px;color:var(--yq-muted)}
+.yq-plan .yq-note{flex:1;margin:0}
+.yq-plan .yq-btn[disabled]{opacity:.6;cursor:not-allowed}
+@media(max-width:760px){.yq-plans{grid-template-columns:1fr}}
+.v2-theme :is(h1,h2){background:none!important;-webkit-text-fill-color:currentColor!important;color:var(--yq-ink)!important}

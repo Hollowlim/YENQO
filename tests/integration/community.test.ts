@@ -21,7 +21,7 @@ beforeAll(async () => {
   const f = await create('free'); free = f.cookie;
   const m = await create('member'); member = m.cookie; memberId = m.id;
   const o = await create('other'); other = o.cookie;
-  await db.membership.create({ data: { userId: memberId, status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: adminId, verifiedAt: new Date(), reviewReason: 'Synthetic test fixture, not broker verification.' } });
+  await db.membership.create({ data: { userId: memberId, status: 'APPROVED', plan: 'LIFETIME', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: adminId, verifiedAt: new Date(), reviewReason: 'Synthetic test fixture, not broker verification.' } });
 });
 afterAll(async () => { await db.user.deleteMany({ where: { email: { startsWith: prefix } } }); await db.$disconnect(); });
 
@@ -95,7 +95,7 @@ it('rate-limits new messages without inserting the rejected post', async () => {
   expect(await db.communityMessage.count({ where: { authorId: adminId, clientKey } })).toBe(0);
 });
 it('retains regular Community posting and reading after premium approval is revoked', async () => {
-  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED' } });
+  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED', plan: 'FREE' } });
   expect((await post('/api/community/messages', { text: 'revoked posting', clientKey: randomUUID() }, member)).status).toBe(201);
   expect((await get('/api/community/messages', member)).status).toBe(200);
 });

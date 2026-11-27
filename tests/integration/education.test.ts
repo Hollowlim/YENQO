@@ -18,7 +18,7 @@ beforeAll(async () => {
     if (role === 'ADMIN') { admin = cookie; adminId = user.id; } else free = cookie;
   }
   const user = await db.user.create({ data: { name: 'verified', email: `${prefix}-verified@example.test`, passwordHash: 'no-login-fixture' } }); memberId = user.id;
-  await db.membership.create({ data: { userId: user.id, status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: adminId, verifiedAt: new Date() } });
+  await db.membership.create({ data: { userId: user.id, status: 'APPROVED', plan: 'LIFETIME', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: adminId, verifiedAt: new Date() } });
   const token = newToken(); await db.session.create({ data: { userId: user.id, tokenHash: digestToken(token), expiresAt: new Date(Date.now() + 600000) } }); verified = `__Host-yengfx_session=${token}; yengfx_session=${token}`;
 });
 afterAll(async () => {
@@ -73,11 +73,11 @@ it('serves byte ranges and HEAD while protecting direct URLs and rejecting inval
   expect((await fetch(base + '/assets/' + row.filename)).status).toBe(404);
 });
 it('rechecks membership revocation and hides archived videos immediately', async () => {
-  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED' } });
+  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED', plan: 'FREE' } });
   expect((await fetch(`${base}/api/content/lessons/${lessonId}/video`, { headers: { Cookie: verified } })).status).toBe(403);
   expect((await post({ ...payload, id: lessonId, version: 1 })).status).toBe(409);
   expect((await post({ ...payload, id: lessonId, version: 3, status: 'ARCHIVED' })).status).toBe(200);
-  await db.membership.update({ where: { userId: memberId }, data: { status: 'APPROVED' } });
+  await db.membership.update({ where: { userId: memberId }, data: { status: 'APPROVED', plan: 'LIFETIME' } });
   expect((await fetch(`${base}/api/content/lessons/${lessonId}/video`, { headers: { Cookie: verified } })).status).toBe(404);
   expect(await db.auditEvent.count({ where: { targetId: lessonId, actorId: adminId } })).toBe(4);
 });

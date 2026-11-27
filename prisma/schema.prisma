@@ -249,6 +249,8 @@ model Membership {
   userId               String           @unique
   user                 User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan                 String           @default("FREE")
+  // Paid access window for MONTHLY and YEARLY plans; LIFETIME ignores it.
+  accessUntil          DateTime?
   entitlements         String[]         @default([])
   createdAt            DateTime         @default(now())
   status               MembershipStatus @default(FREE)

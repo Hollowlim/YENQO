@@ -39,17 +39,17 @@ it('validates account details, blocks CSRF and returns a safe admin projection',
   expect(client.mt5Account).toBe('00123456'); expect(client.brokerName).toBe('JUSTMARKET');
   expect(client.passwordHash).toBeUndefined(); expect(client.sessions).toBeUndefined();
 });
-it('requires a new independent membership review after verified account details change', async () => {
+it('keeps a paid plan when broker or MT5 details change', async () => {
   const reviewer = await db.user.findFirstOrThrow({ where: { email: `${prefix}-admin@example.test` } });
-  await db.membership.create({ data: { userId: memberId, status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: reviewer.id, verifiedAt: new Date() } });
+  await db.membership.create({ data: { userId: memberId, status: 'APPROVED', plan: 'LIFETIME', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: reviewer.id, verifiedAt: new Date() } });
   const saved = await post({ version: 1, brokerName: 'JUSTMARKET', mt5Account: '00987654', mt5Server: 'Synthetic-Demo' });
-  expect(saved.status).toBe(200); expect((await saved.json()).reviewRequired).toBe(true);
+  expect(saved.status).toBe(200); expect((await saved.json()).reviewRequired).toBe(false);
   const membership = await db.membership.findUniqueOrThrow({ where: { userId: memberId } });
-  expect(membership.status).toBe('REVOKED'); expect(membership.verifiedAt).toBeNull();
+  expect(membership.plan).toBe('LIFETIME'); expect(membership.status).toBe('APPROVED');
 });
 it('updates only the principal display name without revoking an unchanged verified account', async () => {
   const reviewer = await db.user.findFirstOrThrow({where:{email:`${prefix}-admin@example.test`}});
-  await db.membership.update({where:{userId:memberId},data:{status:'APPROVED',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:reviewer.id,verifiedAt:new Date()}});
+  await db.membership.update({where:{userId:memberId},data:{status:'APPROVED',plan:'LIFETIME',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:reviewer.id,verifiedAt:new Date()}});
   const previous = await db.user.findUniqueOrThrow({where:{id:memberId}});
   const data = {version:previous.profileVersion,name:'Updated synthetic display name',brokerName:previous.brokerName,mt5Account:previous.mt5Account,mt5Server:previous.mt5Server,userId:reviewer.id,email:'forged@example.test'};
   expect((await post({...data,name:'x'})).status).toBe(400);

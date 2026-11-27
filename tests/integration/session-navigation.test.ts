@@ -7,7 +7,7 @@ let expiredCookie='';
 beforeAll(async()=>{
  const admin=await db.user.create({data:{email:prefix+'-admin@example.test',name:'Session admin fixture',role:'ADMIN',passwordHash:'no-password-fixture'}});
  for(const kind of ['admin','free','approved']){
-  const user=kind==='admin'?admin:await db.user.create({data:{email:`${prefix}-${kind}@example.test`,name:'Session member fixture',passwordHash:'no-password-fixture',membership:{create:kind==='approved'?{status:'APPROVED',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:admin.id,verifiedAt:new Date()}:{status:'FREE'}}}});
+  const user=kind==='admin'?admin:await db.user.create({data:{email:`${prefix}-${kind}@example.test`,name:'Session member fixture',passwordHash:'no-password-fixture',membership:{create:kind==='approved'?{status:'APPROVED',plan:'LIFETIME',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:admin.id,verifiedAt:new Date()}:{status:'FREE'}}}});
   const token=newToken();await db.session.create({data:{userId:user.id,tokenHash:digestToken(token),expiresAt:new Date(Date.now()+600000)}});
   identities.push({id:user.id,token,cookie:`yengfx_session=${token}`,destination:kind==='admin'?'/admin':'/app/mt5'});
  }

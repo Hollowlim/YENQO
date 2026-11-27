@@ -34,27 +34,16 @@ it('requires the authenticated administrator rather than a query-supplied role o
   expect((await get()).status).toBe(200);
 });
 
-it('reports actual registration, activity and independently verified membership records', async () => {
+it('reports actual registration, activity, free trial and paid plan counts', async () => {
   const beforeResponse = await get('?days=7');
   expect(beforeResponse.status).toBe(200);
   const before = await beforeResponse.json();
-  for (const [name, state] of [['free', 'FREE'], ['verified', 'APPROVED'], ['pending', 'PENDING'], ['invalid', 'APPROVED']] as const) {
+  for (const [name, plan] of [['free', 'FREE'], ['lifetime', 'LIFETIME'], ['expired', 'MONTHLY']] as const) {
     const user = await db.user.create({ data: {
       name: `${prefix}-${name}`, email: `${prefix}-${name}@example.test`, passwordHash: 'synthetic-no-login',
-      ...(name === 'verified' ? { lastLoginAt: new Date() } : {}),
+      ...(name === 'lifetime' ? { lastLoginAt: new Date() } : {}),
     } });
-    const membershipData = {
-        userId: user.id,
-        status: state,
-        ...(state === 'APPROVED' ? {
-          verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: name === 'invalid' ? 9999 : 10000,
-          verifiedById: adminId, verifiedAt: new Date(),
-        } : {}),
-    };
-    if (name === 'invalid') {
-      await expect(db.membership.create({ data: membershipData })).rejects.toThrow('Membership_approved_evidence');
-      await db.membership.create({ data: { userId: user.id, status: 'FREE' } });
-    } else await db.membership.create({ data: membershipData });
+    await db.membership.create({ data: { userId: user.id, plan, ...(name === 'expired' ? { accessUntil: new Date(Date.now() - 86400000) } : {}) } });
   }
   const response = await get('?days=7');
   expect(response.status).toBe(200);
@@ -62,16 +51,15 @@ it('reports actual registration, activity and independently verified membership 
   expect(result.source).toBe('application-database');
   expect(Number.isNaN(Date.parse(result.asOf))).toBe(false);
   expect(result.days).toBe(7);
-  expect(result.metrics.totalMembers).toBe(before.metrics.totalMembers + 4);
+  expect(result.metrics.totalMembers).toBe(before.metrics.totalMembers + 3);
   expect(result.metrics.activeMembers30d).toBe(before.metrics.activeMembers30d + 1);
-  expect(result.metrics.verifiedMembers).toBe(before.metrics.verifiedMembers + 1);
-  expect(result.metrics.pendingMemberships).toBe(before.metrics.pendingMemberships + 1);
+  expect(result.metrics.paidMembers).toBe(before.metrics.paidMembers + 1);
   expect(result.growth).toHaveLength(7);
   expect(result.growth.reduce((sum: number, row: { registrations: number }) => sum + row.registrations, 0)).toBe(
-    before.growth.reduce((sum: number, row: { registrations: number }) => sum + row.registrations, 0) + 4,
+    before.growth.reduce((sum: number, row: { registrations: number }) => sum + row.registrations, 0) + 3,
   );
   expect(result.distribution.reduce((sum: number, row: { count: number }) => sum + row.count, 0)).toBe(result.metrics.totalMembers);
-  expect(result.recentMembers.some((row: { email: string }) => row.email === `${prefix}-verified@example.test`)).toBe(true);
+  expect(result.recentMembers.find((row: { email: string }) => row.email === `${prefix}-lifetime@example.test`)?.status).toBe('Lifetime plan');
   expect(JSON.stringify(result)).not.toContain('passwordHash');
   expect(JSON.stringify(result)).not.toContain('tokenHash');
   expect(result.metrics).not.toHaveProperty('revenue');

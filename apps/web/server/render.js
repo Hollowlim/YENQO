@@ -7,9 +7,9 @@ import {isLaunchPathEnabled} from './launch-policy.js';
 import {
   canViewMemberRoute,
   hasFullMemberAccess,
-  isVerifiedIbMember,
   memberDestination,
   memberLabel,
+  hasActivePlan,
   trialDaysLeft,
 } from "./membership-policy.js";
 const root = new URL("../", import.meta.url);
@@ -208,7 +208,7 @@ export async function renderPage(
   const privatePortal = pathname === '/app' || pathname.startsWith('/app/') || admin;
   const [layout, pageDocument, navigationTemplate] = await Promise.all([
     readFile(new URL(pathname === '/' ? 'templates/homepage-v7-layout.html' : privatePortal ? 'templates/portal-layout.html' : 'templates/layout.html', root), "utf8"),
-    readFile(new URL(pathname === '/' ? 'templates/homepage-v7.html' : pathname==='/app/mt5' ? 'templates/trading-tools.html' : ['/app/settings','/admin/settings'].includes(pathname) ? 'templates/account-settings.html' : pathname==='/app/calendar' ? 'templates/performance-calendar.html' : ['/app','/admin'].includes(pathname) ? `templates/launch-${admin ? 'admin' : 'member'}-overview.html` : `pages/${file}.html`, root), "utf8"),
+    readFile(new URL(pathname === '/' ? 'templates/homepage-v7.html' : pathname==='/app/mt5' ? 'templates/trading-tools.html' : ['/app/settings','/admin/settings'].includes(pathname) ? 'templates/account-settings.html' : pathname==='/app/calendar' ? 'templates/performance-calendar.html' : pathname==='/app/membership' ? 'templates/membership.html' : ['/app','/admin'].includes(pathname) ? `templates/launch-${admin ? 'admin' : 'member'}-overview.html` : `pages/${file}.html`, root), "utf8"),
     readFile(
       new URL(`templates/${privatePortal ? 'portal-' : ''}${admin ? "admin" : "member"}-navigation.html`, root),
       "utf8",
@@ -246,19 +246,10 @@ export async function renderPage(
   }
   if(pathname==='/app/calendar')contentTemplate=contentTemplate.replace('{{STATEMENT_IMPORT}}',await readFile(new URL('templates/metaapi-calendar.html',root),'utf8'));
   if(pathname==='/')contentTemplate=interpolate(contentTemplate,{COPYRIGHT_YEAR:new Intl.DateTimeFormat('en',{timeZone:'Asia/Kuala_Lumpur',year:'numeric'}).format(new Date())});
-  if(pathname==='/app/membership')contentTemplate=contentTemplate.replace('Start with free signals. Unlock the member workspace after verified IB linkage and a qualifying deposit.','Start with your free member account. Unlock private education after verified IB linkage and a qualifying deposit.');
-  if(pathname==='/app/membership')contentTemplate=contentTemplate.replace(/<section class="card plan-card pixel-plan">[\s\S]*?<\/section>/,'<section class="card plan-card pixel-plan"><span class="eyebrow">Your member account</span><h2>Free</h2><div class="plan-price">USD 0<span> / membership</span></div><p>Set up your account and submit your details for verification.</p><a class="button button-secondary" href="/app/settings">Account settings</a><ul class="plan-benefits"><li>Your member profile</li><li>Broker and MT5 account details</li><li>Membership verification request</li></ul></section>');
   if(pathname==='/app/membership'){
-    contentTemplate=contentTemplate.replace('Start with your free member account. Unlock private education after verified IB linkage and a qualifying deposit.','Your membership status, IB verification and account access.');
-    const hideOffers=!preserveBindings&&Boolean(user&&(user.role==='ADMIN'||hasFullMemberAccess(user)));
-    contentTemplate=contentTemplate.replace(/<div class="membership-plans"[^>]*>/,tag=>tag.replace(/ hidden(?=[\s>])/g,'').replace(/>$/,hideOffers?' hidden>':'>'));
-    contentTemplate=contentTemplate.replace(/<section id="membership-request"[^>]*>/,tag=>tag.replace(/ hidden(?=[\s>])/g,'').replace(/>$/,hideOffers?' hidden>':'>'));
-    if(!preserveBindings&&user){
-      const onTrial=user.role!=='ADMIN'&&!isVerifiedIbMember(user)&&trialDaysLeft(user)>0;
-      const status=user.role==='ADMIN'?'ADMINISTRATOR':onTrial?'FREE TRIAL':hasFullMemberAccess(user)?'APPROVED':user.membership?.status==='APPROVED'?'REVIEW REQUIRED':user.membership?.status??'FREE';
-      contentTemplate=contentTemplate.replace(/(data-membership-status[^>]*>)[^<]*(<\/span>)/,`$1${escapeHtml(status)}$2`);
-      contentTemplate=contentTemplate.replace(/(<p data-membership-summary>)[\s\S]*?(<\/p>)/,`$1${onTrial?`Free trial: ${trialDaysLeft(user)} days left. Everything is unlocked. Paid plans are coming soon.`:hideOffers?(user.role==='ADMIN'?'Administrator access is separate from IB membership.':'Full member access is approved. MT5 trading controls remain disabled.'):'Your membership details are being refreshed.'}$2`);
-    }
+    const days=trialDaysLeft(user);
+    const [status,summary]=user?.role==='ADMIN'?['Administrator','Administrator access does not need a plan.']:hasActivePlan(user)?[memberLabel(user),'Everything is unlocked.']:days>0?['Free trial',`${days} days left. Everything is unlocked.`]:['Free','Your free trial has ended. Choose a plan to unlock Tools, Academy and the P/L calendar.'];
+    contentTemplate=contentTemplate.replace('{{ACCESS_STATUS}}',status).replace('{{ACCESS_SUMMARY}}',summary).replace('{{ACCESS_NOTICE}}',searchParams.get('notice')==='access-required'?'<p class="notice" role="status">That page needs a plan or an active free trial.</p>':'');
   }
   const initial = user?.name?.slice(0,1) ?? 'M';
   const photoUrl = !preserveBindings && /^[a-f0-9]{64}$/.test(user?.profilePhoto?.imageHash ?? '') ? `/api/profile/photo?v=${user.profilePhoto.imageHash}` : '';
@@ -281,13 +272,6 @@ export async function renderPage(
   if (searchParams.get("notice") === "admin-required")
     content =
       '<p class="notice" role="status">Administrator access is required for that page. Your member workspace is available below.</p>' +
-      content;
-  if (
-    pathname === "/app/membership" &&
-    searchParams.get("notice") === "ib-required"
-  )
-    content =
-      '<p class="notice" role="status">This feature requires verified JUSTMARKET IB membership and a qualifying deposit of at least USD 100.</p>' +
       content;
   let shell = highlightNavigation(layout, pathname);
   if(pathname.startsWith('/auth/'))shell=shell.replace('<body class="v2-theme"','<body class="v2-theme auth-page"').replace('</head>','<link rel="stylesheet" href="/assets/auth-clean.css"></head>');
@@ -334,8 +318,8 @@ export async function renderPage(
     '<nav class="bottom-nav" aria-label="Mobile admin navigation"><a href="/admin">Overview</a><a href="/admin/members">Members</a><a href="/admin/mapping">Mapping CMS</a><a href="/admin/signals">Signals CMS</a><a href="/admin/content">Academy CMS</a><a href="/admin/platform">Platform</a></nav>',
   );
   else if (user && !hasFullMemberAccess(user)) shell = shell.replace(/<nav class="bottom-nav"[\s\S]*?<\/nav>/, (bar) => bar.replace(/<a\b[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>/g, (link, href) => canViewMemberRoute(user, href) ? link : ''));
-  if (pathname === '/app' && user?.role === 'ADMIN') content = content.replace('<strong class="yq-ok">Verified</strong><small>Your Academy and P/L calendar are unlocked.</small>', '<strong>Administrator</strong><small>Admin access is separate from IB membership.</small>');
-  else if (pathname === '/app' && user && !isVerifiedIbMember(user) && trialDaysLeft(user) > 0) content = content.replace('<strong class="yq-ok">Verified</strong><small>Your Academy and P/L calendar are unlocked.</small>', `<strong class="yq-ok">Free trial</strong><small>${trialDaysLeft(user)} days left. Academy and P/L calendar are unlocked.</small>`);
+  if (pathname === '/app' && user?.role === 'ADMIN') content = content.replace('<strong class="yq-ok">Full access</strong><small>Academy and P/L calendar are unlocked.</small>', '<strong>Administrator</strong><small>Admin access does not need a plan.</small>');
+  else if (pathname === '/app' && trialDaysLeft(user) > 0) content = content.replace('<strong class="yq-ok">Full access</strong><small>Academy and P/L calendar are unlocked.</small>', `<strong class="yq-ok">Free trial</strong><small>${trialDaysLeft(user)} days left. Academy and P/L calendar are unlocked.</small>`);
   shell=shell.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
   content=content.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
   if(pathname==='/app/chat'&&clientView)content='<div class="page-heading"><span class="eyebrow">Support</span><h1>Live Chat</h1><p>Live support is not connected for this release.</p></div><section class="card"><h2>Account support</h2><p>Review your account details and membership status in your portal.</p><a class="button button-secondary" href="/app/membership">Open Membership</a></section>';

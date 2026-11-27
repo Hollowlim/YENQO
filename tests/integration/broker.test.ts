@@ -10,17 +10,17 @@ beforeAll(async()=>{
  const admin=await db.user.create({data:{email:prefix+'-admin@example.test',name:'Synthetic reviewer',role:'ADMIN',passwordHash:'no-password-login'}});ids.admin=admin.id;
  const adminToken=newToken();await db.session.create({data:{userId:admin.id,tokenHash:digestToken(adminToken),expiresAt:new Date(Date.now()+600000)}});cookies.admin='yengfx_session='+adminToken;
  for(const who of ['member','other','free']){
-  const user=await db.user.create({data:{email:`${prefix}-${who}@example.test`,name:'Synthetic broker member',passwordHash:'no-password-login',brokerName:fields.broker,mt5Account:fields.login,mt5Server:fields.server,membership:{create:who==='free'?{status:'FREE'}:{status:'APPROVED',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:admin.id,verifiedAt:new Date()}}}});ids[who]=user.id;
+  const user=await db.user.create({data:{email:`${prefix}-${who}@example.test`,name:'Synthetic broker member',passwordHash:'no-password-login',brokerName:fields.broker,mt5Account:fields.login,mt5Server:fields.server,membership:{create:who==='free'?{status:'FREE'}:{status:'APPROVED',plan:'LIFETIME',verifiedBroker:'JUSTMARKET',verifiedIbCode:'jai4w0w6',verifiedDepositCents:10000,verifiedById:admin.id,verifiedAt:new Date()}}}});ids[who]=user.id;
   const token=newToken();await db.session.create({data:{userId:user.id,tokenHash:digestToken(token),expiresAt:new Date(Date.now()+600000)}});cookies[who]='yengfx_session='+token;
  }
 });
 afterAll(async()=>{await db.auditEvent.deleteMany({where:{actorId:{in:Object.values(ids)}}});await db.user.deleteMany({where:{email:{startsWith:prefix}}});await db.$disconnect();});
 it('never saves an in-flight MetaApi history result after membership revocation',async()=>{
  await db.brokerConnection.create({data:{userId:ids.other,broker:fields.broker,login:fields.login,server:fields.server,requestKey:crypto.randomUUID(),providerAccountId:'synthetic-race-account'}});
- provider.history.mockImplementationOnce(async()=>{await db.membership.update({where:{userId:ids.other},data:{status:'REVOKED',version:{increment:1}}});return [];});
+ provider.history.mockImplementationOnce(async()=>{await db.membership.update({where:{userId:ids.other},data:{status:'REVOKED',plan:'FREE',version:{increment:1}}});return [];});
  const result=await api(request('/api/broker/sync','POST',{version:0},'other'));expect(result.status).toBe(403);
  const row=await db.brokerConnection.findUniqueOrThrow({where:{userId:ids.other}});expect(row.lastSyncedAt).toBeNull();expect(row.deals).toBeNull();
- await db.brokerConnection.delete({where:{userId:ids.other}});await db.membership.update({where:{userId:ids.other},data:{status:'APPROVED'}});
+ await db.brokerConnection.delete({where:{userId:ids.other}});await db.membership.update({where:{userId:ids.other},data:{status:'APPROVED',plan:'LIFETIME'}});
 });
 it('authenticates MT5 server lookup, labels the configured provider and falls back honestly',async()=>{
  expect((await api(request('/api/broker/servers','GET',undefined,'guest'))).status).toBe(401);
@@ -60,11 +60,11 @@ it('syncs only the principal account, idempotently replaces a bounded history sn
 it('blocks revoked history access and never grants admins another member connection',async()=>{
  const month=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kuala_Lumpur',year:'numeric',month:'2-digit'}).format(new Date());
  const admin=await (await api(request('/api/broker/connection?userId='+ids.member,'GET',undefined,'admin'))).json();expect(admin.connection).toBeNull();
- await db.membership.update({where:{userId:ids.member},data:{status:'REVOKED'}});
+ await db.membership.update({where:{userId:ids.member},data:{status:'REVOKED',plan:'FREE'}});
  try{
   expect((await api(request('/api/broker/calendar?month='+month))).status).toBe(403);
   expect((await api(request('/api/broker/sync','POST',{version:1}))).status).toBe(403);
- }finally{await db.membership.update({where:{userId:ids.member},data:{status:'APPROVED'}});}
+ }finally{await db.membership.update({where:{userId:ids.member},data:{status:'APPROVED',plan:'LIFETIME'}});}
 });
 it('keeps the last successful snapshot when the provider fails and disconnects without touching another member',async()=>{
  provider.read.mockRejectedValueOnce(new BrokerUnavailable('INVESTOR_PASSWORD_REQUIRED'));

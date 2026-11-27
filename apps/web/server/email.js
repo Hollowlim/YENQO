@@ -5,7 +5,6 @@ const useOutbox = () => process.env.NODE_ENV !== 'production' && process.env.DEV
 const sender = () => (process.env.RESEND_FROM || process.env.RESET_EMAIL_FROM || '').trim();
 const providerConfigured = () => Boolean(process.env.RESEND_API_KEY?.trim() && sender() && !/[\r\n]/.test(sender()));
 export const resetDeliveryEnabled = () => useOutbox() || providerConfigured();
-export const membershipDeliveryEnabled = () => process.env.MEMBERSHIP_EMAIL_ENABLED === 'true' && resetDeliveryEnabled();
 function applicationUrl(pathname) {
   const origin = new URL(process.env.APP_ORIGIN ?? 'http://127.0.0.1:3000');
   const loopback = ['127.0.0.1','localhost','[::1]'].includes(origin.hostname);
@@ -39,15 +38,4 @@ export async function deliverReset(email, token) {
   url.searchParams.set("token", token);
   return deliverMessage(email,'Reset your YENQO password',`You requested a password reset for YENQO.\n\n${url.toString()}\n\nThis link expires in 30 minutes and can be used once. If you did not request it, ignore this email.`,
     `password-reset/${createHash('sha256').update(token).digest('hex')}`,{url:url.toString(),expiresInMinutes:30});
-}
-
-export async function deliverMembershipNotice(email, status, eventId, reviewedAt) {
-  if (!membershipDeliveryEnabled()) throw new Error('Membership email is not configured');
-  const copy = {
-    APPROVED:['Your YENQO IB membership is approved','Your administrator has approved your IB membership after reviewing the broker relationship and qualifying deposit.'],
-    REJECTED:['Your YENQO membership verification update','Your verification request was not approved. Sign in to Membership to read the review reason and check your next steps.'],
-    REVOKED:['Your YENQO membership access has changed','Your full membership access has been revoked. Sign in to Membership to read the review reason and check your next steps.'],
-  }[status];
-  if (!copy || !/^[A-Za-z0-9_-]{1,100}$/.test(eventId) || !Number.isFinite(new Date(reviewedAt).getTime())) throw new Error('Invalid membership email event');
-  return deliverMessage(email,copy[0],`${copy[1]}\n\nReview recorded: ${new Date(reviewedAt).toISOString()}\n\n${applicationUrl('/app/membership')}\n\nThis email records an administrative review. Your current access is shown in your portal. YENQO never asks for your password by email.`, `membership-review/${eventId}`);
 }

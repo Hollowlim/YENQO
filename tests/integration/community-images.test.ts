@@ -17,7 +17,7 @@ beforeAll(async () => {
   };
   const a = await create('admin', 'ADMIN'), m = await create('writer'), f = await create('reader');
   admin = a.cookie; member = m.cookie; free = f.cookie; memberId = m.id;
-  await db.membership.create({ data: { userId: m.id, status: 'APPROVED', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: a.id, verifiedAt: new Date() } });
+  await db.membership.create({ data: { userId: m.id, status: 'APPROVED', plan: 'LIFETIME', verifiedBroker: 'JUSTMARKET', verifiedIbCode: 'jai4w0w6', verifiedDepositCents: 10000, verifiedById: a.id, verifiedAt: new Date() } });
   image = (await sharp({ create: { width: 64, height: 32, channels: 3, background: '#e8be68' } }).png().toBuffer()).toString('base64');
 });
 afterAll(async () => { await db.user.deleteMany({ where: { email: { startsWith: prefix } } }); await db.$disconnect(); });
@@ -61,6 +61,6 @@ it('hides attached photos after moderation while regular Community remains open 
   expect((await db.communityMessage.findUniqueOrThrow({ where: { id: messageId } })).imageData).toBeNull();
   const feed = await (await get('/api/community/messages', free)).json();
   expect(feed.messages.find((row: { id: string }) => row.id === messageId).hasImage).toBe(false);
-  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED' } });
+  await db.membership.update({ where: { userId: memberId }, data: { status: 'REVOKED', plan: 'FREE' } });
   expect((await post('/api/community/messages/photo', { text: 'revoked member retains regular Community', image: { base64: image }, clientKey: randomUUID() })).status).toBe(201);
 });

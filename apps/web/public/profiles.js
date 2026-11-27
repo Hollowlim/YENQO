@@ -33,7 +33,7 @@
         document.querySelectorAll('[data-profile-avatar]').forEach(node => { if (node instanceof HTMLElement) node.dataset.profileInitial = result.profile.name.slice(0,1); const initial = node.querySelector('[data-profile-initial]'); if(initial)initial.textContent = result.profile.name.slice(0,1); });
         document.dispatchEvent(new window.CustomEvent('profile:updated', { detail: { name: result.profile.name } }));
         if (result.reviewRequired) document.querySelectorAll('.profile small, .v6-header-profile small, [data-profile-card-role]').forEach(node => { node.textContent = 'Free member'; });
-        say(result.reviewRequired ? 'Details saved. Your IB/deposit access now requires a new verification request because account details changed.' : form.hasAttribute('data-admin-profile') ? 'Profile saved.' : 'Account details saved. Your administrator can review them.');
+        say(form.hasAttribute('data-admin-profile') ? 'Profile saved.' : 'Account details saved. Your administrator can review them.');
       } catch (error) { say(error instanceof Error ? error.message : 'Unable to save details.'); }
       finally { setBusy(false); }
     }); void load();
@@ -51,27 +51,17 @@
     const date = value => value && Number.isFinite(new Date(value).getTime()) ? new Intl.DateTimeFormat('en-MY',{timeZone:'Asia/Kuala_Lumpur',dateStyle:'medium'}).format(new Date(value)) : 'Not available';
     const render = () => {
       if(!list)return;list.replaceChildren();
-      const rows = loaded.filter(client=>!filter || filter.value==='ALL' || (client.membership?.status??'FREE')===filter.value);
+      const rows = loaded.filter(client=>!filter || filter.value==='ALL' || (String(client.access).startsWith('Free trial')?'TRIAL':'FREE')===filter.value);
       rows.sort((a,b)=>sort?.value==='name'?a.name.localeCompare(b.name):sort?.value==='oldest'?String(a.createdAt).localeCompare(String(b.createdAt)):String(b.createdAt).localeCompare(String(a.createdAt)));
       for(const client of rows){
         const card = el(tableMode?'tr':'article', '', tableMode?'client-record v6-member-row':'card client-record');
-        card.tabIndex=0;card.setAttribute('aria-label',`Review ${client.name}`);
-        const openReview=()=>document.dispatchEvent(new window.CustomEvent('membership:open',{detail:{email:client.email,action:client.membership?.status==='APPROVED'?'revoke':'approve'}}));
-        card.addEventListener('click',event=>{if(!(event.target instanceof window.Element)||!event.target.closest('button'))openReview();});
-        card.addEventListener('keydown',event=>{if(event.target===card&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openReview();}});
         const identity = el(tableMode?'td':'div','','v6-member-identity');identity.append(el('h3',client.name),el('p',client.email));
         const account=el(tableMode?'td':'div','','v6-member-account');account.append(el('strong',client.brokerName??'Broker not provided'),el('span',client.mt5Account??'MT5 not provided'),el('small',client.mt5Server??'Server not provided'));
-        const membership=el(tableMode?'td':'div');membership.append(el('span',client.membership?.status??'FREE','v6-status-tag'));
+        const membership=el(tableMode?'td':'div');membership.append(el('span',client.access??'Free member','v6-status-tag'));
         const joined=el(tableMode?'td':'div',date(client.createdAt));
-        const actions=el(tableMode?'td':'div');const buttons=el('div','','client-membership-actions');
-        for(const action of ['approve','revoke']){
-          const button=/** @type {HTMLButtonElement} */(el('button',action==='approve'?'Approve':'Revoke','button button-outline'));button.type='button';
-          button.disabled=action==='approve'?client.membership?.status==='APPROVED':client.membership?.status!=='APPROVED';
-          button.addEventListener('click',()=>document.dispatchEvent(new window.CustomEvent('membership:open',{detail:{email:client.email,action}})));buttons.append(button);
-        }
-        actions.append(buttons);card.append(identity,account,membership,joined,actions);list.append(card);
+        card.append(identity,account,membership,joined);list.append(card);
       }
-      if(!rows.length){const empty=el(tableMode?'tr':'div');const text=el(tableMode?'td':'p',loaded.length?'No loaded clients match this review filter.':'No matching clients.','v6-empty');if(tableMode)text.setAttribute('colspan','5');empty.append(text);list.append(empty);}
+      if(!rows.length){const empty=el(tableMode?'tr':'div');const text=el(tableMode?'td':'p',loaded.length?'No loaded clients match this filter.':'No matching clients.','v6-empty');if(tableMode)text.setAttribute('colspan','4');empty.append(text);list.append(empty);}
       say(`Showing ${rows.length} of ${loaded.length} loaded clients. Full account numbers are visible only to the client and administrators.`);
     };
     const load = async (append = false) => {

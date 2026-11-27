@@ -54,7 +54,7 @@ export async function handler(incoming, outgoing) {
     const method = incoming.method ?? "GET";
     const authAction = url.pathname.match(/^\/api\/auth\/([a-z-]+)$/)?.[1];
     const membershipRoute =
-      /^\/api\/(?:membership\/(?:me|request)|admin\/memberships(?:\/[A-Za-z0-9_-]{1,100}\/review)?)$/.test(
+      /^\/api\/membership\/me$/.test(
         url.pathname,
       );
     const communityRoute = /^\/api\/community\/(?:messages(?:\/photo|\/[a-zA-Z0-9_-]{1,80}\/(?:remove|report|image))?|reports)$/.test(url.pathname);
@@ -152,7 +152,7 @@ export async function handler(incoming, outgoing) {
           : member && !canViewMemberRoute(user, url.pathname)
             ? url.pathname === "/app"
               ? memberDestination(user)
-              : "/app/membership?notice=ib-required"
+              : "/app/membership?notice=access-required"
             : null;
       if (redirect) {
         outgoing.writeHead(307, { Location: redirect });
