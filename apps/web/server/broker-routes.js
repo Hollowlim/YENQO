@@ -33,6 +33,15 @@ const brokerMessages={
  PROVIDER_RATE_LIMITED:'MetaApi is limiting requests. Wait before trying again.',
  PROVIDER_UNAVAILABLE:'The managed broker service could not complete this request. Check the provider account and try again.',
 };
+const liveTimeframes={M5:'5m',M15:'15m',H1:'1h',H4:'4h'};
+const num=v=>typeof v==='number'&&Number.isFinite(v)?v:null;
+// Shapes provider data for the chart. MT5 reports "no stop" as 0, so 0 becomes null.
+export function liveSnapshot({info,positions,candles},symbol,now=new Date()){
+ const bars=candles.map(c=>({time:Date.parse(c?.time),open:num(c?.open),high:num(c?.high),low:num(c?.low),close:num(c?.close)})).filter(c=>Number.isFinite(c.time)&&[c.open,c.high,c.low,c.close].every(v=>v!==null)).sort((a,b)=>a.time-b.time);
+ const open=positions.filter(p=>p&&typeof p==='object');
+ const layers=open.filter(p=>p.symbol===symbol).map(p=>({side:p.type==='POSITION_TYPE_BUY'?'BUY':p.type==='POSITION_TYPE_SELL'?'SELL':null,volume:num(p.volume),openPrice:num(p.openPrice),stopLoss:num(p.stopLoss)||null,takeProfit:num(p.takeProfit)||null,profit:num(p.profit),time:typeof p.time==='string'?p.time:null})).filter(p=>p.side&&p.openPrice!==null&&p.volume!==null);
+ return {live:true,source:'metaapi',symbol,asOf:now.toISOString(),account:{currency:info.currency,balance:num(info.balance),equity:num(info.equity),margin:num(info.margin),floating:open.reduce((sum,p)=>sum+(num(p.profit)??0),0),openPositions:open.length},candles:bars,positions:layers};
+}
 const safeErrorCode=code=>Object.hasOwn(brokerMessages,code)?code:'PROVIDER_UNAVAILABLE';
 export function createBrokerApi({database=db,principal=currentUser,provider=metaApiProvider,configured=brokerConfigured,rateLimit=takeRateLimit}={}){
  return async function brokerApi(request){
@@ -70,6 +79,14 @@ export function createBrokerApi({database=db,principal=currentUser,provider=meta
     if(!row?.lastSyncedAt||!Array.isArray(row.deals))return jsonResponse({available:true,source:'metaapi',connection:publicConnection(row),days:null,metrics:null,message:'No MetaApi history has been synced. Connect in Settings, then use Sync history.'});
     const snapshot=performanceSnapshot(row.deals);
     return jsonResponse({...snapshot,days:Object.fromEntries(Object.entries(snapshot.days).filter(([date])=>date.startsWith(month))),available:true,source:'metaapi',connection:publicConnection(row),stale:row.state!=='READY'||Date.now()-new Date(row.lastSyncedAt).getTime()>15*60000});
+   }
+   if(path==='/api/broker/live'&&request.method==='GET'){
+    if(!entitled)return jsonResponse({message:'A free trial or plan is required.'},403);
+    const query=new URL(request.url).searchParams,symbol=query.get('symbol')??'XAUUSD',timeframe=liveTimeframes[query.get('tf')??'M15'];
+    if(!/^[A-Za-z0-9._#+-]{1,24}$/.test(symbol)||!timeframe)return jsonResponse({message:'Choose a valid symbol and timeframe.'},400);
+    if(!row?.providerAccountId)return jsonResponse({live:false,message:'Connect your MT5 account to see your live chart.'});
+    // shortcut: 4 provider calls per poll and no shared cache; add a short per-account cache if MetaApi limits bite.
+    return jsonResponse(liveSnapshot(await provider().live(row.providerAccountId,row,symbol,timeframe),symbol));
    }
    const data=await readBoundedJson(request.body,8192);
    if(path==='/api/broker/connection'&&request.method==='POST'){

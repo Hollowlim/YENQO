@@ -4,10 +4,22 @@
   <section class="yq-card" aria-labelledby="yq-access-title"><div class="yq-card-head"><h2 id="yq-access-title">Your access</h2><span class="yq-pill" data-membership-status>{{ACCESS_STATUS}}</span></div><p data-membership-summary>{{ACCESS_SUMMARY}}</p></section>
   <section aria-labelledby="yq-plans-title"><h2 id="yq-plans-title" class="yq-section-title">Plans</h2>
     <div class="yq-plans">
-      <article class="yq-card yq-plan"><h3>Monthly</h3><p class="yq-plan-price">USD 10<span> / month</span></p><p class="yq-note">Full access, billed every month. Cancel any time.</p><button class="yq-btn" type="button" disabled>Card payment coming soon</button></article>
-      <article class="yq-card yq-plan"><h3>Yearly</h3><p class="yq-plan-price">USD 100<span> / year</span></p><p class="yq-note">Full access for 12 months. Two months cheaper than monthly.</p><button class="yq-btn" type="button" disabled>Card payment coming soon</button></article>
-      <article class="yq-card yq-plan"><h3>Lifetime</h3><p class="yq-plan-price">USD 400<span> once</span></p><p class="yq-note">Full access with one payment. No renewals.</p><button class="yq-btn" type="button" disabled>Card payment coming soon</button></article>
+      <article class="yq-card yq-plan"><h3>Monthly</h3><p class="yq-plan-price">USD 10<span> / month</span></p><p class="yq-note">Full access for 30 days. Pay again to add another 30.</p><button class="yq-btn" type="button" data-usdt-plan="MONTHLY">Pay 10 USDT</button></article>
+      <article class="yq-card yq-plan"><h3>Yearly</h3><p class="yq-plan-price">USD 100<span> / year</span></p><p class="yq-note">Full access for 12 months. Two months cheaper than monthly.</p><button class="yq-btn yq-btn-gold" type="button" data-usdt-plan="YEARLY">Pay 100 USDT</button></article>
+      <article class="yq-card yq-plan"><h3>Lifetime</h3><p class="yq-plan-price">USD 400<span> once</span></p><p class="yq-note">Full access with one payment. No renewals.</p><button class="yq-btn" type="button" data-usdt-plan="LIFETIME">Pay 400 USDT</button></article>
     </div>
+    <p class="yq-note">Pay with USDT on the Tron network (TRC20). Card payment is coming soon.</p>
+    <section class="yq-card yq-pay" data-usdt-panel hidden aria-labelledby="yq-pay-title" tabindex="-1">
+      <h2 id="yq-pay-title">Pay with USDT</h2>
+      <ol class="yq-pay-steps">
+        <li>Send <strong>exactly <span data-usdt-amount></span> USDT</strong> <button class="yq-link" type="button" data-usdt-copy="amount">Copy amount</button><br><span class="yq-note">The extra cents identify your payment. If your exchange takes a fee, add it so this exact amount arrives.</span></li>
+        <li>Network: <strong>Tron (TRC20)</strong> only. Other networks will lose the money.</li>
+        <li>To this address: <code class="yq-pay-address" data-usdt-wallet></code> <button class="yq-link" type="button" data-usdt-copy="wallet">Copy address</button></li>
+        <li>Wait 1–3 minutes, then press <strong>I have paid</strong>. This request is open until <span data-usdt-expires></span>.</li>
+      </ol>
+      <button class="yq-btn yq-btn-gold" type="button" data-usdt-check>I have paid</button>
+    </section>
+    <p class="yq-result" data-usdt-result role="status" aria-live="polite"></p>
     <p class="yq-note">Full access covers Tools, Academy, P/L calendar, News and Discussion Rooms. Plans never enable broker trading.</p>
   </section>
 </section>

@@ -1,18 +1,19 @@
 <section class="yq-terminal" data-yq-terminal aria-labelledby="yq-terminal-title">
   <header class="yq-term-head">
-    <div><p class="yq-kicker">Tools / trading terminal</p><h1 id="yq-terminal-title">XAUUSD terminal</h1></div>
-    <div class="yq-term-badges"><span class="yq-pill yq-pill-demo">Chart: demo data, not market prices</span><span class="yq-pill yq-pill-off">Execution disabled</span></div>
+    <div><p class="yq-kicker">Tools / trading terminal</p><h1 id="yq-terminal-title">Trading terminal</h1></div>
+    <div class="yq-term-badges"><span class="yq-pill yq-pill-demo" data-yq-source>Chart: demo data, not market prices</span><span class="yq-pill yq-pill-off">Execution disabled</span></div>
   </header>
   <div class="yq-term-grid">
     <section class="yq-card yq-chart-card" aria-labelledby="yq-chart-title">
       <div class="yq-card-head">
-        <h2 id="yq-chart-title">XAUUSD · <span data-yq-tf-label>M15</span></h2>
+        <h2 id="yq-chart-title"><span data-yq-symbol-label>XAUUSD</span> · <span data-yq-tf-label>M15</span></h2>
+        <form class="yq-symbol" data-yq-symbol role="search" aria-label="Chart symbol"><input name="symbol" value="XAUUSD" maxlength="24" pattern="[A-Za-z0-9._#+-]{1,24}" autocomplete="off" spellcheck="false" aria-label="Symbol, as named by your broker" required><button class="yq-btn" type="submit">Show</button></form>
         <div class="yq-segment" role="group" aria-label="Chart timeframe"><button type="button" data-yq-tf="M5" aria-pressed="false">M5</button><button type="button" data-yq-tf="M15" aria-pressed="true">M15</button><button type="button" data-yq-tf="H1" aria-pressed="false">H1</button><button type="button" data-yq-tf="H4" aria-pressed="false">H4</button></div>
       </div>
-      <p class="yq-note" data-yq-feed role="status">No market-data feed is connected. Candles and levels below are a generated demonstration, not XAUUSD prices.</p>
+      <div class="yq-feed"><p class="yq-note" data-yq-feed role="status">Demo chart. Connect your MT5 account to see live prices and your open trades on the chart.</p><a class="yq-btn yq-btn-gold" data-yq-connect href="/app/settings#broker-connection-heading">Connect MT5</a></div>
       <div class="yq-chart-wrap"><canvas data-yq-chart role="img" aria-label="Demonstration XAUUSD candlestick chart with BUY and SELL zones, EA entry layers, stop loss and take profit. Not market data. Exact levels are listed in the table below."></canvas></div>
-      <ul class="yq-legend" aria-label="Chart legend"><li><i class="yq-sw yq-sw-buy"></i>BUY zone</li><li><i class="yq-sw yq-sw-sell"></i>SELL zone</li><li><i class="yq-sw yq-sw-layer"></i>EA layers L1–L3</li><li><i class="yq-sw yq-sw-sl"></i>Stop loss</li><li><i class="yq-sw yq-sw-tp"></i>Take profit</li></ul>
-      <details class="yq-levels"><summary>Chart levels as a table</summary><table class="yq-table"><caption>Demonstration levels, not a trade plan</caption><thead><tr><th scope="col">Level</th><th scope="col">Price</th></tr></thead><tbody data-yq-levels></tbody></table></details>
+      <ul class="yq-legend" aria-label="Chart legend"><li><i class="yq-sw yq-sw-buy"></i>BUY</li><li><i class="yq-sw yq-sw-sell"></i>SELL</li><li><i class="yq-sw yq-sw-layer"></i>Entry layers</li><li><i class="yq-sw yq-sw-sl"></i>Stop loss</li><li><i class="yq-sw yq-sw-tp"></i>Take profit</li></ul>
+      <details class="yq-levels"><summary>Chart levels as a table</summary><table class="yq-table"><caption data-yq-levels-caption>Demonstration levels, not a trade plan</caption><thead><tr><th scope="col">Level</th><th scope="col">Price</th></tr></thead><tbody data-yq-levels></tbody></table></details>
     </section>
     <aside class="yq-side" aria-label="Account and EA">
       <section class="yq-card" aria-labelledby="yq-account-title">
@@ -70,9 +71,9 @@
       <button type="button" role="tab" id="yq-tab-layers" aria-controls="yq-panel-layers" aria-selected="false" tabindex="-1" data-yq-tab>EA layers</button>
       <button type="button" role="tab" id="yq-tab-history" aria-controls="yq-panel-history" aria-selected="false" tabindex="-1" data-yq-tab>History</button>
     </div>
-    <div role="tabpanel" id="yq-panel-positions" aria-labelledby="yq-tab-positions" tabindex="0"><p class="yq-empty">No broker-confirmed positions. The cloud MT5 connector is not deployed.</p></div>
+    <div role="tabpanel" id="yq-panel-positions" aria-labelledby="yq-tab-positions" tabindex="0"><p class="yq-empty" data-yq-positions>No broker-confirmed positions. Connect MT5 to see them here.</p></div>
     <div role="tabpanel" id="yq-panel-orders" aria-labelledby="yq-tab-orders" tabindex="0" hidden><p class="yq-empty">No broker-confirmed pending orders.</p></div>
-    <div role="tabpanel" id="yq-panel-layers" aria-labelledby="yq-tab-layers" tabindex="0" hidden><p class="yq-note">Demonstration layer plan matching the chart. These are not open positions.</p><table class="yq-table"><thead><tr><th scope="col">Layer</th><th scope="col">Side</th><th scope="col">Entry</th><th scope="col">Stop loss</th><th scope="col">Take profit</th></tr></thead><tbody data-yq-layer-rows></tbody></table></div>
+    <div role="tabpanel" id="yq-panel-layers" aria-labelledby="yq-tab-layers" tabindex="0" hidden><p class="yq-note" data-yq-layers-note>Demonstration layer plan matching the chart. These are not open positions.</p><table class="yq-table"><thead><tr><th scope="col">Layer</th><th scope="col">Side</th><th scope="col">Entry</th><th scope="col">Stop loss</th><th scope="col">Take profit</th></tr></thead><tbody data-yq-layer-rows></tbody></table></div>
     <div role="tabpanel" id="yq-panel-history" aria-labelledby="yq-tab-history" tabindex="0" hidden><p class="yq-empty">Closed-trade history comes from your read-only MT5 connection. <a class="yq-link" href="/app/calendar">Open P/L Calendar →</a></p></div>
   </section>
 </section>

@@ -24,6 +24,7 @@ import {pcConnectorApi,startPcSecretSweeper} from './pc-connector-routes.js';
 import {roomsApi} from './rooms-routes.js';
 import {newsApi} from './news-routes.js';
 import {eaApi} from './ea-routes.js';
+import {usdtApi} from './usdt-payments.js';
 
 const origin = new URL(process.env.APP_ORIGIN ?? "http://127.0.0.1:3000");
 const port = Number(process.env.PORT ?? origin.port ?? 3000) || 3000;
@@ -64,15 +65,16 @@ export async function handler(incoming, outgoing) {
     const profilePhotoRoute = url.pathname === '/api/profile/photo';
     const pcRoute=['/api/pc-broker/connection','/api/pc-broker/prepare','/api/pc-broker/connect','/api/pc-broker/calendar','/api/pc-worker/poll','/api/pc-worker/check','/api/pc-worker/receipt'].includes(url.pathname);
     const statementRoute=['/api/statements/preview','/api/statements/import','/api/statements/calendar'].includes(url.pathname);
-    const brokerRoute=['/api/broker/connection','/api/broker/sync','/api/broker/calendar','/api/broker/servers'].includes(url.pathname);
+    const brokerRoute=['/api/broker/connection','/api/broker/sync','/api/broker/calendar','/api/broker/servers','/api/broker/live'].includes(url.pathname);
     const toolsSnapshotRoute=url.pathname==='/api/tools/mt5-snapshot';
     const adminDashboardRoute = url.pathname === '/api/admin/dashboard';
     const adminAuditRoute = url.pathname === '/api/admin/audit';
     const roomsRoute = /^\/api\/(?:rooms(?:\/[a-zA-Z0-9_/-]{1,200})?|admin\/(?:rooms(?:\/[a-zA-Z0-9_/-]{1,200})?|mentors))$/.test(url.pathname);
     const newsRoute = url.pathname === '/api/news/usd';
+    const usdtRoute = /^\/api\/payments\/usdt(?:\/check)?$/.test(url.pathname);
     const eaRoute = ['/api/ea/status', '/api/ea/commands'].includes(url.pathname);
     if (educationRoute && method === 'PUT') incoming.setTimeout(10 * 60 * 1000);
-    if ((authAction && method === "POST") || membershipRoute || communityRoute || editorialRoute || educationRoute || profileRoute || profilePhotoRoute || adminDashboardRoute || adminAuditRoute || brokerRoute || statementRoute || pcRoute || toolsSnapshotRoute || roomsRoute || newsRoute || eaRoute) {
+    if ((authAction && method === "POST") || membershipRoute || communityRoute || editorialRoute || educationRoute || profileRoute || profilePhotoRoute || adminDashboardRoute || adminAuditRoute || brokerRoute || statementRoute || pcRoute || toolsSnapshotRoute || roomsRoute || newsRoute || eaRoute || usdtRoute) {
       const headers = new Headers();
       for (const [name, value] of Object.entries(incoming.headers))
         if (value)
@@ -90,7 +92,7 @@ export async function handler(incoming, outgoing) {
           : {}),
       };
       const request = new Request(url, init);
-      const response = roomsRoute ? await roomsApi(request) : newsRoute ? await newsApi(request) : eaRoute ? await eaApi(request) : toolsSnapshotRoute ? await toolsSnapshotApi(request) : pcRoute ? await pcConnectorApi(request) : statementRoute ? await statementApi(request) : brokerRoute ? await brokerApi(request) : profilePhotoRoute ? await profilePhotoApi(request) : adminAuditRoute ? await adminAuditApi(request) : adminDashboardRoute ? await adminDashboardApi(request) : profileRoute ? await profileApi(request) : educationRoute ? await educationApi(request) : editorialRoute ? await editorialApi(request) : communityRoute ? await communityApi(request) : membershipRoute
+      const response = usdtRoute ? await usdtApi(request) : roomsRoute ? await roomsApi(request) : newsRoute ? await newsApi(request) : eaRoute ? await eaApi(request) : toolsSnapshotRoute ? await toolsSnapshotApi(request) : pcRoute ? await pcConnectorApi(request) : statementRoute ? await statementApi(request) : brokerRoute ? await brokerApi(request) : profilePhotoRoute ? await profilePhotoApi(request) : adminAuditRoute ? await adminAuditApi(request) : adminDashboardRoute ? await adminDashboardApi(request) : profileRoute ? await profileApi(request) : educationRoute ? await educationApi(request) : editorialRoute ? await editorialApi(request) : communityRoute ? await communityApi(request) : membershipRoute
         ? await membershipApi(request)
         : await POST(request, {
             params: Promise.resolve({ action: authAction }),

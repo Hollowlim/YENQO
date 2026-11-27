@@ -119,6 +119,7 @@ export const safeAssetPath = (pathname) =>
     "/assets/yenqo-mark.svg": "yenqo-mark.svg",
     "/assets/yenqo.css": "yenqo.css",
     "/assets/terminal.js": "terminal.js",
+    "/assets/payments.js": "payments.js",
     "/assets/rooms.js": "rooms.js",
     "/assets/news.js": "news.js",
     "/assets/admin-platform.js": "admin-platform.js",
@@ -307,6 +308,7 @@ export async function renderPage(
   if(['/app/settings','/admin/settings','/app/calendar'].includes(pathname))shell=shell.replace('</head>','<link rel="stylesheet" href="/assets/account-settings.css"></head>');
   if(['/app/settings','/app/calendar'].includes(pathname))shell=shell.replace('</head>','<script defer src="/assets/statement-import.js"></script></head>');
   if(pathname==='/app/settings')shell=shell.replace('</head>','<script defer src="/assets/broker-connection.js"></script></head>');
+  if(pathname==='/app/membership')shell=shell.replace('</head>','<script defer src="/assets/payments.js"></script></head>');
   if(pathname==='/app/mt5')shell=shell.replace('</head>','<link rel="stylesheet" href="/assets/trading-tools.css"><script defer src="/assets/trading-tools.js"></script><script defer src="/assets/terminal.js"></script></head>');
   if(pathname==='/app/rooms')shell=shell.replace('</head>','<script defer src="/assets/rooms.js"></script></head>');
   if(pathname==='/app/news')shell=shell.replace('</head>','<script defer src="/assets/news.js"></script></head>');

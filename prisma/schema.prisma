@@ -65,6 +65,7 @@ model User {
   roomMemberships     RoomMember[]
   roomJoinRequests    RoomJoinRequest[]
   roomMessages        RoomMessage[]
+  cryptoInvoices      CryptoInvoice[]
   @@index([createdAt, id])
 }
 
@@ -270,6 +271,24 @@ model Membership {
   reviewReason         String?
 
   @@index([status, requestedAt])
+}
+
+// One USDT (TRC20) payment request. The exact amount identifies the payer, so an
+// open invoice reserves its amount in openAmount until it is paid or expires.
+model CryptoInvoice {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan        String
+  amountMicro Int
+  openAmount  Int?      @unique
+  status      String    @default("PENDING")
+  txHash      String?   @unique
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  paidAt      DateTime?
+
+  @@index([userId, status])
 }
 
 model RateLimit {

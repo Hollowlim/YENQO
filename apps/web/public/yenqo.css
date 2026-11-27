@@ -248,3 +248,18 @@ body.clean-portal .bottom-nav a{text-align:center;line-height:1.2}
 .yq-plan .yq-btn[disabled]{opacity:.6;cursor:not-allowed}
 @media(max-width:760px){.yq-plans{grid-template-columns:1fr}}
 .v2-theme :is(h1,h2){background:none!important;-webkit-text-fill-color:currentColor!important;color:var(--yq-ink)!important}
+
+/* Live chart controls */
+.yq-chart-card .yq-card-head{flex-wrap:wrap;gap:12px}
+.yq-symbol{display:flex;gap:8px;margin-left:auto}
+.yq-symbol input{width:120px;min-height:36px;padding:0 10px;border:1px solid var(--yq-line);border-radius:9px;background:var(--yq-bg,#0d0d13);color:var(--yq-ink);font:500 13px Manrope,system-ui,sans-serif;text-transform:uppercase}
+.yq-symbol .yq-btn{min-height:36px}
+.yq-feed{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.yq-feed .yq-note{margin:0}
+.yq-feed [hidden]{display:none}
+.yq-up{color:var(--yq-buy)}.yq-down{color:var(--yq-sell)}
+
+/* USDT payment panel */
+.yq-pay{display:grid;gap:12px}
+.yq-pay-steps{display:grid;gap:10px;margin:0;padding-left:20px;line-height:1.6}
+.yq-pay-address{word-break:break-all;padding:2px 6px;border-radius:6px;background:var(--yq-raised);font-size:13px}

@@ -2,7 +2,7 @@
 const provisioning='https://mt-provisioning-api-v1.agiliumtrade.agiliumtrade.ai';
 const regions=['new-york','vint-hill','london','singapore'];
 export const brokerConfigured=()=>process.env.BROKER_READ_ONLY_ENABLED==='true'&&Boolean(process.env.METAAPI_TOKEN?.trim())&&regions.includes(process.env.METAAPI_REGION??'new-york');
-const diagnosticOperations=['createAccount','deployAccount','removeAccount','undeployAccount','getAccount','accountInformation','historyDeals','serverDirectory'];
+const diagnosticOperations=['createAccount','deployAccount','removeAccount','undeployAccount','getAccount','accountInformation','historyDeals','serverDirectory','positions','candles'];
 const diagnosticErrors=['UnauthorizedError','ForbiddenError','ValidationError','NotFoundError','TooManyRequestsError','InternalError'];
 const diagnosticCodes=['E_AUTH','E_SERVER_TIMEZONE','E_RESOURCE_SLOTS','E_NO_SYMBOLS','ERR_OTP_REQUIRED','E_PASSWORD_CHANGE_REQUIRED','E_TRADING_ACCOUNT_DISABLED'];
 const diagnosticHints=['permission','resource','role','token','region','subscription','balance','payment','quota'];
@@ -27,6 +27,8 @@ function operationFor(path,method){
  if(path.endsWith('/deploy'))return 'deployAccount';
  if(path.endsWith('/accountInformation'))return 'accountInformation';
  if(path.includes('/history-deals/'))return 'historyDeals';
+ if(path.endsWith('/positions'))return 'positions';
+ if(path.includes('/historical-market-data/'))return 'candles';
  return method==='DELETE'?'removeAccount':'getAccount';
 }
 export function metaApiProvider(fetcher=fetch){
@@ -80,7 +82,17 @@ export function metaApiProvider(fetcher=fetch){
    if(info.type!=='ACCOUNT_TRADE_MODE_DEMO' && !(process.env.METAAPI_ALLOW_REAL_READONLY==='true'&&info.type==='ACCOUNT_TRADE_MODE_REAL'))throw new BrokerUnavailable('DEMO_ACCOUNT_REQUIRED');
    if(!/^[A-Z]{3}$/.test(info.currency))throw new BrokerUnavailable('INVALID_PROVIDER_RESPONSE');
    verifiedRegions.set(accountId,account.region);
-   return {currency:info.currency};
+   return {currency:info.currency,balance:info.balance,equity:info.equity,margin:info.margin};
+  },
+  // Read-only chart data: candles for one symbol plus the account's open positions on it.
+  async live(accountId,account,symbol,timeframe){
+   const info=await this.read(accountId,account),region=verifiedRegions.get(accountId),path=`/users/current/accounts/${id(accountId)}`;
+   const [positions,candles]=await Promise.all([
+    call(clientFor(region),path+'/positions'),
+    call(`https://mt-market-data-client-api-v1.${region}.agiliumtrade.ai`,`${path}/historical-market-data/symbols/${encodeURIComponent(symbol)}/timeframes/${timeframe}/candles?limit=120`)
+   ]);
+   if(!Array.isArray(positions)||!Array.isArray(candles))throw new BrokerUnavailable('INVALID_PROVIDER_RESPONSE');
+   return {info,positions,candles};
   },
   async history(accountId,from,to){
    if(!verifiedRegions.has(accountId))throw new BrokerUnavailable('BROKER_NOT_CONNECTED');
