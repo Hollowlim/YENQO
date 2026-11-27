@@ -273,3 +273,15 @@ body.clean-portal .bottom-nav a{text-align:center;line-height:1.2}
 .yq-chart-wrap{height:clamp(360px,56vh,620px)}
 @media (max-width:900px){.yq-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:520px){.yq-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Tools: order counts and EA buttons on the right */
+.yq-orders{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:12px;margin:4px 0 14px}
+.yq-orders div{display:grid;gap:2px;min-width:0}
+.yq-orders strong{font:500 26px/1.1 Manrope,system-ui,sans-serif;color:var(--yq-ink);font-variant-numeric:tabular-nums}
+.yq-orders strong.yq-up{color:var(--yq-buy)}.yq-orders strong.yq-down{color:var(--yq-sell)}
+.yq-orders span{font-size:12px;color:var(--yq-muted)}
+.yq-side .yq-stats{margin-bottom:12px}
+.yq-ea .yq-ea-actions{margin-top:0}
+.yq-ea-state{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 0}
+.yq-orders{grid-template-columns:repeat(3,minmax(0,1fr))}
+.yq-ea-actions [data-yq-ea="PARTIAL_CLOSE"]{grid-column:1/-1}

@@ -111,7 +111,21 @@
     retry = !live && !client && Boolean(feedMessage) && body?.available !== false;
     render();
   }
+  // Order counts for the charted symbol, from broker-confirmed positions only.
+  function renderOrders() {
+    const set = (/** @type {string} */ key, /** @type {string} */ text) => { $(`[data-yq-orders="${key}"]`).textContent = text; };
+    set('symbol', symbol);
+    setPill($('[data-yq-connection]'), live ? 'Live' : 'Not connected', live ? 'ok' : 'pending');
+    if (!live) { ['total', 'buy', 'sell', 'buyLots', 'sellLots', 'pl'].forEach(key => set(key, '—')); return; }
+    const side = (/** @type {string} */ name) => live.positions.filter((/** @type {any} */ p) => p.side === name);
+    const lots = (/** @type {any[]} */ list) => list.reduce((sum, p) => sum + p.volume, 0).toFixed(2) + ' lots';
+    const buys = side('BUY'), sells = side('SELL'), pl = live.positions.reduce((/** @type {number} */ sum, /** @type {any} */ p) => sum + (p.profit ?? 0), 0);
+    set('total', String(live.positions.length)); set('buy', String(buys.length)); set('sell', String(sells.length));
+    set('buyLots', lots(buys)); set('sellLots', lots(sells)); set('pl', money(pl, live.account.currency));
+    $('[data-yq-orders="pl"]').className = pl > 0 ? 'yq-up' : pl < 0 ? 'yq-down' : '';
+  }
   function render() {
+    renderOrders();
     if (live) {
       const a = live.account, time = new Date(live.asOf).toLocaleTimeString();
       setPill($('[data-yq-source]'), 'Live · MT5 read-only', 'ok');
@@ -156,10 +170,6 @@
   // Poll while live (or after a temporary error), only while the tab is visible.
   window.setInterval(() => { if ((live || retry) && !document.hidden) loadLive(); }, 10000);
 
-  getJson('/api/ea/status').then(status => {
-    $('[data-yq-stat="ea"]').textContent = status ? 'Not deployed' : 'Unavailable';
-    setPill($('[data-yq-connection]'), status?.connector === 'PENDING' ? 'Cloud connector pending' : 'Status unavailable', 'pending');
-  });
   getJson('/api/broker/connection').then(data => {
     const state = data?.connection?.state;
     $('[data-yq-stat="history"]').textContent = state ? String(state).toLowerCase().replaceAll('_', ' ') : 'Not connected';

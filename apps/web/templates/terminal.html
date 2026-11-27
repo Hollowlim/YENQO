@@ -16,21 +16,21 @@
       <ul class="yq-legend" aria-label="Chart legend"><li><i class="yq-sw yq-sw-buy"></i>BUY</li><li><i class="yq-sw yq-sw-sell"></i>SELL</li><li><i class="yq-sw yq-sw-layer"></i>Entry layers</li><li><i class="yq-sw yq-sw-sl"></i>Stop loss</li><li><i class="yq-sw yq-sw-tp"></i>Take profit</li></ul>
       <details class="yq-levels"><summary>Chart levels as a table</summary><table class="yq-table"><caption data-yq-levels-caption>Demonstration levels, not a trade plan</caption><thead><tr><th scope="col">Level</th><th scope="col">Price</th></tr></thead><tbody data-yq-levels></tbody></table></details>
     </section>
-    <aside class="yq-side" aria-label="Account and EA">
-      <section class="yq-card" aria-labelledby="yq-account-title">
-        <div class="yq-card-head"><h2 id="yq-account-title">MT5 connection</h2><span class="yq-pill yq-pill-pending" data-yq-connection>Checking…</span></div>
+    <aside class="yq-side" aria-label="Orders and EA">
+      <section class="yq-card" aria-labelledby="yq-orders-title">
+        <div class="yq-card-head"><h2 id="yq-orders-title">Orders</h2><span class="yq-pill yq-pill-pending" data-yq-connection>Not connected</span></div>
+        <div class="yq-orders">
+          <div class="yq-orders-total"><strong data-yq-orders="total">—</strong><span>Total</span><span data-yq-orders="symbol">XAUUSD</span></div>
+          <div><strong class="yq-up" data-yq-orders="buy">—</strong><span>BUY</span><span data-yq-orders="buyLots">—</span></div>
+          <div><strong class="yq-down" data-yq-orders="sell">—</strong><span>SELL</span><span data-yq-orders="sellLots">—</span></div>
+        </div>
         <dl class="yq-stats">
+          <div><dt>Floating P&amp;L</dt><dd data-yq-orders="pl">—</dd></div>
           <div><dt>Read-only link</dt><dd data-yq-stat="history">—</dd></div>
-          <div><dt>EA</dt><dd data-yq-stat="ea">—</dd></div>
         </dl>
-        <p class="yq-note" data-yq-account-note>Numbers above the chart come only from your broker. “—” means not connected.</p>
         <a class="yq-link" href="/app/settings#broker-connection-heading">Manage MT5 connection →</a>
       </section>
-      <section class="yq-card" aria-labelledby="yq-ea-title">
-        <div class="yq-card-head"><h2 id="yq-ea-title">EA controls</h2><span class="yq-pill yq-pill-off">Execution disabled</span></div>
-        <p class="yq-note">Coming soon. For now nothing here reaches your broker.</p>
-        <details class="yq-advanced"><summary>Show controls</summary>
-        <p class="yq-note">Buttons send a <strong>request</strong>. A request is not an execution: only a broker-confirmed result changes your account. Cloud execution is not enabled, so every request is recorded and rejected.</p>
+      <section class="yq-card yq-ea" aria-label="EA buttons">
         <div class="yq-ea-actions">
           <button type="button" class="yq-btn" data-yq-ea="START">Start EA</button>
           <button type="button" class="yq-btn" data-yq-ea="PAUSE_NEW_ENTRIES">Pause new entries</button>
@@ -39,6 +39,7 @@
           <button type="button" class="yq-btn" data-yq-ea="PARTIAL_CLOSE">Partial close</button>
           <button type="button" class="yq-btn yq-btn-danger" data-yq-ea="EMERGENCY_STOP">Emergency stop</button>
         </div>
+        <p class="yq-note yq-ea-state"><span class="yq-pill yq-pill-off">Execution disabled</span> Buttons send a request only. Nothing reaches your broker yet.</p>
         <details class="yq-advanced"><summary>EA settings</summary>
           <form class="yq-form" data-yq-settings novalidate>
             <label>Lot size<input name="lotSize" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.01" required></label>
@@ -51,7 +52,6 @@
             <label>Partial close (% of eligible volume)<input name="partialClosePercent" type="number" inputmode="numeric" step="1" min="1" max="100" value="50" required></label>
             <button type="submit" class="yq-btn">Request settings update</button>
           </form>
-        </details>
         </details>
         <p class="yq-result" data-yq-ea-result role="status" aria-live="polite"></p>
       </section>
