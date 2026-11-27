@@ -65,7 +65,7 @@
         const joined=el(tableMode?'td':'div',date(client.createdAt));
         const actions=el(tableMode?'td':'div');const buttons=el('div','','client-membership-actions');
         for(const action of ['approve','revoke']){
-          const button=/** @type {HTMLButtonElement} */(el('button',action==='approve'?'Approve':'Revoke',action==='approve'?'button button-gold':'button button-outline'));button.type='button';
+          const button=/** @type {HTMLButtonElement} */(el('button',action==='approve'?'Approve':'Revoke','button button-outline'));button.type='button';
           button.disabled=action==='approve'?client.membership?.status==='APPROVED':client.membership?.status!=='APPROVED';
           button.addEventListener('click',()=>document.dispatchEvent(new window.CustomEvent('membership:open',{detail:{email:client.email,action}})));buttons.append(button);
         }

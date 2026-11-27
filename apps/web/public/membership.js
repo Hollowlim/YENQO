@@ -64,15 +64,19 @@
           "[data-membership-status]",
           result.isAdmin
             ? "ADMINISTRATOR"
-            : m.status === "APPROVED" && !result.fullAccess
-              ? "REVIEW REQUIRED"
-              : m.status,
+            : result.trialDaysLeft > 0
+              ? "FREE TRIAL"
+              : m.status === "APPROVED" && !result.fullAccess
+                ? "REVIEW REQUIRED"
+                : m.status,
         );
         text(
           "[data-membership-summary]",
           result.isAdmin
             ? "Administrator access is separate from IB membership."
-            : result.fullAccess
+            : result.trialDaysLeft > 0
+              ? `Free trial: ${result.trialDaysLeft} days left. Everything is unlocked. Paid plans are coming soon.`
+              : result.fullAccess
               ? "Full member access is approved. This does not enable broker trading or grant administration."
               : m.status === "PENDING"
                 ? "Your request is waiting for an administrator to check the broker records. Private education unlocks after approval."

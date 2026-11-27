@@ -13,7 +13,8 @@ export function parseUsdToCents(value) {
   return Number.isSafeInteger(cents) && cents <= 100000000 ? cents : null;
 }
 // Every new member gets full access for 90 days from sign-up; no IB link or deposit needed.
-export const TRIAL_DAYS = 90;
+// MEMBER_TRIAL_DAYS=0 turns the trial off; start the local server with it before running integration tests.
+export const TRIAL_DAYS = /^\d{1,4}$/.test(process.env.MEMBER_TRIAL_DAYS ?? "") ? Number(process.env.MEMBER_TRIAL_DAYS) : 90;
 export function trialDaysLeft(user, now = Date.now()) {
   const start = user?.role === "MEMBER" && user.createdAt ? new Date(user.createdAt).getTime() : NaN;
   return Number.isFinite(start) ? Math.max(0, Math.ceil((start + TRIAL_DAYS * 86400000 - now) / 86400000)) : 0;

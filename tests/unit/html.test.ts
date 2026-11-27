@@ -4,10 +4,10 @@ it('distinguishes actual client pages from labelled admin and offline simulation
   const member = { id:'synthetic-client',role:'MEMBER',name:'Test',email:'test@example.test' };
   const client = await renderPage('/app/mt5',member);
   expect(client).toContain('data-client-view="true"');
-  expect(client).not.toContain('DEMO · NOT LIVE');
+  expect(client).not.toContain('Demo · not live');
   const admin = await renderPage('/app/mt5',{...member,role:'ADMIN'});
   expect(admin).toContain('data-client-view="false"');
-  expect(admin).toContain('DEMO · NOT LIVE');
+  expect(admin).toContain('Demo · not live');
   const offline = await renderPage('/app/mt5',member,new URLSearchParams(),true);
   expect(offline).toContain('data-client-view="false"');
 });

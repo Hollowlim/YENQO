@@ -247,7 +247,7 @@ export async function renderPage(
   if(pathname==='/app/calendar')contentTemplate=contentTemplate.replace('{{STATEMENT_IMPORT}}',await readFile(new URL('templates/metaapi-calendar.html',root),'utf8'));
   if(pathname==='/')contentTemplate=interpolate(contentTemplate,{COPYRIGHT_YEAR:new Intl.DateTimeFormat('en',{timeZone:'Asia/Kuala_Lumpur',year:'numeric'}).format(new Date())});
   if(pathname==='/app/membership')contentTemplate=contentTemplate.replace('Start with free signals. Unlock the member workspace after verified IB linkage and a qualifying deposit.','Start with your free member account. Unlock private education after verified IB linkage and a qualifying deposit.');
-  if(pathname==='/app/membership')contentTemplate=contentTemplate.replace(/<section class="card plan-card pixel-plan">[\s\S]*?<\/section>/,'<section class="card plan-card pixel-plan"><span class="eyebrow">YOUR MEMBER ACCOUNT</span><h2>Free</h2><div class="plan-price">USD 0<span> / membership</span></div><p>Set up your account and submit your details for verification.</p><a class="button button-secondary" href="/app/settings">Account settings</a><ul class="plan-benefits"><li>Your member profile</li><li>Broker and MT5 account details</li><li>Membership verification request</li></ul></section>');
+  if(pathname==='/app/membership')contentTemplate=contentTemplate.replace(/<section class="card plan-card pixel-plan">[\s\S]*?<\/section>/,'<section class="card plan-card pixel-plan"><span class="eyebrow">Your member account</span><h2>Free</h2><div class="plan-price">USD 0<span> / membership</span></div><p>Set up your account and submit your details for verification.</p><a class="button button-secondary" href="/app/settings">Account settings</a><ul class="plan-benefits"><li>Your member profile</li><li>Broker and MT5 account details</li><li>Membership verification request</li></ul></section>');
   if(pathname==='/app/membership'){
     contentTemplate=contentTemplate.replace('Start with your free member account. Unlock private education after verified IB linkage and a qualifying deposit.','Your membership status, IB verification and account access.');
     const hideOffers=!preserveBindings&&Boolean(user&&(user.role==='ADMIN'||hasFullMemberAccess(user)));
@@ -311,10 +311,10 @@ export async function renderPage(
   }
   const clientView = Boolean(user && user.role !== 'ADMIN' && !preserveBindings);
   if (clientView) {
-    shell = shell.replace('DEMO · NOT LIVE', 'EA DISCONNECTED');
+    shell = shell.replace('Demo · not live', 'EA disconnected');
     content = content.replace('aria-label="Local Trade Manager simulation"', 'aria-label="MT5 Trade Manager"');
     navigation = navigation.replaceAll('Live Chat / Demo', 'Live Chat');
-    if (pathname === '/app/chat') content = '<div class="page-heading"><span class="eyebrow">YENQO / SUPPORT</span><h1>Live Chat</h1><p>Support messaging is not connected yet. Use Community to contact the team.</p></div><section class="card v2-panel"><h2>Support unavailable</h2><p>No live support room is available at this time.</p><a class="button button-gold section-gap" href="/app/community">Open Community</a></section>';
+    if (pathname === '/app/chat') content = '<div class="page-heading"><span class="eyebrow">Support</span><h1>Live Chat</h1><p>Support messaging is not connected yet. Use Community to contact the team.</p></div><section class="card v2-panel"><h2>Support unavailable</h2><p>No live support room is available at this time.</p><a class="button button-gold section-gap" href="/app/community">Open Community</a></section>';
   }
   shell = shell.replaceAll('<strong>YENQO</strong>', '<img class="brand-logo-small" src="/assets/yenqo-mark.svg" alt="" width="36" height="36">');
   if (pathname === '/app/community') shell = shell.replace('</head>', '<script type="module" src="/assets/community.js"></script></head>');
@@ -335,9 +335,10 @@ export async function renderPage(
   );
   else if (user && !hasFullMemberAccess(user)) shell = shell.replace(/<nav class="bottom-nav"[\s\S]*?<\/nav>/, (bar) => bar.replace(/<a\b[^>]*href="([^"]+)"[^>]*>[\s\S]*?<\/a>/g, (link, href) => canViewMemberRoute(user, href) ? link : ''));
   if (pathname === '/app' && user?.role === 'ADMIN') content = content.replace('<strong class="yq-ok">Verified</strong><small>Your Academy and P/L calendar are unlocked.</small>', '<strong>Administrator</strong><small>Admin access is separate from IB membership.</small>');
+  else if (pathname === '/app' && user && !isVerifiedIbMember(user) && trialDaysLeft(user) > 0) content = content.replace('<strong class="yq-ok">Verified</strong><small>Your Academy and P/L calendar are unlocked.</small>', `<strong class="yq-ok">Free trial</strong><small>${trialDaysLeft(user)} days left. Academy and P/L calendar are unlocked.</small>`);
   shell=shell.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
   content=content.replace(/<a\b[^>]*href="([^"]*)"[^>]*>[\s\S]*?<\/a\s*>/g,(tag,href)=>isLaunchPathEnabled(href)?tag:'');
-  if(pathname==='/app/chat'&&clientView)content='<div class="page-heading"><span class="eyebrow">YENQO / SUPPORT</span><h1>Live Chat</h1><p>Live support is not connected for this release.</p></div><section class="card"><h2>Account support</h2><p>Review your account details and membership status in your portal.</p><a class="button button-secondary" href="/app/membership">Open Membership</a></section>';
+  if(pathname==='/app/chat'&&clientView)content='<div class="page-heading"><span class="eyebrow">Support</span><h1>Live Chat</h1><p>Live support is not connected for this release.</p></div><section class="card"><h2>Account support</h2><p>Review your account details and membership status in your portal.</p><a class="button button-secondary" href="/app/membership">Open Membership</a></section>';
   if(pathname==='/')shell=shell.replace('Your YENQO member workspace for XAUUSD daily analysis, manual signals, video education and community. Explore the app and create a free account.','Your YENQO workspace for private video education, membership verification and account settings. Create a free member account.');
   shell = shell.replace('</head>', '<link rel="icon" href="/assets/yenqo-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/yenqo.css"></head>');
   let html=interpolate(shell, {

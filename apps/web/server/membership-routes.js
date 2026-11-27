@@ -10,6 +10,8 @@ import {
   IB_POLICY,
   parseUsdToCents,
   hasFullMemberAccess,
+  isVerifiedIbMember,
+  trialDaysLeft,
 } from "./membership-policy.js";
 
 const claimSchema = z.object({
@@ -81,6 +83,7 @@ export async function membershipApi(request) {
       return jsonResponse({
         membership: membership ?? { id: null, status: "FREE", version: 0 },
         fullAccess: hasFullMemberAccess(user),
+        trialDaysLeft: isVerifiedIbMember(user) ? 0 : trialDaysLeft(user),
         isAdmin: user.role === "ADMIN",
         policy: IB_POLICY,
       });
