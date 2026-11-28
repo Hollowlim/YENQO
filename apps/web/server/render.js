@@ -70,6 +70,7 @@ export const safeAssetPath = (pathname) =>
     "/assets/product-home.js": "product-home.js",
     "/assets/homepage-v7.css": "homepage-v7.css",
     "/assets/homepage-v7.js": "homepage-v7.js",
+    "/assets/homepage-calc.js": "homepage-calc.js",
     "/assets/homepage-v7/member-workspace.webp": "homepage-v7/member-workspace.webp",
     "/assets/homepage-v7/yenqo-workspace.webp": "homepage-v7/yenqo-workspace.webp",
     "/assets/homepage-v7/rock.webp": "homepage-v7/rock.webp",

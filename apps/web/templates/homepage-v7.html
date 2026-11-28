@@ -2,10 +2,10 @@
   <header class="v7-header">
     <div class="v7-container v7-header-inner">
       <a class="v7-brand" href="/" aria-label="YENQO home"><img src="/assets/yenqo-mark.svg" width="28" height="28" alt="YENQO"><span>YENQO</span></a>
-      <nav class="v7-desktop-nav" aria-label="Main site navigation"><a href="#platform">Platform</a><a href="#features">Features</a><a href="#academy">Academy</a><a href="#legacy">Security</a></nav>
+      <nav class="v7-desktop-nav" aria-label="Main site navigation"><a href="#platform">Platform</a><a href="#features">Features</a><a href="#academy">Academy</a><a href="#legacy">Security</a><a href="#calculator">Calculator</a></nav>
       <div class="v7-header-actions"><a class="v7-login" href="/auth/login">Log in</a><a class="v7-button v7-button-primary v7-header-start" href="/app">Get started <span aria-hidden="true">→</span></a><button class="v7-menu-toggle" type="button" aria-label="Open site navigation" aria-expanded="false" aria-controls="v7-mobile-nav" data-v7-menu-toggle hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button></div>
     </div>
-    <nav class="v7-mobile-nav v7-container" id="v7-mobile-nav" aria-label="Mobile site navigation"><a href="#platform">Platform</a><a href="#features">Features</a><a href="#academy">Academy</a><a href="#legacy">Security</a><a href="/auth/login">Log in</a><a href="/auth/register">Create an account</a></nav>
+    <nav class="v7-mobile-nav v7-container" id="v7-mobile-nav" aria-label="Mobile site navigation"><a href="#platform">Platform</a><a href="#features">Features</a><a href="#academy">Academy</a><a href="#legacy">Security</a><a href="#calculator">Calculator</a><a href="/auth/login">Log in</a><a href="/auth/register">Create an account</a></nav>
   </header>
 
   <main id="main-content">
@@ -79,9 +79,39 @@
     <section class="v7-legacy v7-section" id="legacy" aria-labelledby="v7-legacy-title">
       <div class="v7-container">
         <p class="v7-level" aria-hidden="true"><span>04 · Security</span></p>
-        <div class="v7-split">
-          <div class="v7-editorial" data-v7-reveal><h2 id="v7-legacy-title">Mentors and admins never get access to your broker account</h2></div>
-          <div class="v7-editorial" data-v7-reveal><p>Each member sees only their own account. Administrators and mentors never receive trading access to your broker account. Credentials stay on the server, never in your browser.</p><p class="v7-legacy-note">Cloud MT5 automation will only be enabled after separate testing and authorization.</p><a class="v7-text-link" href="/auth/register">Create your account <span aria-hidden="true">→</span></a></div>
+        <div class="v7-editorial v7-center-head" data-v7-reveal><h2 id="v7-legacy-title">Your account stays yours.</h2><p>What YENQO can and cannot do with your trading.</p></div>
+        <div class="v7-safe-grid" data-v7-reveal><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 10h18M5 10V20h14V10M12 3 3 8h18z"/></svg><h3>Your money stays at your broker</h3><p>YENQO cannot deposit, withdraw or move money in your broker account.</p></article><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><h3>Credentials stay on the server</h3><p>Your MT5 details are kept on our server, never in your browser.</p></article><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><h3>Only you see your account</h3><p>Each member sees only their own account and results.</p></article><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/></svg><h3>Admins cannot trade for you</h3><p>Administrators and mentors never get trading access to your broker account.</p></article><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12h16M12 4v16" transform="rotate(45 12 12)"/></svg><h3>Trading is switched off</h3><p>Broker execution is disabled. Automation will only start after separate testing.</p></article><article class="v7-safe-card"><svg class="v7-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><h3>Demo is always labelled</h3><p>Charts and numbers say when they are a demonstration and not live data.</p></article></div>
+      </div>
+    </section>
+
+    <section class="v7-join v7-section" id="join" aria-labelledby="v7-join-title">
+      <div class="v7-container">
+        <p class="v7-level" aria-hidden="true"><span>05 · Join</span></p>
+        <div class="v7-editorial v7-center-head" data-v7-reveal><h2 id="v7-join-title">Three steps to start.</h2></div>
+        <ol class="v7-steps" data-v7-reveal><li><span class="v7-mono">01</span><h3>Create your account</h3><p>Sign up with your email. It takes a minute.</p></li><li><span class="v7-mono">02</span><h3>Get 3 months free</h3><p>Every new account gets 3 months of full access. No payment needed.</p></li><li><span class="v7-mono">03</span><h3>Keep going with a plan</h3><p>After the trial, pick monthly, yearly or lifetime in Membership.</p></li></ol>
+        <div class="v7-actions v7-center-actions"><a class="v7-button v7-button-primary" href="/auth/register">Create your account <span aria-hidden="true">→</span></a></div>
+      </div>
+    </section>
+
+    <section class="v7-calc v7-section" id="calculator" aria-labelledby="v7-calc-title">
+      <div class="v7-container">
+        <p class="v7-level" aria-hidden="true"><span>06 · Free tools</span></p>
+        <div class="v7-editorial v7-center-head" data-v7-reveal><h2 id="v7-calc-title">Size every gold trade right.</h2><p>Change any number and the answer updates. Everything runs in your browser; nothing you type is sent anywhere.</p></div>
+        <div class="v7-calc-grid">
+          <form class="v7-calc-card" data-home-calc aria-label="Gold lot size calculator">
+            <h3>Lot size · XAUUSD</h3>
+            <label>Account size (USD)<input name="balance" type="number" inputmode="decimal" min="1" step="any" value="1000"></label>
+            <label>Risk per trade (%)<input name="risk" type="number" inputmode="decimal" min="0.1" max="100" step="any" value="1"></label>
+            <div class="v7-chips" role="group" aria-label="Quick risk values"><button type="button" data-risk="0.5">0.5%</button><button type="button" data-risk="1">1%</button><button type="button" data-risk="2">2%</button></div>
+            <label>Stop loss (pips)<input name="stop" type="number" inputmode="decimal" min="1" step="any" value="50"></label>
+            <div class="v7-calc-result" aria-live="polite"><span>Trade this size</span><strong><output data-out="lots">—</output> lots</strong><p data-out="note"></p></div>
+            <small>1 gold pip = 0.10 in price; 1 lot = 100 oz. Check your broker's contract size before you trade.</small>
+          </form>
+          <div class="v7-calc-card">
+            <h3>Market sessions · your time</h3>
+            <ul class="v7-sessions" data-home-sessions aria-live="off"></ul>
+            <small>Approximate hours; they can shift by 1 hour with daylight saving. Gold moves most when London and New York overlap.</small>
+          </div>
         </div>
       </div>
     </section>

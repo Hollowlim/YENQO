@@ -119,3 +119,23 @@
 }
 @media(max-width:560px){.v7-window-dots,.v7-window-tag{display:none}.v7-feature-grid,.v7-course-track{grid-template-columns:1fr}.v7-section-list li{grid-template-columns:1fr;gap:4px}.v7-actions{flex-wrap:wrap;gap:12px 20px}}
 @media(prefers-reduced-motion:reduce){.yq-loader{display:none}.homepage-v7 *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.v7-home [data-v7-reveal]{opacity:1!important;translate:none!important}}
+/* Security cards, join steps and free calculator sections. */
+.v7-center-head{max-width:640px;margin:0 auto 40px;text-align:center}.v7-center-head p{margin-top:12px;color:var(--text-2)}.v7-center-actions{justify-content:center;margin-top:32px}
+.v7-safe-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.v7-safe-card,.v7-steps li,.v7-calc-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.v7-safe-card .v7-icon{color:var(--accent)}.v7-safe-card h3,.v7-steps h3,.v7-calc-card h3{margin-top:14px;font-size:16px;line-height:24px;font-weight:600}.v7-calc-card h3{margin-top:0}
+.v7-safe-card p,.v7-steps p{margin-top:8px;font-size:14px;line-height:22px;color:var(--text-2)}
+.v7-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.v7-steps .v7-mono{color:var(--accent);font-weight:700}
+.v7-calc-grid{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
+.v7-calc-card{display:grid;gap:14px}.v7-calc-card label{display:grid;gap:6px;font-size:13px;color:var(--text-2)}
+.v7-calc-card input{min-height:46px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--deep);color:var(--text);font:500 15px Manrope,system-ui,sans-serif}
+.v7-calc-card input:focus-visible,.v7-chips button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.v7-chips{display:flex;gap:8px}.v7-chips button{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--text);font:500 13px Manrope,system-ui,sans-serif;cursor:pointer}.v7-chips button:hover{border-color:var(--accent)}
+.v7-calc-result{padding:18px;border-radius:12px;background:var(--raised)}.v7-calc-result span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.v7-calc-result strong{display:block;margin-top:4px;font-size:34px;line-height:1.2;font-weight:800;color:var(--accent)}.v7-calc-result p{margin-top:6px;font-size:14px;color:var(--text-2)}
+.v7-calc-card small{font-size:12px;line-height:18px;color:var(--muted)}
+.v7-sessions{list-style:none;margin:0;padding:0;display:grid;gap:8px}.v7-sessions li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 14px;border-radius:10px;border:1px solid var(--line)}
+.v7-sessions span{grid-column:1;font-size:13px;color:var(--text-2)}.v7-sessions em{grid-column:2;grid-row:1/3;align-self:center;font-style:normal;font-size:12px;color:var(--muted)}
+.v7-sessions li.is-open{border-color:var(--accent)}.v7-sessions li.is-open em{color:var(--accent);font-weight:700}
+@media(max-width:850px){.v7-safe-grid,.v7-steps{grid-template-columns:1fr 1fr}.v7-calc-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.v7-safe-grid,.v7-steps{grid-template-columns:1fr}}
