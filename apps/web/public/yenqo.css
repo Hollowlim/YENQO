@@ -305,3 +305,13 @@ body.clean-portal .bottom-nav a{text-align:center;line-height:1.2}
 @keyframes yq-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.yq-spin{animation-duration:3s}}
 .yq-ea-btn{white-space:nowrap;gap:6px;padding:8px 6px}
+
+/* Wide screens: positions/orders move into the empty left column beside the chart */
+@media (min-width:1800px){
+  body .main-content:has(.yq-terminal){max-width:2300px}
+  body .main-content:has(.yq-terminal) .yh-tools{max-width:2200px}
+  .yq-terminal{max-width:2200px;grid-template-columns:380px minmax(0,1fr);grid-template-areas:"head head" "strip strip" "bottom grid";align-items:start}
+  .yq-term-head{grid-area:head}.yq-strip{grid-area:strip}.yq-term-grid{grid-area:grid}
+  .yq-bottom{grid-area:bottom;position:sticky;top:96px}
+  .yq-bottom .yq-tabs button{padding:8px 10px}
+}
