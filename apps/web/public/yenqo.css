@@ -285,3 +285,23 @@ body.clean-portal .bottom-nav a{text-align:center;line-height:1.2}
 .yq-ea-state{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0 0}
 .yq-orders{grid-template-columns:repeat(3,minmax(0,1fr))}
 .yq-ea-actions [data-yq-ea="PARTIAL_CLOSE"]{grid-column:1/-1}
+
+/* EA buttons: dark control-panel tiles with a red/green EA status */
+.yq-ea-status{display:flex;align-items:center;gap:8px;margin:0 0 12px;padding:8px 12px;border-radius:9px;font:600 13px Manrope,system-ui,sans-serif}
+.yq-ea-status i{width:8px;height:8px;border-radius:50%;background:currentColor}
+.yq-ea-status[data-state="off"]{color:#f1a3a3;background:rgba(214,107,107,.12)}
+.yq-ea-status[data-state="on"]{color:#8fe0bd;background:rgba(63,191,143,.12)}
+.yq-ea-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 10px;border:0;border-radius:10px;background:#232331;color:var(--yq-ink);font:600 13px Manrope,system-ui,sans-serif;cursor:pointer;transition:background .15s}
+.yq-ea-btn:hover{background:#2c2c3d}
+.yq-ea-btn:focus-visible{outline:2px solid var(--yq-gold);outline-offset:2px}
+.yq-ea-btn:disabled{cursor:progress;opacity:.85}
+.yq-ea-btn-danger{grid-column:1/-1;background:rgba(214,107,107,.14);color:#f1b3b3}
+.yq-ea-btn-danger:hover{background:rgba(214,107,107,.22)}
+.yq-ea-icon{width:16px;height:16px;flex:none;color:var(--yq-muted)}
+.yq-ea-btn-danger .yq-ea-icon{color:currentColor}
+/* From Uiverse.io by mobinkakei - https://uiverse.io/mobinkakei/great-insect-77
+   MIT License, Copyright (c) mobinkakei (Mobeen) */
+.yq-spin{width:16px;height:16px;flex:none;color:#fff;animation:yq-spin 1s linear infinite}
+@keyframes yq-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.yq-spin{animation-duration:3s}}
+.yq-ea-btn{white-space:nowrap;gap:6px;padding:8px 6px}

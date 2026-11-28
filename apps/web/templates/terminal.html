@@ -31,15 +31,16 @@
         <a class="yq-link" href="/app/settings#broker-connection-heading">Manage MT5 connection →</a>
       </section>
       <section class="yq-card yq-ea" aria-label="EA buttons">
+        <p class="yq-ea-status" data-yq-ea-status data-state="off" role="status"><i aria-hidden="true"></i><span>EA not connected</span></p>
         <div class="yq-ea-actions">
-          <button type="button" class="yq-btn" data-yq-ea="START">Start EA</button>
-          <button type="button" class="yq-btn" data-yq-ea="PAUSE_NEW_ENTRIES">Pause new entries</button>
-          <button type="button" class="yq-btn" data-yq-ea="RESUME">Resume EA</button>
-          <button type="button" class="yq-btn" data-yq-ea="BREAKEVEN">Breakeven</button>
-          <button type="button" class="yq-btn" data-yq-ea="PARTIAL_CLOSE">Partial close</button>
-          <button type="button" class="yq-btn yq-btn-danger" data-yq-ea="EMERGENCY_STOP">Emergency stop</button>
+          <button type="button" class="yq-ea-btn" data-yq-ea="START"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l12 7-12 7z"/></svg><span>Start EA</span></button>
+          <button type="button" class="yq-ea-btn" data-yq-ea="PAUSE_NEW_ENTRIES"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5v14M15 5v14"/></svg><span>Pause entries</span></button>
+          <button type="button" class="yq-ea-btn" data-yq-ea="RESUME"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 4v4h-4M20 12a8 8 0 0 1-14 5.3M4 20v-4h4"/></svg><span>Resume EA</span></button>
+          <button type="button" class="yq-ea-btn" data-yq-ea="BREAKEVEN"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16M4 15h16"/></svg><span>Breakeven</span></button>
+          <button type="button" class="yq-ea-btn" data-yq-ea="PARTIAL_CLOSE"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/></svg><span>Partial close</span></button>
+          <button type="button" class="yq-ea-btn yq-ea-btn-danger" data-yq-ea="EMERGENCY_STOP"><svg class="yq-ea-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8zM12 8v5M12 16v.01"/></svg><span>Emergency stop</span></button>
         </div>
-        <p class="yq-note yq-ea-state"><span class="yq-pill yq-pill-off">Execution disabled</span> Buttons send a request only. Nothing reaches your broker yet.</p>
+        <p class="yq-note yq-ea-state">Execution disabled. Buttons send a request only; nothing reaches your broker yet.</p>
         <details class="yq-advanced"><summary>EA settings</summary>
           <form class="yq-form" data-yq-settings novalidate>
             <label>Lot size<input name="lotSize" type="number" inputmode="decimal" step="0.01" min="0.01" max="100" value="0.01" required></label>
